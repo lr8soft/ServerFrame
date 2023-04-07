@@ -1,0 +1,14 @@
+# ninja log v5
+1	368	7025836026538635	CMakeFiles/ServerFrame.dir/main.cpp.obj	4a2ea35e6c457b5c
+2	390	7025836998601014	CMakeFiles/ServerFrame.dir/Utils/JsonLoader.cpp.obj	b3d1a6dedb1660c2
+3	247	7025838710937455	CMakeFiles/ServerFrame.dir/main.cpp.obj	4a2ea35e6c457b5c
+10	788	7025838716349348	CMakeFiles/ServerFrame.dir/Utils/HttpConnect.cpp.obj	76a480eb813f68a5
+788	1753	7025838717286220	ServerFrame.exe	4395918b9e6920bf
+3	234	7025839143070330	CMakeFiles/ServerFrame.dir/main.cpp.obj	4a2ea35e6c457b5c
+234	1187	7025839143967350	ServerFrame.exe	4395918b9e6920bf
+2	227	7025839580837887	CMakeFiles/ServerFrame.dir/main.cpp.obj	4a2ea35e6c457b5c
+228	1172	7025839581854479	ServerFrame.exe	4395918b9e6920bf
+2	233	7025839710394598	CMakeFiles/ServerFrame.dir/main.cpp.obj	4a2ea35e6c457b5c
+233	1175	7025839711281628	ServerFrame.exe	4395918b9e6920bf
+2	243	7025840001168747	CMakeFiles/ServerFrame.dir/main.cpp.obj	4a2ea35e6c457b5c
+243	1189	7025840002085681	ServerFrame.exe	4395918b9e6920bf

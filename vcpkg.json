@@ -1,0 +1,12 @@
+{
+  "name" : "serverframe",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "7f59e0013648f0dd80377330b770b414032233cb",
+  "dependencies" : [ {
+    "name" : "curl",
+    "version>=" : "8.0.1"
+  }, {
+    "name" : "jsoncpp",
+    "version>=" : "1.9.5"
+  } ]
+}
