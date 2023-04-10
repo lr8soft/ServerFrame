@@ -1,8 +1,8 @@
-#include <iostream>
-#include "Utils/HttpConnect.h"
+#include "Application.h"
 int main() {
-    HttpConnect conn;
-    std::cout << "Hello, World!" << std::endl;
-    std::cout << conn.readFromUrl("https://raw.githubusercontent.com/lr8soft/MoreElectricTools/master/README.txt");
+    Application app;
+    app.init();
+    app.work();
+    app.finalize();
     return 0;
 }

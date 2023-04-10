@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="ServerFrame"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Users\;CMake Files\Users\lrsoft\;CMake Files\Users\lrsoft\.clion-vcpkg\;CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\;CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\scripts\;CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\scripts\buildsystems\;CMake Files\cmake-build-release\;CMake Files\cmake-build-release\vcpkg_installed\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\curl\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\zlib\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="F:/ServerFrame/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ServerFrame">
+				<Option output="F:/ServerFrame/cmake-build-release/ServerFrame.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="F:/ServerFrame/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 ServerFrame"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ServerFrame/fast">
+				<Option output="F:/ServerFrame/cmake-build-release/ServerFrame.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="F:/ServerFrame/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 ServerFrame/fast"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="F:/ServerFrame/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="F:/ServerFrame/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe -f &quot;F:/ServerFrame/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="F:/ServerFrame/Application.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Application.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/HttpConnect.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/HttpConnect.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/LogUtil.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/LogUtil.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/Timer.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/Timer.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/main.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/vcpkg.json">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Users/lrsoft/.clion-vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake">
+			<Option virtualFolder="CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\scripts\buildsystems\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/curl/CURLConfig.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\curl\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/curl/CURLConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\curl\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/curl/CURLTargets-debug.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\curl\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/curl/CURLTargets-release.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\curl\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/curl/CURLTargets.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\curl\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/curl/vcpkg-cmake-wrapper.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\curl\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/zlib/vcpkg-cmake-wrapper.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\zlib\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/jsoncpp/jsoncpp-namespaced-targets.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/jsoncpp/jsoncpp-targets-debug.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/jsoncpp/jsoncpp-targets-release.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/jsoncpp/jsoncpp-targets.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/jsoncpp/jsoncppConfig.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/jsoncpp/jsoncppConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

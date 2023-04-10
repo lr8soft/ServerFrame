@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/curl-x64-windows-8.0.1-d9df1433-c486-4e2b-a6dc-1159065de9d8",
-  "name": "curl:x64-windows@8.0.1 b77b491957e69fc7210123eed130df0d950a4b46d863750d15bfbb23c7d76786",
+  "documentNamespace": "https://spdx.org/spdxdocs/curl-x64-windows-8.0.1-fff03b35-d82c-4a53-a030-7fc9ab0a0f59",
+  "name": "curl:x64-windows@8.0.1 b1214726c347d2b1be025d430bc5dd152746a6aeaf650f6ba43847495b1f99ff",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-664f8bb619b752430368d0f30a8289b761f5caba"
     ],
-    "created": "2023-04-07T14:53:24Z"
+    "created": "2023-04-07T03:18:11Z"
   },
   "relationships": [
     {
@@ -163,7 +163,7 @@
       "name": "curl",
       "SPDXID": "SPDXRef-port",
       "versionInfo": "8.0.1",
-      "downloadLocation": "git+https://github.com/Microsoft/vcpkg#ports/curl",
+      "downloadLocation": "git+https://github.com/Microsoft/vcpkg@08eea1b0a159f6555603ac8d26a9f8ab4738d02f",
       "homepage": "https://curl.se/",
       "licenseConcluded": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",
@@ -174,7 +174,7 @@
     {
       "name": "curl:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "b77b491957e69fc7210123eed130df0d950a4b46d863750d15bfbb23c7d76786",
+      "versionInfo": "b1214726c347d2b1be025d430bc5dd152746a6aeaf650f6ba43847495b1f99ff",
       "downloadLocation": "NONE",
       "licenseConcluded": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",

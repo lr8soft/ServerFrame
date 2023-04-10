@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/jsoncpp-x64-windows-1.9.5-e61f94d8-201c-4088-bde8-2e9d7b5ca825",
-  "name": "jsoncpp:x64-windows@1.9.5 1a6f53382aaac74763eaf130c9fc2d6e2cedf1b3c6d0772341eacca3f114e60b",
+  "documentNamespace": "https://spdx.org/spdxdocs/jsoncpp-x64-windows-1.9.5-3eb8f0e9-f776-4fc9-b548-41d86b2cfe4e",
+  "name": "jsoncpp:x64-windows@1.9.5 b7e832d3621580db2c23c4f4b106fa50ad4905e074639d9fbad71b47193a0d2c",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-664f8bb619b752430368d0f30a8289b761f5caba"
     ],
-    "created": "2023-04-07T14:50:23Z"
+    "created": "2023-04-07T03:18:22Z"
   },
   "relationships": [
     {
@@ -53,7 +53,7 @@
       "name": "jsoncpp",
       "SPDXID": "SPDXRef-port",
       "versionInfo": "1.9.5",
-      "downloadLocation": "git+https://github.com/Microsoft/vcpkg#ports/jsoncpp",
+      "downloadLocation": "git+https://github.com/Microsoft/vcpkg@ee92c743e235ebd2eda342c656704f20a329bda9",
       "homepage": "https://github.com/open-source-parsers/jsoncpp",
       "licenseConcluded": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",
@@ -64,7 +64,7 @@
     {
       "name": "jsoncpp:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "1a6f53382aaac74763eaf130c9fc2d6e2cedf1b3c6d0772341eacca3f114e60b",
+      "versionInfo": "b7e832d3621580db2c23c4f4b106fa50ad4905e074639d9fbad71b47193a0d2c",
       "downloadLocation": "NONE",
       "licenseConcluded": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",
