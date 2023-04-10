@@ -10,3 +10,12 @@ target_link_libraries(ServerFrame PRIVATE CURL::libcurl)
 
 find_package(jsoncpp CONFIG REQUIRED)
 target_link_libraries(ServerFrame PRIVATE JsonCpp::JsonCpp)
+
+find_package(asio CONFIG REQUIRED)
+target_link_libraries(ServerFrame PRIVATE asio::asio)
+# asio需要链接对应lib
+if(WIN32)
+    target_link_libraries(ServerFrame PRIVATE ws2_32)
+elseif(UNIX)
+    target_link_libraries(ServerFrame PRIVATE pthread boost_system)
+endif()

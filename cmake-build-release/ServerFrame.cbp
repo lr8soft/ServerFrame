@@ -5,7 +5,7 @@
 		<Option title="ServerFrame"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\Users\;CMake Files\Users\lrsoft\;CMake Files\Users\lrsoft\.clion-vcpkg\;CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\;CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\scripts\;CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\scripts\buildsystems\;CMake Files\cmake-build-release\;CMake Files\cmake-build-release\vcpkg_installed\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\curl\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\zlib\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Users\;CMake Files\Users\lrsoft\;CMake Files\Users\lrsoft\.clion-vcpkg\;CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\;CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\scripts\;CMake Files\Users\lrsoft\.clion-vcpkg\vcpkg\scripts\buildsystems\;CMake Files\cmake-build-release\;CMake Files\cmake-build-release\vcpkg_installed\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\curl\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\zlib\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\;CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\asio\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="F:/ServerFrame/cmake-build-release"/>
@@ -158,6 +158,12 @@
 		</Unit>
 		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/jsoncpp/jsoncppConfigVersion.cmake">
 			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/asio/asio-config.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\asio\"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/share/asio/asio-targets.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-release\vcpkg_installed\x64-windows\share\asio\"/>
 		</Unit>
 	</Project>
 </CodeBlocks_project_file>
