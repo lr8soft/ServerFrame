@@ -25,8 +25,8 @@
 		[
 			"C:/Users/lrsoft/.clion-vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake",
 			"CMakeLists.txt",
-			"cmake-build-debug/vcpkg_installed/x64-windows/share/jsoncpp/jsoncpp-namespaced-targets.cmake",
-			"cmake-build-debug/vcpkg_installed/x64-windows/share/jsoncpp/jsoncppConfig.cmake"
+			"cmake-build-release/vcpkg_installed/x64-windows/share/jsoncpp/jsoncpp-namespaced-targets.cmake",
+			"cmake-build-release/vcpkg_installed/x64-windows/share/jsoncpp/jsoncppConfig.cmake"
 		],
 		"nodes" : 
 		[
@@ -103,7 +103,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -fdiagnostics-color=always"
+					"fragment" : "-O3 -DNDEBUG -fdiagnostics-color=always"
 				}
 			],
 			"includes" : 
@@ -111,7 +111,7 @@
 				{
 					"backtrace" : 3,
 					"isSystem" : true,
-					"path" : "F:/ServerFrame/cmake-build-debug/vcpkg_installed/x64-windows/include"
+					"path" : "F:/ServerFrame/cmake-build-release/vcpkg_installed/x64-windows/include"
 				}
 			],
 			"language" : "CXX",
@@ -163,7 +163,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
+				"fragment" : "-O3 -DNDEBUG",
 				"role" : "flags"
 			},
 			{
@@ -172,7 +172,7 @@
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "vcpkg_installed\\x64-windows\\debug\\lib\\libcurl-d.lib",
+				"fragment" : "vcpkg_installed\\x64-windows\\lib\\libcurl.lib",
 				"role" : "libraries"
 			},
 			{
@@ -182,7 +182,7 @@
 			},
 			{
 				"backtrace" : 10,
-				"fragment" : "vcpkg_installed\\x64-windows\\debug\\lib\\jsoncpp.lib",
+				"fragment" : "vcpkg_installed\\x64-windows\\lib\\jsoncpp.lib",
 				"role" : "libraries"
 			},
 			{
@@ -245,12 +245,12 @@
 		{
 			"backtrace" : 2,
 			"compileGroupIndex" : 0,
-			"path" : "Application.cpp",
+			"path" : "Server.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 2,
-			"path" : "Application.h",
+			"path" : "Server.h",
 			"sourceGroupIndex" : 1
 		},
 		{

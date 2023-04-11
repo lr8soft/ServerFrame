@@ -1,8 +1,8 @@
-#include "Application.h"
+#include "Server.h"
 int main() {
-    Application app;
-    app.init();
-    app.work();
-    app.finalize();
+    Server* app = Server::getInstance();
+    app->init();
+    app->work();
+    app->finalize();
     return 0;
 }
