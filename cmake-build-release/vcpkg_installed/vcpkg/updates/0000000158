@@ -1,0 +1,9 @@
+Package: boost-logic
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-config, boost-core, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 9d4f100815d7cd9a51160ceacb2a41e8da8d872094a21a3b3fa21887208dad4a
+Description: Boost logic module
+Status: purge ok half-installed

@@ -1,0 +1,9 @@
+Package: boost-pfr
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 39b2cd35db016c2ced5eee8a0baef50fb78010dcfda445b1134f9c73532e376b
+Description: Boost pfr module
+Status: purge ok not-installed

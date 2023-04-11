@@ -1,0 +1,10 @@
+Package: boost-python
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-align, boost-bind, boost-build, boost-config, boost-conversion, boost-core, boost-detail, boost-foreach, boost-function, boost-graph, boost-integer, boost-iterator, boost-lexical-cast, boost-modular-build-helper, boost-mpl, boost-numeric-conversion, boost-preprocessor, boost-property-map, boost-smart-ptr, boost-static-assert, boost-tuple, boost-type-traits, boost-utility, boost-vcpkg-helpers, vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 3c574c574926dfdfd4b8437ad30dd1d62607dd002b3ad1e21a56deb136a6e61f
+Description: Boost python module
+Default-Features: python3
+Status: purge ok not-installed

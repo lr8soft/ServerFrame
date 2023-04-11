@@ -1,0 +1,9 @@
+Package: boost-property-tree
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-any, boost-assert, boost-bind, boost-config, boost-core, boost-format, boost-iterator, boost-mpl, boost-multi-index, boost-optional, boost-range, boost-serialization, boost-static-assert, boost-throw-exception, boost-type-traits, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 6b5dc5cb1d8768d68e30e33b53de931a654d50efe42476c6042c302e404a82d5
+Description: Boost property_tree module
+Status: purge ok not-installed

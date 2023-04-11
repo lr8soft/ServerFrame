@@ -1,0 +1,9 @@
+Package: boost-fiber
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-algorithm, boost-assert, boost-build, boost-config, boost-context, boost-core, boost-filesystem, boost-format, boost-intrusive, boost-modular-build-helper, boost-predef, boost-smart-ptr, boost-vcpkg-helpers, vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: ae4275752c0d03da9fdb65a53df133e9c2ad89b3170a905c8b1b65d00bbbf193
+Description: Boost fiber module
+Status: purge ok half-installed

@@ -1,0 +1,9 @@
+Package: boost-lambda2
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 5375ccad0ac6e665c46c1099ec023e494feb58c1901e05da2ae093127fb0b670
+Description: Boost lambda2 module
+Status: purge ok half-installed

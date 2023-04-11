@@ -1,0 +1,9 @@
+Package: boost-asio
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-align, boost-array, boost-assert, boost-bind, boost-chrono, boost-config, boost-context, boost-core, boost-coroutine, boost-date-time, boost-exception, boost-function, boost-regex, boost-smart-ptr, boost-system, boost-throw-exception, boost-type-traits, boost-utility, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 3a56dc187b7a62c0212926224c798e5f0074125b44aa35cd802a97a233e9be64
+Description: Boost asio module
+Status: purge ok not-installed

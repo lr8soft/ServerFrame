@@ -1,0 +1,9 @@
+Package: boost-detail
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-config, boost-core, boost-preprocessor, boost-static-assert, boost-type-traits, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: eb50c960815dffb57fd05137c281750f0585875349a20ac06611dfbd9f965532
+Description: Boost detail module
+Status: purge ok not-installed

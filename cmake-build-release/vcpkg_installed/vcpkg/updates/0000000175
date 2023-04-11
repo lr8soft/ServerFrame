@@ -1,0 +1,9 @@
+Package: boost-tti
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-config, boost-function-types, boost-mpl, boost-preprocessor, boost-type-traits, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: a5d6bab18dbd1a49829ebfeb54f8689ee49a57e25306ddb3595ab2f11cc30a6b
+Description: Boost tti module
+Status: purge ok not-installed

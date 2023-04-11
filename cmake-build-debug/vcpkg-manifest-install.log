@@ -1,7 +1,7 @@
 Detecting compiler hash for triplet x64-windows...
 All requested packages are currently installed.
-Restored 0 package(s) from C:\Users\lrsoft\AppData\Local\vcpkg\archives in 163 us. Use --debug to see more details.
-Total install time: 191 us
+Restored 0 package(s) from C:\Users\lrsoft\AppData\Local\vcpkg\archives in 112 us. Use --debug to see more details.
+Total install time: 131 us
 asio provides CMake targets:
 
     # this is heuristically generated, and may not be correct

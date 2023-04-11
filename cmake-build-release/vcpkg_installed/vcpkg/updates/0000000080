@@ -1,0 +1,9 @@
+Package: boost-parameter-python
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-mpl, boost-parameter, boost-preprocessor, boost-python, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: f746b96b99cb936cc87b8945e3a38b59bc193b2071b93dfdb7e71eb335b2e169
+Description: Boost parameter_python module
+Status: purge ok half-installed

@@ -1,0 +1,9 @@
+Package: boost-vmd
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-preprocessor, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 9176363e55719343e054c1a3f5c40f3b5797b8ec9f5c1dddf552a54377512e1e
+Description: Boost vmd module
+Status: purge ok not-installed

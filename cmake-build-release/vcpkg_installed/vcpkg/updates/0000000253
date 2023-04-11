@@ -1,0 +1,9 @@
+Package: boost-functional
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-config, boost-core, boost-function, boost-function-types, boost-mpl, boost-preprocessor, boost-type-traits, boost-typeof, boost-utility, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: bea17f3036d049e138c4888667b3f1c726bca7ffef5e32dd7d5319754ad20473
+Description: Boost functional module
+Status: purge ok not-installed

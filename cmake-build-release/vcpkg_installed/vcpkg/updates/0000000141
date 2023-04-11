@@ -1,0 +1,9 @@
+Package: boost-stl-interfaces
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-assert, boost-config, boost-type-traits, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: abeaf2c9a71bca131a0d1be16da58782ae4f63072d07b6874c69bd45e1b7f75a
+Description: Boost stl_interfaces module
+Status: purge ok not-installed

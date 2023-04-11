@@ -1,0 +1,9 @@
+Package: boost-hof
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: aacf5685808165a9f2924b7077298c3d984a133c6a5411fae8a16390f4a8c820
+Description: Boost hof module
+Status: purge ok half-installed

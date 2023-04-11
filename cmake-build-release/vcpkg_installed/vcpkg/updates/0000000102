@@ -1,0 +1,9 @@
+Package: boost-bimap
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-concept-check, boost-config, boost-container-hash, boost-core, boost-iterator, boost-lambda, boost-mpl, boost-multi-index, boost-preprocessor, boost-serialization, boost-static-assert, boost-throw-exception, boost-type-traits, boost-utility, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 85c2c47833faa140658384a547dc1da0e8254e83e8d6981834777f0c577b5694
+Description: Boost bimap module
+Status: purge ok half-installed

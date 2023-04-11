@@ -1,0 +1,9 @@
+Package: boost-local-function
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-config, boost-mpl, boost-preprocessor, boost-scope-exit, boost-type-traits, boost-typeof, boost-utility, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: c5221259dde4070774fde08cf70e2975d35a16edd3981ec4ef0ce60d8d33588d
+Description: Boost local_function module
+Status: purge ok half-installed

@@ -1,0 +1,9 @@
+Package: boost-outcome
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-config, boost-exception, boost-system, boost-throw-exception, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 395308a7275591b412d325553f57bd01ecb9c7a8e8b7d2cb1fe5072a0156e2c9
+Description: Boost outcome module
+Status: purge ok half-installed

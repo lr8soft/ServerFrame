@@ -1,0 +1,9 @@
+Package: boost-array
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-assert, boost-config, boost-core, boost-static-assert, boost-throw-exception, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 8d947b6eef46bbf18680cce6d1e94b2f901f64ba404b905b7b541558418cafa7
+Description: Boost array module
+Status: purge ok not-installed

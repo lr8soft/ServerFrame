@@ -1,0 +1,9 @@
+Package: boost-preprocessor
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: c5d04c0cac892fa6642c2b7fd3ffd8326aba87baf4342a90fdc7a51b1b7e9e43
+Description: Boost preprocessor module
+Status: purge ok not-installed

@@ -1,0 +1,9 @@
+Package: boost-sort
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-config, boost-core, boost-range, boost-static-assert, boost-type-traits, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: b2932d940132ea720a5e0129a9cf4b870e1a778f638371affc44b9c3ad426d20
+Description: Boost sort module
+Status: purge ok not-installed

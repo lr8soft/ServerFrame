@@ -15,7 +15,7 @@ find_package(asio CONFIG REQUIRED)
 target_link_libraries(ServerFrame PRIVATE asio::asio)
 # asio需要链接对应lib
 if(WIN32)
-    target_link_libraries(ServerFrame PRIVATE ws2_32)
+    target_link_libraries(ServerFrame PRIVATE wsock32 ws2_32)
 elseif(UNIX)
     target_link_libraries(ServerFrame PRIVATE pthread boost_system)
 endif()

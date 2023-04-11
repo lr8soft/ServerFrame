@@ -1,0 +1,9 @@
+Package: boost-timer
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-build, boost-chrono, boost-config, boost-core, boost-io, boost-modular-build-helper, boost-predef, boost-system, boost-throw-exception, boost-vcpkg-helpers, vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: c27bc4e9be8c24ecc6cb13e63a53a6ad31a6e03583e73c4abc82d7b41429d7e3
+Description: Boost timer module
+Status: purge ok not-installed

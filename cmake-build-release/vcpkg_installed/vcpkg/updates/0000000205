@@ -1,0 +1,9 @@
+Package: boost-hana
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-config, boost-core, boost-fusion, boost-mpl, boost-tuple, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 87c293057987405e35185855683a987a92338925c8681874cd132faca0ef965d
+Description: Boost hana module
+Status: purge ok not-installed

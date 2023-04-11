@@ -1,0 +1,9 @@
+Package: boost-gil
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-assert, boost-concept-check, boost-config, boost-container-hash, boost-core, boost-integer, boost-iterator, boost-mp11, boost-preprocessor, boost-type-traits, boost-variant2, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 38c9637df8b5330db2fb0ff7cc3e0a0e0b763d03ed4543216b648a44462782bc
+Description: Boost gil module
+Status: purge ok not-installed

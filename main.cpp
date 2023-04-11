@@ -1,8 +1,10 @@
 #include "Server.h"
 int main() {
-    Server* app = Server::getInstance();
-    app->init();
-    app->work();
-    app->finalize();
+    AsioService service;
+    Server server(service);
+    server.init();
+    server.work();
+
+    service.run();
     return 0;
 }

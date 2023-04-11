@@ -1,0 +1,9 @@
+Package: boost-function
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-assert, boost-bind, boost-config, boost-core, boost-integer, boost-preprocessor, boost-throw-exception, boost-type-index, boost-type-traits, boost-typeof, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 3a798e754ebcf475f941723d86891e738f6a1075bb5e26a44a65cd7391a0ee67
+Description: Boost function module
+Status: purge ok not-installed

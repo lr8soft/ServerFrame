@@ -1,0 +1,9 @@
+Package: boost-describe
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-mp11, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 275e4ea3337218eb98b8f3453ca31c888ea22bd096e36dbe20bc57cdca9a1644
+Description: Boost describe module
+Status: purge ok half-installed

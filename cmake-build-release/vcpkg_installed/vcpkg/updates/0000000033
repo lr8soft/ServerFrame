@@ -1,0 +1,9 @@
+Package: boost-histogram
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-config, boost-core, boost-math, boost-mp11, boost-serialization, boost-throw-exception, boost-variant2, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 8c500cc4b1902a2c28db1682cca62e886977e321ecf28c2bb44f1e7d5b3312ca
+Description: Boost histogram module
+Status: purge ok not-installed

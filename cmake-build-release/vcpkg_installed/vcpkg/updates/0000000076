@@ -1,0 +1,9 @@
+Package: boost-multi-array
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-array, boost-assert, boost-concept-check, boost-config, boost-core, boost-functional, boost-iterator, boost-mpl, boost-static-assert, boost-type-traits, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: bf8f64df8575223aafad9648a2ab962772c4ebb0b8f67fdb799c72e3b64766cc
+Description: Boost multi_array module
+Status: purge ok half-installed

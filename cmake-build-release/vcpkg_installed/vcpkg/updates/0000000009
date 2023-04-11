@@ -1,0 +1,9 @@
+Package: boost-callable-traits
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 498b258fda08639a498e6c0305ec8b4b4a12f6dcac3095f6ff9c2b1c5c0c2b28
+Description: Boost callable_traits module
+Status: purge ok not-installed

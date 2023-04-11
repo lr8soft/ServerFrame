@@ -8,11 +8,9 @@
 #include "Utils/LogUtil.h"
 #include "Utils/HttpConnect.h"
 
-Server* Server::pInst = nullptr;
-
 void Server::init() {
     try{
-        asio::ip::tcp::endpoint endPoint(asio::ip::tcp::v4(), 6780);
+        AsioEndPoint endPoint(asio::ip::tcp::v4(), 6780);
         pAcceptor = std::make_shared<AsioAcceptor>(ioService, endPoint);
         // 打印当前服务器地址
         std::cout << "Server address: " << pAcceptor->local_endpoint().address()
@@ -23,21 +21,8 @@ void Server::init() {
 }
 
 void Server::work() {
-    while(!getIsTerminated()){
-        timer.Tick();
-        asio::ip::tcp::socket socket(ioService);
-        pAcceptor->accept(socket);
-        // 阻塞等待客户端连接，连接成功后返回socket, accept这个函数使用引用来调取socket.
-        std::cout << "client try connect: " << socket.remote_endpoint().address() << std::endl;
-
-        std::string msg;
-        // 发点啥的
-        socket.write_some(asio::buffer("HELLO FROM LT_LRSOFT!"));
-        // 线程直接堵塞等他回复
-        socket.read_some(asio::buffer(msg));
-
-        std::cout << "client reply:" << msg << std::endl;
-    }
+    auto pSocket = std::make_shared<AsioSocket>(ioService);
+    pAcceptor->async_accept(*pSocket, std::bind(&Server::acceptHandler, this, 1, pSocket));
 }
 
 void Server::finalize() {
@@ -46,6 +31,21 @@ void Server::finalize() {
 
 bool Server::getIsTerminated() {
     return isTerminated;
+}
+
+void Server::acceptHandler(int code, std::shared_ptr<AsioSocket> pSocket) {
+    if(!code) {
+        std::cerr << "Accpet handle fail CODE" << code << std::endl;
+        return;
+    }
+    std::cout << "Client: " << pSocket->remote_endpoint().address() << std::endl;
+    pSocket->async_write_some(asio::buffer("HELLO WORLD! FROM SERVER FLAME"),
+                              std::bind(&Server::writeHandler, this, 1));
+    this->work();
+}
+
+void Server::writeHandler(int code) {
+    std::cout << "Send message to client CODE" << code << std::endl;
 }
 
 

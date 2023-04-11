@@ -1,0 +1,9 @@
+Package: boost-msm
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-any, boost-assert, boost-bind, boost-circular-buffer, boost-config, boost-core, boost-function, boost-fusion, boost-mpl, boost-parameter, boost-phoenix, boost-preprocessor, boost-proto, boost-serialization, boost-tuple, boost-type-traits, boost-typeof, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: f972093d62bae3cabddf793cf876e79cd89e433d8e6934c3da8a16412bd686d2
+Description: Boost msm module
+Status: purge ok half-installed

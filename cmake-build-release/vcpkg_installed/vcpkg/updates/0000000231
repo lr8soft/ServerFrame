@@ -1,0 +1,9 @@
+Package: boost-unordered
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-assert, boost-config, boost-container-hash, boost-core, boost-move, boost-mp11, boost-predef, boost-preprocessor, boost-throw-exception, boost-tuple, boost-type-traits, boost-vcpkg-helpers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 588da19c6b1612a16db9d089b7a52685799b00058006d67ebf0094eb1c75a6bb
+Description: Boost unordered module
+Status: purge ok not-installed

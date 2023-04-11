@@ -1,0 +1,9 @@
+Package: boost-stacktrace
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-array, boost-build, boost-config, boost-container-hash, boost-core, boost-modular-build-helper, boost-predef, boost-static-assert, boost-type-traits, boost-vcpkg-helpers, boost-winapi, vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: dfb2884a99d17bcb1c17595b444d4076013f24e0f8d6921ebd799eabf2b1d884
+Description: Boost stacktrace module
+Status: purge ok half-installed

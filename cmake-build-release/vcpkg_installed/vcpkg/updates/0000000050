@@ -1,0 +1,9 @@
+Package: boost-json
+Version: 1.81.0
+Port-Version: 2
+Depends: boost-align, boost-assert, boost-build, boost-config, boost-container, boost-core, boost-describe, boost-modular-build-helper, boost-mp11, boost-system, boost-throw-exception, boost-vcpkg-helpers, vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 882a119edf2201f9fae7fb3e550757cb4b9514d93c759c5867b6096dc6409056
+Description: Boost json module
+Status: purge ok half-installed
