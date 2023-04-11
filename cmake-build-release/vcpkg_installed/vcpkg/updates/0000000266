@@ -1,9 +1,0 @@
-Package: boost-bind
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-config, boost-core, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 8993cf4ce9bff8e41ef47ab972fb1522494630e46eb744dcf8b63cad4b2c5a1d
-Description: Boost bind module
-Status: purge ok half-installed

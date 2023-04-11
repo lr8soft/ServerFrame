@@ -1,9 +1,0 @@
-Package: python3
-Version: 3.10.7
-Port-Version: 5
-Depends: bzip2, expat, libffi, liblzma, openssl, python3, sqlite3, zlib
-Architecture: x64-windows
-Multi-Arch: same
-Abi: c5cdadc15af3f79bb826f81238b16a3eda957791db32ea82f8efe442b611b00c
-Description: The Python programming language
-Status: purge ok not-installed

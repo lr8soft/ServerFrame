@@ -1,9 +1,0 @@
-Package: boost-scope-exit
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-config, boost-function, boost-preprocessor, boost-type-traits, boost-typeof, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 9c8da34ff79418b45d48b09817100bb7465d94ee05a256bdeb0b859ee5966e6e
-Description: Boost scope_exit module
-Status: purge ok not-installed

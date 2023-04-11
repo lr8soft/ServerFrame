@@ -1,9 +1,0 @@
-Package: boost-numeric-conversion
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-config, boost-conversion, boost-core, boost-mpl, boost-preprocessor, boost-throw-exception, boost-type-traits, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 9c7b3e43c67b95587eb5a9a79d16f74848d8c5ba84f3fd4e44f44dfbadf2cadf
-Description: Boost numeric_conversion module
-Status: purge ok not-installed

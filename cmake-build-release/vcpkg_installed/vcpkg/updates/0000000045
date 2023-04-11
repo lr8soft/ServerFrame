@@ -1,7 +1,0 @@
-Package: boost-iostreams
-Feature: zlib
-Depends: zlib
-Architecture: x64-windows
-Multi-Arch: same
-Description: Support zlib filters
-Status: purge ok not-installed

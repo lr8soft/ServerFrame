@@ -6,32 +6,25 @@
 #define SERVERFRAME_SERVER_H
 
 #include <atomic>
-#include <asio.hpp>
 #include <memory>
+#include "SimpleAsioDefine.h"
 #include "Utils/Timer.h"
-
-typedef asio::ip::tcp::acceptor AsioAcceptor;
-typedef asio::io_service AsioService;
-typedef asio::ip::tcp::endpoint AsioEndPoint;
-typedef asio::ip::tcp::socket AsioSocket;
-
 class Server {
-private:
-    Timer timer;
-    std::atomic<bool> isTerminated = false;
-    AsioService& ioService;
-    std::shared_ptr<AsioAcceptor> pAcceptor;
-
-    void acceptHandler(int code, std::shared_ptr<AsioSocket> pSocket);
-    void writeHandler(int code);
 public:
-    Server(AsioService& service): ioService(service){}
+    Server(AsioService& service);
 
-    void init();
-    void work();
-    void finalize();
+    void start();
+    // 处理接受连接后
+    void handleAcceptAction(std::shared_ptr<AsioSocket> pSocket);
+    void handleRequest(std::shared_ptr<AsioSocket> pSocket);
+    void handleReceiveRequest(std::shared_ptr<AsioSocket> pSocket);
+    void handleReleaseSocket(std::shared_ptr<AsioSocket> pSocket);
+private:
+    AsioService& _service;
+    AsioAcceptor _acceptor;
 
-    inline bool getIsTerminated();
+    char buf[256];
+    Timer timer;
 };
 
 

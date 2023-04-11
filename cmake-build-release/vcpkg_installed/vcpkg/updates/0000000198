@@ -1,9 +1,0 @@
-Package: boost-proto
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-config, boost-core, boost-fusion, boost-mpl, boost-preprocessor, boost-range, boost-static-assert, boost-type-traits, boost-typeof, boost-utility, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 3bf2399b542e4ce7aa6a665abf3a85ba95576e61653fd51759e1fe8449108d9e
-Description: Boost proto module
-Status: purge ok half-installed

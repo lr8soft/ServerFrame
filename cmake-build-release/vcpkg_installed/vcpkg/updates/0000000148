@@ -1,9 +1,0 @@
-Package: boost-ublas
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-compute, boost-concept-check, boost-config, boost-core, boost-interval, boost-iterator, boost-mpl, boost-range, boost-serialization, boost-smart-ptr, boost-static-assert, boost-type-traits, boost-typeof, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: f5b9a362c27dd3d2551dde9e4184a00e777a9286ca76ea170cb7c4b7753b1edc
-Description: Boost ublas module
-Status: purge ok half-installed

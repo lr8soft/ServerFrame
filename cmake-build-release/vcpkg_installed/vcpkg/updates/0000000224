@@ -1,9 +1,0 @@
-Package: boost-pool
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-assert, boost-config, boost-integer, boost-throw-exception, boost-type-traits, boost-vcpkg-helpers, boost-winapi
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 161adb16df87791f9aba26f091cf42e178a5f9c2db621ada3b99db229310c12c
-Description: Boost pool module
-Status: purge ok half-installed

@@ -1,9 +1,0 @@
-Package: boost-static-string
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-assert, boost-container-hash, boost-static-assert, boost-throw-exception, boost-utility, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 1ce3120185742749f78b1a09913a88c06953e98749c7ceb989cc40804ea67e95
-Description: Boost static_string module
-Status: purge ok not-installed

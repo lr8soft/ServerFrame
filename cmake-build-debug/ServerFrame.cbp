@@ -84,10 +84,19 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="F:/ServerFrame/ConnManager.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/ConnManager.h">
+			<Option target="ServerFrame"/>
+		</Unit>
 		<Unit filename="F:/ServerFrame/Server.cpp">
 			<Option target="ServerFrame"/>
 		</Unit>
 		<Unit filename="F:/ServerFrame/Server.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/SimpleAsioDefine.h">
 			<Option target="ServerFrame"/>
 		</Unit>
 		<Unit filename="F:/ServerFrame/Utils/HttpConnect.cpp">

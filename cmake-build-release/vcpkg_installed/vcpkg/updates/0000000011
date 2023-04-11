@@ -1,9 +1,0 @@
-Package: boost-compatibility
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: f2e891b270b5ddf6a4dceb36a6e0e89773e18c66e53db36ec1ead9618d32465a
-Description: Boost compatibility module
-Status: purge ok not-installed

@@ -1,9 +1,0 @@
-Package: boost-geometry
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-algorithm, boost-any, boost-array, boost-assert, boost-concept-check, boost-config, boost-container, boost-core, boost-function-types, boost-fusion, boost-integer, boost-iterator, boost-lexical-cast, boost-math, boost-move, boost-mpl, boost-multiprecision, boost-numeric-conversion, boost-polygon, boost-qvm, boost-range, boost-rational, boost-serialization, boost-smart-ptr, boost-static-assert, boost-thread, boost-throw-exception, boost-tokenizer, boost-tuple, boost-type-traits, boost-utility, boost-variant, boost-variant2, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: d414bb8e8fa785de73d91bd4a344d8a2377dfdb6b3a130ecc5cb21c00c8dac02
-Description: Boost geometry module
-Status: purge ok half-installed

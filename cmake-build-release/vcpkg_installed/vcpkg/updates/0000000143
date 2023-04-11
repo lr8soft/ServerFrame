@@ -1,9 +1,0 @@
-Package: boost-test
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-algorithm, boost-assert, boost-bind, boost-build, boost-config, boost-core, boost-detail, boost-exception, boost-function, boost-io, boost-iterator, boost-modular-build-helper, boost-mpl, boost-numeric-conversion, boost-optional, boost-preprocessor, boost-smart-ptr, boost-static-assert, boost-type-traits, boost-utility, boost-vcpkg-helpers, vcpkg-cmake
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 7b943eae3e25e8ac6008179feacefb17154c967f5337b36140f8ef1c24bc2d7d
-Description: Boost test module
-Status: purge ok not-installed

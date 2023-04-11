@@ -3,51 +3,56 @@
 //
 
 #include <iostream>
-#include <curl/curl.h>
 #include "Server.h"
 #include "Utils/LogUtil.h"
 #include "Utils/HttpConnect.h"
 
-void Server::init() {
-    try{
-        AsioEndPoint endPoint(asio::ip::tcp::v4(), 6780);
-        pAcceptor = std::make_shared<AsioAcceptor>(ioService, endPoint);
-        // 打印当前服务器地址
-        std::cout << "Server address: " << pAcceptor->local_endpoint().address()
-                  << ":" << pAcceptor->local_endpoint().port() << std::endl;
-    }catch(std::exception& expt) {
-        std::cout << "Server init failed " << expt.what() << std::endl;
-    }
+Server::Server(AsioService &service)
+    : _service(service),
+    _acceptor(service, AsioEndPoint(asio::ip::tcp::v4(), 6780)){
+    this->start();
 }
 
-void Server::work() {
-    auto pSocket = std::make_shared<AsioSocket>(ioService);
-    pAcceptor->async_accept(*pSocket, std::bind(&Server::acceptHandler, this, 1, pSocket));
+void Server::start() {
+    std::shared_ptr<AsioSocket> pSocket(new AsioSocket(_service));
+    _acceptor.async_accept(*pSocket, std::bind(&Server::handleAcceptAction, this, pSocket));
 }
 
-void Server::finalize() {
-    curl_global_cleanup();
+void Server::handleAcceptAction(std::shared_ptr<AsioSocket> pSocket) {
+    std::memset(buf, 0, sizeof(buf));
+    pSocket->async_read_some(asio::buffer(buf, std::strlen(buf)),
+                             std::bind(&Server::handleRequest, this, pSocket));
+    std::cout << "handleAcceptAction " << pSocket->remote_endpoint().address() <<std::endl;
+    this->start();
 }
 
-bool Server::getIsTerminated() {
-    return isTerminated;
+void Server::handleRequest(std::shared_ptr<AsioSocket> pSocket) {
+    std::memset(buf, 0, sizeof(buf));
+    pSocket->async_read_some(asio::buffer(buf, std::strlen(buf)),
+                             std::bind(&Server::handleReceiveRequest, this, pSocket));
+    std::cout << "handleRequest " << pSocket->remote_endpoint().address() << std::endl;
 }
 
-void Server::acceptHandler(int code, std::shared_ptr<AsioSocket> pSocket) {
-    if(!code) {
-        std::cerr << "Accpet handle fail CODE" << code << std::endl;
-        return;
-    }
-    std::cout << "Client: " << pSocket->remote_endpoint().address() << std::endl;
-    pSocket->async_write_some(asio::buffer("HELLO WORLD! FROM SERVER FLAME"),
-                              std::bind(&Server::writeHandler, this, 1));
-    this->work();
+void Server::handleReceiveRequest(std::shared_ptr<AsioSocket> pSocket) {
+    char result[] = "HTTP/1.1 200 OK\n"
+                    "Content-Type: text/html\n"
+                    "Content-Length: 1024\n"
+                    "\n"
+                    "<!DOCTYPE html>\n"
+                    "<html>\n"
+                    "<head>\n"
+                    "    <title>Example</title>\n"
+                    "</head>\n"
+                    "<body>\n"
+                    "    <h1>Hello, world!</h1>\n"
+                    "</body>\n"
+                    "</html>";
+    pSocket->async_write_some(asio::buffer(result),
+                              std::bind(&Server::handleReleaseSocket, this, pSocket));
+    std::cout << "handleReceiveRequest " << pSocket->remote_endpoint().address() << std::endl;
 }
 
-void Server::writeHandler(int code) {
-    std::cout << "Send message to client CODE" << code << std::endl;
+void Server::handleReleaseSocket(std::shared_ptr<AsioSocket> pSocket) {
+    std::cout << "Release " << pSocket->remote_endpoint().address() << std::endl;
+    pSocket->release();
 }
-
-
-
-

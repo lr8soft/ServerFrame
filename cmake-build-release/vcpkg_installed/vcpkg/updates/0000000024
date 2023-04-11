@@ -1,9 +1,0 @@
-Package: boost-flyweight
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-assert, boost-config, boost-container-hash, boost-core, boost-detail, boost-interprocess, boost-mpl, boost-multi-index, boost-parameter, boost-preprocessor, boost-serialization, boost-smart-ptr, boost-throw-exception, boost-type-traits, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 04293b0aa042c048e2dae50af95f893ef16e59e765750c87368c0c6f69390392
-Description: Boost flyweight module
-Status: purge ok half-installed

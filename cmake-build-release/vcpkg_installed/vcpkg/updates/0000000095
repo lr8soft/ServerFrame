@@ -1,9 +1,0 @@
-Package: boost-circular-buffer
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-assert, boost-concept-check, boost-config, boost-core, boost-move, boost-static-assert, boost-throw-exception, boost-type-traits, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 88d60eb44d5a0f008321c41aad25f590cdf6f4860e6a6f173539a38fdd92b4c5
-Description: Boost circular_buffer module
-Status: purge ok not-installed

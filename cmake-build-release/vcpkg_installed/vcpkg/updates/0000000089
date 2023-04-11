@@ -1,9 +1,0 @@
-Package: boost-process
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-algorithm, boost-asio, boost-config, boost-core, boost-filesystem, boost-fusion, boost-io, boost-iterator, boost-move, boost-optional, boost-system, boost-throw-exception, boost-tokenizer, boost-type-index, boost-utility, boost-vcpkg-helpers, boost-winapi
-Architecture: x64-windows
-Multi-Arch: same
-Abi: ef4c9245117751edca7353c5d766c3c09a6adcdf1da8ab1e80aca7c2ad4ffa8f
-Description: Boost process module
-Status: purge ok not-installed

@@ -1,9 +1,0 @@
-Package: boost-metaparse
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-config, boost-mpl, boost-predef, boost-preprocessor, boost-static-assert, boost-type-traits, boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 557cd8cb6d9048cb08514b3f37741f4325cdcfd981d1a49aa5e2aa13ed4a625f
-Description: Boost metaparse module
-Status: purge ok not-installed

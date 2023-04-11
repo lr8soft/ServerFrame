@@ -1,9 +1,0 @@
-Package: boost-qvm
-Version: 1.81.0
-Port-Version: 2
-Depends: boost-vcpkg-helpers
-Architecture: x64-windows
-Multi-Arch: same
-Abi: b1290e6de17455d9e35e090a20bbcb898750e8cf15e6a92a2c00732c9a8e655d
-Description: Boost qvm module
-Status: purge ok not-installed
