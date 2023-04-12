@@ -5,254 +5,191 @@
 #include "RequestParser.hpp"
 #include "Request.hpp"
 
-RequestParser::ResultEnum RequestParser::consume(Request &req, char input) {
+RequestParser::ResultEnum RequestParser::parseRequestItem(Request &req, char input) {
+    // 开头第一行GET / HTTP/1.1
     switch (_state) {
         case method_start:
             // 啥都不是
-            if (!is_char(input) || is_ctl(input) || is_tspecial(input))
-            {
+            if (!isChar(input) || isCtl(input) || isTspecial(input)) {
                 return bad;
-            }
-            else
-            {
+            } else {
+                // 读GET POST之类的方法阶段
                 _state = method;
                 req.method.push_back(input);
                 return indeterminate;
             }
         case method:
-            if (input == ' ')
-            {
+            // 方法名后你最好是空格
+            if (input == ' ') {
                 _state = uri;
                 return indeterminate;
-            }
-            else if (!is_char(input) || is_ctl(input) || is_tspecial(input))
-            {
+            } else if (!isChar(input) || isCtl(input) || isTspecial(input)) {
                 return bad;
-            }
-            else
-            {
+            } else {
                 req.method.push_back(input);
                 return indeterminate;
             }
         case uri:
-            if (input == ' ')
-            {
+            // 没url那就跳阶段读主版本
+            if (input == ' ') {
                 _state = http_version_h;
                 return indeterminate;
-            }
-            else if (is_ctl(input))
-            {
+            } else if (isCtl(input)) {
                 return bad;
-            }
-            else
-            {
+            } else {
+                // 读url
                 req.uri.push_back(input);
                 return indeterminate;
             }
         case http_version_h:
-            if (input == 'H')
-            {
+            // 下面拼一个HTTP出来
+            if (input == 'H') {
                 _state = http_version_t_1;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case http_version_t_1:
-            if (input == 'T')
-            {
+            if (input == 'T') {
                 _state = http_version_t_2;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case http_version_t_2:
-            if (input == 'T')
-            {
+            if (input == 'T') {
                 _state = http_version_p;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case http_version_p:
-            if (input == 'P')
-            {
+            if (input == 'P') {
                 _state = http_version_slash;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case http_version_slash:
-            if (input == '/')
-            {
+            // 分隔符后面版本号比如1.1
+            if (input == '/') {
                 req.http_version_major = 0;
                 req.http_version_minor = 0;
                 _state = http_version_major_start;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case http_version_major_start:
-            if (is_digit(input))
-            {
+            if (isDigit(input)) {
                 req.http_version_major = req.http_version_major * 10 + input - '0';
                 _state = http_version_major;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case http_version_major:
-            if (input == '.')
-            {
+            // 读到.就是主版本结束了，跳去读次版本
+            if (input == '.') {
                 _state = http_version_minor_start;
                 return indeterminate;
-            }
-            else if (is_digit(input))
-            {
+            } else if (isDigit(input)) {
+                // 是主版本的个位，把原个位变十位+现在的值
                 req.http_version_major = req.http_version_major * 10 + input - '0';
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case http_version_minor_start:
-            if (is_digit(input))
-            {
+            if (isDigit(input)) {
+                // 读次版本号
                 req.http_version_minor = req.http_version_minor * 10 + input - '0';
                 _state = http_version_minor;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case http_version_minor:
-            if (input == '\r')
-            {
+            // 次版本结束了换行
+            if (input == '\r') {
                 _state = expecting_newline_1;
                 return indeterminate;
-            }
-            else if (is_digit(input))
-            {
+            } else if (isDigit(input)) {
+                // 次版本原先的值x10+现在的
                 req.http_version_minor = req.http_version_minor * 10 + input - '0';
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case expecting_newline_1:
-            if (input == '\n')
-            {
+            // 第一行结束就应该换行
+            if (input == '\n') {
                 _state = header_line_start;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case header_line_start:
-            if (input == '\r')
-            {
+            // 换行后回车
+            if (input == '\r') {
                 _state = expecting_newline_3;
                 return indeterminate;
-            }
-            else if (!req.headers.empty() && (input == ' ' || input == '\t'))
-            {
+            } else if (!req.headers.empty() && (input == ' ' || input == '\t')) {
                 _state = header_lws;
                 return indeterminate;
-            }
-            else if (!is_char(input) || is_ctl(input) || is_tspecial(input))
-            {
+            } else if (!isChar(input) || isCtl(input) || isTspecial(input)) {
                 return bad;
-            }
-            else
-            {
+            } else {
                 req.headers.push_back(Header());
                 req.headers.back().name.push_back(input);
                 _state = header_name;
                 return indeterminate;
             }
         case header_lws:
-            if (input == '\r')
-            {
+            if (input == '\r') {
                 _state = expecting_newline_2;
                 return indeterminate;
-            }
-            else if (input == ' ' || input == '\t')
-            {
+            } else if (input == ' ' || input == '\t') {
                 return indeterminate;
-            }
-            else if (is_ctl(input))
-            {
+            } else if (isCtl(input)) {
                 return bad;
-            }
-            else
-            {
+            } else {
                 _state = header_value;
                 req.headers.back().value.push_back(input);
                 return indeterminate;
             }
         case header_name:
-            if (input == ':')
-            {
+            if (input == ':') {
                 _state = space_before_header_value;
                 return indeterminate;
-            }
-            else if (!is_char(input) || is_ctl(input) || is_tspecial(input))
-            {
+            } else if (!isChar(input) || isCtl(input) || isTspecial(input)) {
                 return bad;
-            }
-            else
-            {
+            } else {
                 req.headers.back().name.push_back(input);
                 return indeterminate;
             }
         case space_before_header_value:
-            if (input == ' ')
-            {
+            if (input == ' ') {
                 _state = header_value;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case header_value:
-            if (input == '\r')
-            {
+            if (input == '\r') {
                 _state = expecting_newline_2;
                 return indeterminate;
-            }
-            else if (is_ctl(input))
-            {
+            } else if (isCtl(input)) {
                 return bad;
-            }
-            else
-            {
+            } else {
                 req.headers.back().value.push_back(input);
                 return indeterminate;
             }
         case expecting_newline_2:
-            if (input == '\n')
-            {
+            if (input == '\n') {
                 _state = header_line_start;
                 return indeterminate;
-            }
-            else
-            {
+            } else {
                 return bad;
             }
         case expecting_newline_3:
@@ -262,15 +199,15 @@ RequestParser::ResultEnum RequestParser::consume(Request &req, char input) {
     }
 }
 
-bool RequestParser::is_char(int c) {
+bool RequestParser::isChar(int c) {
     return c >= 0 && c <= 127;
 }
 
-bool RequestParser::is_ctl(int c) {
+bool RequestParser::isCtl(int c) {
     return (c >= 0 && c <= 31) || (c == 127);
 }
 
-bool RequestParser::is_tspecial(int c) {
+bool RequestParser::isTspecial(int c) {
     switch (c)
     {
         case '(': case ')': case '<': case '>': case '@':
@@ -283,7 +220,7 @@ bool RequestParser::is_tspecial(int c) {
     }
 }
 
-bool RequestParser::is_digit(int c) {
+bool RequestParser::isDigit(int c) {
     return c >= '0' && c <= '9';
 }
 

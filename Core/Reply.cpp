@@ -230,10 +230,12 @@ Reply Reply::stockReply(Reply::StatusType status) {
     Reply rep;
     rep.status = status;
     rep.content = stock_replies::toString(status);
-    rep.headers.resize(2);
+    rep.headers.resize(3);
     rep.headers[0].name = "Content-Length";
     rep.headers[0].value = std::to_string(rep.content.size());
     rep.headers[1].name = "Content-Type";
     rep.headers[1].value = "text/html";
+    rep.headers[2].name = "Server";
+    rep.headers[2].value = "ServerFrame";
     return rep;
 }

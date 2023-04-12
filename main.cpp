@@ -2,7 +2,6 @@
 int main() {
     AsioService service;
     Server server(service);
-
-    service.run();
+    server.start();
     return 0;
 }

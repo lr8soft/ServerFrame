@@ -48,7 +48,7 @@ void RequestHandler::handleRequest(const Request &req, Reply &rep) {
 #else
     std::filesystem::path full_path = std::filesystem::current_path() / (_root + reqPath);
 #endif
-    std::cout << "read local file " << full_path.string() << std::endl;
+    //std::cout << "read local file " << full_path.string() << std::endl;
     std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
     // 404
     if (!is) {
@@ -64,12 +64,13 @@ void RequestHandler::handleRequest(const Request &req, Reply &rep) {
     }
 
     // 拼接响应头
-    rep.headers.resize(2);
+    rep.headers.resize(3);
     rep.headers[0].name = "Content-Length";
     rep.headers[0].value = std::to_string(rep.content.size());
     rep.headers[1].name = "Content-Type";
     rep.headers[1].value = MimeUtils::getMimeFromExt(extension);//扩展名->Content-Type
-
+    rep.headers[2].name = "Server";
+    rep.headers[2].value = "ServerFrame";
 }
 
 bool RequestHandler::urlDecode(const std::string &in, std::string &out) {

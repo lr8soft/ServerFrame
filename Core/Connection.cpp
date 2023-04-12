@@ -22,7 +22,7 @@ void Connection::doRead() {
             // 解析成功
             if (result == RequestParser::good) {
                 _requestHandler.handleRequest(_request, _reply);
-                LogUtil::printInfo("request url:" + _request.uri);
+                LogUtil::printInfo(_request.method + ":" + _request.uri);
                 doWrite();
             } else if (result == RequestParser::bad) {
                 _reply = Reply::stockReply(Reply::bad_request);

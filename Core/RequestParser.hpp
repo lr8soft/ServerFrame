@@ -6,6 +6,7 @@
 #define SERVERFRAME_REQUESTPARSER_HPP
 
 #include <tuple>
+#include <iostream>
 //  from AsioLearn author NearXdu
 //  https://github.com/NearXdu/AsioLearn/blob/master/src/example_http/request_handler.hpp
 struct Request;
@@ -21,26 +22,26 @@ public:
     template <typename T>
     std::tuple<ResultEnum, T> parse(Request& request, T begin, T end) {
         while (begin != end) {
-            ResultEnum result = consume(request, *begin++);
+            ResultEnum result = parseRequestItem(request, *begin++);
             if (result == good || result == bad)
                 return std::make_tuple(result, begin);
         }
         return std::make_tuple(indeterminate, begin);
     }
 private:
-    ResultEnum consume(Request& req, char input);
+    ResultEnum parseRequestItem(Request& req, char input);
 
     /// Check if a byte is an HTTP character.
-    static bool is_char(int c);
+    static bool isChar(int c);
 
     /// Check if a byte is an HTTP control character.
-    static bool is_ctl(int c);
+    static bool isCtl(int c);
 
     /// Check if a byte is defined as an HTTP tspecial character.
-    static bool is_tspecial(int c);
+    static bool isTspecial(int c);
 
     /// Check if a byte is a digit.
-    static bool is_digit(int c);
+    static bool isDigit(int c);
 
     //解析http请求状态
     enum state
