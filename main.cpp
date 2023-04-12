@@ -1,8 +1,7 @@
-#include <iostream>
-#include "Utils/HttpConnect.h"
+#include "Server.h"
 int main() {
-    HttpConnect conn;
-    std::cout << "Hello, World!" << std::endl;
-    std::cout << conn.readFromUrl("https://raw.githubusercontent.com/lr8soft/MoreElectricTools/master/README.txt");
+    AsioService service;
+    Server server(service);
+    server.start();
     return 0;
 }
