@@ -96,6 +96,15 @@
 		<Unit filename="F:/ServerFrame/Core/Connection.h">
 			<Option target="ServerFrame"/>
 		</Unit>
+		<Unit filename="F:/ServerFrame/Core/Header.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Core/Reply.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Core/Reply.h">
+			<Option target="ServerFrame"/>
+		</Unit>
 		<Unit filename="F:/ServerFrame/Core/Request.hpp">
 			<Option target="ServerFrame"/>
 		</Unit>
@@ -130,6 +139,12 @@
 			<Option target="ServerFrame"/>
 		</Unit>
 		<Unit filename="F:/ServerFrame/Utils/LogUtil.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/MimeUtils.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/MimeUtils.h">
 			<Option target="ServerFrame"/>
 		</Unit>
 		<Unit filename="F:/ServerFrame/Utils/Timer.cpp">

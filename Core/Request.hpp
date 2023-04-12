@@ -7,11 +7,7 @@
 
 #include <string>
 #include <vector>
-
-struct Header {
-    std::string name;
-    std::string value;
-};
+#include "Header.h"
 
 struct Request {
     std::string method;

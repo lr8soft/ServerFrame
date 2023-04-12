@@ -11,4 +11,5 @@ typedef asio::io_service AsioService;
 typedef asio::ip::tcp::endpoint AsioEndPoint;
 typedef asio::ip::tcp::socket AsioSocket;
 
+
 #endif //SERVERFRAME_SIMPLEASIODEFINE_H

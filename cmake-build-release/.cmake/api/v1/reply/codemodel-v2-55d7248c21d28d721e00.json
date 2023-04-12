@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.25"
@@ -19,7 +19,7 @@
 					]
 				}
 			],
-			"name" : "Debug",
+			"name" : "Release",
 			"projects" : 
 			[
 				{
@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ServerFrame::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ServerFrame-Debug-773b27ec0e24bb750185.json",
+					"jsonFile" : "target-ServerFrame-Release-049b1792ec4632f83214.json",
 					"name" : "ServerFrame",
 					"projectIndex" : 0
 				}
@@ -49,7 +49,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "F:/ServerFrame/cmake-build-debug",
+		"build" : "F:/ServerFrame/cmake-build-release",
 		"source" : "F:/ServerFrame"
 	},
 	"version" : 

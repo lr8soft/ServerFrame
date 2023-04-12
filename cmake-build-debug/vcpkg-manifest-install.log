@@ -1,8 +1,8 @@
 Detecting compiler hash for triplet x64-windows...
 -- Automatically setting HTTP(S)_PROXY environment variables to "127.0.0.1:7890".
 All requested packages are currently installed.
-Restored 0 package(s) from C:\Users\lrsoft\AppData\Local\vcpkg\archives in 106 us. Use --debug to see more details.
-Total install time: 121 us
+Restored 0 package(s) from C:\Users\lrsoft\AppData\Local\vcpkg\archives in 112 us. Use --debug to see more details.
+Total install time: 130 us
 asio provides CMake targets:
 
     # this is heuristically generated, and may not be correct

@@ -90,25 +90,34 @@
 		<Unit filename="F:/ServerFrame/ConnManager.h">
 			<Option target="ServerFrame"/>
 		</Unit>
-		<Unit filename="F:/ServerFrame/Connection.cpp">
+		<Unit filename="F:/ServerFrame/Core/Connection.cpp">
 			<Option target="ServerFrame"/>
 		</Unit>
-		<Unit filename="F:/ServerFrame/Connection.h">
+		<Unit filename="F:/ServerFrame/Core/Connection.h">
 			<Option target="ServerFrame"/>
 		</Unit>
-		<Unit filename="F:/ServerFrame/Request/Request.hpp">
+		<Unit filename="F:/ServerFrame/Core/Header.h">
 			<Option target="ServerFrame"/>
 		</Unit>
-		<Unit filename="F:/ServerFrame/Request/RequestHandler.cpp">
+		<Unit filename="F:/ServerFrame/Core/Reply.cpp">
 			<Option target="ServerFrame"/>
 		</Unit>
-		<Unit filename="F:/ServerFrame/Request/RequestHandler.h">
+		<Unit filename="F:/ServerFrame/Core/Reply.h">
 			<Option target="ServerFrame"/>
 		</Unit>
-		<Unit filename="F:/ServerFrame/Request/RequestParser.cpp">
+		<Unit filename="F:/ServerFrame/Core/Request.hpp">
 			<Option target="ServerFrame"/>
 		</Unit>
-		<Unit filename="F:/ServerFrame/Request/RequestParser.hpp">
+		<Unit filename="F:/ServerFrame/Core/RequestHandler.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Core/RequestHandler.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Core/RequestParser.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Core/RequestParser.hpp">
 			<Option target="ServerFrame"/>
 		</Unit>
 		<Unit filename="F:/ServerFrame/Server.cpp">
@@ -130,6 +139,12 @@
 			<Option target="ServerFrame"/>
 		</Unit>
 		<Unit filename="F:/ServerFrame/Utils/LogUtil.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/MimeUtils.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Utils/MimeUtils.h">
 			<Option target="ServerFrame"/>
 		</Unit>
 		<Unit filename="F:/ServerFrame/Utils/Timer.cpp">
