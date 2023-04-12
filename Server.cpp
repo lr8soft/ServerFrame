@@ -7,9 +7,14 @@
 #include "Utils/LogUtil.h"
 #include "Utils/HttpConnect.h"
 
-Server::Server(AsioService &service)
-    : _service(service),
-    _acceptor(service, AsioEndPoint(asio::ip::tcp::v4(), 6780)){
+Server::Server(AsioService &service, const std::string & addr, const std::string & port)
+    : _service(service), _acceptor(service){
+    AsioResolver resolver(_service);
+    AsioEndPoint endPoint = *resolver.resolve({addr, port});
+    _acceptor.open(endPoint.protocol());
+    _acceptor.set_option(asio::ip::tcp::acceptor::reuse_address(true));
+    _acceptor.bind(endPoint);
+    _acceptor.listen();
     this->start();
 }
 
@@ -22,21 +27,22 @@ void Server::handleAcceptAction(std::shared_ptr<AsioSocket> pSocket) {
     std::memset(buf, 0, sizeof(buf));
     pSocket->async_read_some(asio::buffer(buf, std::strlen(buf)),
                              std::bind(&Server::handleRequest, this, pSocket));
-    std::cout << "handleAcceptAction " << pSocket->remote_endpoint().address() <<std::endl;
+    std::cout << "handleAcceptAction buf " << buf << " " <<pSocket->remote_endpoint().address() <<std::endl;
     this->start();
 }
 
 void Server::handleRequest(std::shared_ptr<AsioSocket> pSocket) {
     std::memset(buf, 0, sizeof(buf));
-    pSocket->async_read_some(asio::buffer(buf, std::strlen(buf)),
+    pSocket->async_receive(asio::buffer(buf, std::strlen(buf)),
                              std::bind(&Server::handleReceiveRequest, this, pSocket));
-    std::cout << "handleRequest " << pSocket->remote_endpoint().address() << std::endl;
+    std::cout << "handleRequest buf " << buf << " " << pSocket->remote_endpoint().address() << std::endl;
 }
 
 void Server::handleReceiveRequest(std::shared_ptr<AsioSocket> pSocket) {
     char result[] = "HTTP/1.1 200 OK\n"
                     "Content-Type: text/html\n"
                     "Content-Length: 1024\n"
+                    "Server: ServerFrame v0.0\n"
                     "\n"
                     "<!DOCTYPE html>\n"
                     "<html>\n"
@@ -47,7 +53,7 @@ void Server::handleReceiveRequest(std::shared_ptr<AsioSocket> pSocket) {
                     "    <h1>Hello, world!</h1>\n"
                     "</body>\n"
                     "</html>";
-    pSocket->async_write_some(asio::buffer(result),
+    pSocket->async_write_some(asio::buffer(result, strlen(result)),
                               std::bind(&Server::handleReleaseSocket, this, pSocket));
     std::cout << "handleReceiveRequest " << pSocket->remote_endpoint().address() << std::endl;
 }

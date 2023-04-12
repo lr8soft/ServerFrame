@@ -6,7 +6,8 @@
 #define SERVERFRAME_CONNMANAGER_H
 
 #include "SimpleAsioDefine.h"
-#include <map>
+#include <vector>
+#include <memory>
 
 class ConnManager {
 public:
@@ -15,8 +16,13 @@ public:
             pInstance = new ConnManager;
         return pInstance;
     }
+
+    void addConn(std::shared_ptr<AsioSocket> pConn);
 private:
     ConnManager(){}
+
+private:
+    std::vector<std::shared_ptr<AsioSocket>> connList;
 
     static ConnManager* pInstance;
 };

@@ -7,12 +7,14 @@
 
 #include <atomic>
 #include <memory>
+#include <string>
 #include "SimpleAsioDefine.h"
 #include "Utils/Timer.h"
 class Server {
+private:
+    typedef asio::ip::tcp::resolver AsioResolver;
 public:
-    Server(AsioService& service);
-
+    Server(AsioService& service, const std::string & addr = "0.0.0.0", const std::string & port = "6780");
     void start();
     // 处理接受连接后
     void handleAcceptAction(std::shared_ptr<AsioSocket> pSocket);

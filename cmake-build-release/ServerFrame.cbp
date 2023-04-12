@@ -90,6 +90,27 @@
 		<Unit filename="F:/ServerFrame/ConnManager.h">
 			<Option target="ServerFrame"/>
 		</Unit>
+		<Unit filename="F:/ServerFrame/Connection.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Connection.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Request/Request.hpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Request/RequestHandler.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Request/RequestHandler.h">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Request/RequestParser.cpp">
+			<Option target="ServerFrame"/>
+		</Unit>
+		<Unit filename="F:/ServerFrame/Request/RequestParser.hpp">
+			<Option target="ServerFrame"/>
+		</Unit>
 		<Unit filename="F:/ServerFrame/Server.cpp">
 			<Option target="ServerFrame"/>
 		</Unit>
