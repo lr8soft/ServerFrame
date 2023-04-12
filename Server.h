@@ -9,24 +9,33 @@
 #include <memory>
 #include <string>
 #include "SimpleAsioDefine.h"
+#include "Core/RequestHandler.h"
 #include "Utils/Timer.h"
+
+
 class Server {
 private:
     typedef asio::ip::tcp::resolver AsioResolver;
 public:
     Server(AsioService& service, const std::string & addr = "0.0.0.0", const std::string & port = "6780");
     void start();
-    // 处理接受连接后
-    void handleAcceptAction(std::shared_ptr<AsioSocket> pSocket);
-    void handleRequest(std::shared_ptr<AsioSocket> pSocket);
-    void handleReceiveRequest(std::shared_ptr<AsioSocket> pSocket);
-    void handleReleaseSocket(std::shared_ptr<AsioSocket> pSocket);
+
+private:
+    // 异步新连接
+    void doAccept();
+    // 异步等信号
+    void doAwaitStop();
+
 private:
     AsioService& _service;
     AsioAcceptor _acceptor;
 
-    char buf[256];
-    Timer timer;
+    // 终止信息
+    asio::signal_set _signals;
+    // 下个连接的socket
+    AsioSocket _nextSocket;
+    // 所有访问的请求的handle
+    RequestHandler _requestHandler;
 };
 
 

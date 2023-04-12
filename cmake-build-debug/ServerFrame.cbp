@@ -24,6 +24,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add option="-D_DEBUG"/>
 					<Add directory="F:/ServerFrame/cmake-build-debug/vcpkg_installed/x64-windows/include"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
@@ -47,6 +48,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add option="-D_DEBUG"/>
 					<Add directory="F:/ServerFrame/cmake-build-debug/vcpkg_installed/x64-windows/include"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2023.1/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>

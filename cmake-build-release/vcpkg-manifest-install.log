@@ -1,9 +1,8 @@
-waiting to take filesystem lock on C:\Users\lrsoft\.clion-vcpkg\vcpkg\.vcpkg-root...
 Detecting compiler hash for triplet x64-windows...
 -- Automatically setting HTTP(S)_PROXY environment variables to "127.0.0.1:7890".
 All requested packages are currently installed.
 Restored 0 package(s) from C:\Users\lrsoft\AppData\Local\vcpkg\archives in 110 us. Use --debug to see more details.
-Total install time: 125 us
+Total install time: 127 us
 asio provides CMake targets:
 
     # this is heuristically generated, and may not be correct

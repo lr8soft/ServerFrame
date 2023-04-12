@@ -19,3 +19,8 @@ if(WIN32)
 elseif(UNIX)
     target_link_libraries(ServerFrame PRIVATE pthread boost_system)
 endif()
+
+# 添加debug宏
+if (CMAKE_BUILD_TYPE STREQUAL Debug)
+    add_definitions(-D_DEBUG)
+endif ()

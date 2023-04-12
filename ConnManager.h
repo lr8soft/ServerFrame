@@ -5,9 +5,10 @@
 #ifndef SERVERFRAME_CONNMANAGER_H
 #define SERVERFRAME_CONNMANAGER_H
 
-#include "SimpleAsioDefine.h"
-#include <vector>
+#include <set>
 #include <memory>
+#include "SimpleAsioDefine.h"
+#include "Core/Connection.h"
 
 class ConnManager {
 public:
@@ -17,12 +18,14 @@ public:
         return pInstance;
     }
 
-    void addConn(std::shared_ptr<AsioSocket> pConn);
+    void startConn(std::shared_ptr<Connection> pConn);
+    void stopConn(std::shared_ptr<Connection> pConn);
+    void stopAllConn();
 private:
     ConnManager(){}
 
 private:
-    std::vector<std::shared_ptr<AsioSocket>> connList;
+    std::set<std::shared_ptr<Connection>> connList;
 
     static ConnManager* pInstance;
 };
