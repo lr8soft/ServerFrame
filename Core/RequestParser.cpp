@@ -2,6 +2,8 @@
 // Created by lrsoft on 2023/4/12.
 //
 
+#include <vector>
+#include <sstream>
 #include "RequestParser.hpp"
 #include "Request.hpp"
 
@@ -228,4 +230,8 @@ RequestParser::RequestParser(): _state(method_start) {}
 
 void RequestParser::reset() {
     _state = method_start;
+}
+
+RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::stringstream &str) {
+    return RequestParser::bad;
 }

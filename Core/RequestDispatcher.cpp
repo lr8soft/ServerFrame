@@ -25,6 +25,6 @@ void RequestDispatcher::handleRequest(const Request &req, Reply &rep) {
     }
 }
 
-void RequestDispatcher::addHandler(const std::string method, std::shared_ptr<IRequestHandler> handler) {
+void RequestDispatcher::addHandler(const std::string method, std::shared_ptr<IRequestSolver> handler) {
     handleGroup.insert(std::make_pair(method, handler));
 }

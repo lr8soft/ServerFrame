@@ -7,6 +7,7 @@
 
 #include <tuple>
 #include <iostream>
+#include <sstream>
 //  from AsioLearn author NearXdu
 //  https://github.com/NearXdu/AsioLearn/blob/master/src/example_http/request_handler.hpp
 struct Request;
@@ -23,13 +24,19 @@ public:
     std::tuple<ResultEnum, T> parse(Request& request, T begin, T end) {
         while (begin != end) {
             ResultEnum result = parseRequestItem(request, *begin++);
-            if (result == good || result == bad)
+            if (result == good || result == bad) {
                 return std::make_tuple(result, begin);
+            }
         }
         return std::make_tuple(indeterminate, begin);
     }
+
+    // 尝试解析表单
+    ResultEnum parseForm(Request& request, std::stringstream & str);
+
 private:
     ResultEnum parseRequestItem(Request& req, char input);
+
 
     /// Check if a byte is an HTTP character.
     static bool isChar(int c);

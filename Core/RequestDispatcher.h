@@ -7,7 +7,7 @@
 #include <map>
 #include <memory>
 #include <string>
-#include "IRequestHandler.h"
+#include "../Resolvers/IRequestSolver.h"
 
 class RequestDispatcher {
 public:
@@ -17,13 +17,13 @@ public:
         return pInst;
     }
 
-    void addHandler(const std::string method, std::shared_ptr<IRequestHandler> handler);
+    void addHandler(const std::string method, std::shared_ptr<IRequestSolver> handler);
     void handleRequest(const Request& req, Reply& rep);
 private:
     static RequestDispatcher* pInst;
 
     // METHOD => Requesthandler
-    std::multimap<std::string, std::shared_ptr<IRequestHandler>> handleGroup;
+    std::multimap<std::string, std::shared_ptr<IRequestSolver>> handleGroup;
 };
 
 

@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "Header.h"
 
 struct Request {
@@ -15,6 +16,7 @@ struct Request {
     int http_version_major;
     int http_version_minor;
     std::vector<Header> headers;
+    std::map<std::string, std::string> headerMap;
 };
 
 #endif //SERVERFRAME_REQUEST_H

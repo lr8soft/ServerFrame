@@ -8,6 +8,7 @@
 #include "../SimpleAsioDefine.h"
 #include <array>
 #include <memory>
+#include <sstream>
 
 #include "Request.hpp"
 #include "RequestParser.hpp"
@@ -16,6 +17,7 @@
 class Connection: public std::enable_shared_from_this<Connection> {
 private:
     std::array<char, 8192> _buffer;
+    std::stringstream _bufferStream;
     AsioSocket _socket;
 
     Request _request;

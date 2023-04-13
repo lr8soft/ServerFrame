@@ -17,6 +17,9 @@ void Connection::doRead() {
         [this](const std::error_code & code, std::size_t bytesCount){
         if(!code) {
             RequestParser::ResultEnum result;
+            // add _buffer to _bufferStream
+            _bufferStream << std::string(_buffer.data(), bytesCount);
+
             // 解包解析结果
             std::tie(result, std::ignore) = _parser.parse(_request, _buffer.data(),
                                                           _buffer.data() + bytesCount);  // +bytesCount计算iterend

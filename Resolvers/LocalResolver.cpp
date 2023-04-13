@@ -5,17 +5,17 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-#include "RequestHandler.h"
-#include "Request.hpp"
-#include "Reply.h"
+#include "LocalResolver.h"
+#include "../Core/Request.hpp"
+#include "../Core/Reply.h"
 #include "../Utils/UrlUtils.h"
 #include "../Utils/MimeUtils.h"
 
-RequestHandler::RequestHandler(const std::string &doc_root) : _root(doc_root){
+LocalResolver::LocalResolver(const std::string &doc_root) : _root(doc_root){
 
 }
 
-bool RequestHandler::handleRequest(const Request &req, Reply &rep) {
+bool LocalResolver::handleRequest(const Request &req, Reply &rep) {
     std::string reqPath;
     // 解析失败
     if (!UrlUtils::urlDecode(req.uri, reqPath)) {
@@ -60,7 +60,6 @@ bool RequestHandler::handleRequest(const Request &req, Reply &rep) {
     rep.status = Reply::ok;
     char buf[512];
     while (is.read(buf, sizeof(buf)).gcount() > 0) {
-        //append(const char *,size_t size)
         rep.content.append(buf, is.gcount());
     }
 
