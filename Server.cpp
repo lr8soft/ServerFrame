@@ -7,9 +7,11 @@
 #include "Server.h"
 #include "ConnManager.h"
 #include "Utils/LogUtil.h"
+#include "Core/RequestDispatcher.h"
+#include "Core/RequestHandler.h"
 
 Server::Server(AsioService &service, const std::string &addr, const std::string &port)
-        : _service(service), _acceptor(service), _nextSocket(service), _requestHandler("statics"), _signals(service) {
+        : _service(service), _acceptor(service), _nextSocket(service), _signals(service) {
     _signals.add(SIGINT);
     _signals.add(SIGTERM);
 #if defined(SIGQUIT)
@@ -30,6 +32,12 @@ Server::Server(AsioService &service, const std::string &addr, const std::string 
     this->doAccept();
 }
 
+void Server::init() {
+    auto dispatcher = RequestDispatcher::getInstance();
+    // 允许GET statics文件夹下的内容
+    dispatcher->addHandler("GET", std::make_shared<RequestHandler>("statics"));
+}
+
 void Server::start() {
     _service.run();
 }
@@ -43,7 +51,7 @@ void Server::doAccept() {
 
         LogUtil::printInfo("Socket connected with " + _nextSocket.remote_endpoint().address().to_string() + "  " + code.message());
         if(!code) {
-            auto pConn = std::make_shared<Connection>(std::move(_nextSocket), _requestHandler);
+            auto pConn = std::make_shared<Connection>(std::move(_nextSocket));
             ConnManager::getInstance()->startConn(pConn);
         }
 
@@ -58,3 +66,4 @@ void Server::doAwaitStop() {
         LogUtil::printInfo("All connection stop now.");
     });
 }
+

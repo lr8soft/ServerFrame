@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Connection.h"
+#include "RequestDispatcher.h"
 #include "../ConnManager.h"
 #include "../Utils/LogUtil.h"
 
@@ -21,7 +22,7 @@ void Connection::doRead() {
                                                           _buffer.data() + bytesCount);  // +bytesCount计算iterend
             // 解析成功
             if (result == RequestParser::good) {
-                _requestHandler.handleRequest(_request, _reply);
+                RequestDispatcher::getInstance()->handleRequest(_request, _reply);
                 LogUtil::printInfo(_request.method + ":" + _request.uri);
                 doWrite();
             } else if (result == RequestParser::bad) {

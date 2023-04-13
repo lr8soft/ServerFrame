@@ -6,10 +6,9 @@
 #define SERVERFRAME_REQUESTHANDLER_H
 
 #include <string>
-struct Reply;
-struct Request;
+#include "IRequestHandler.h"
 
-class RequestHandler {
+class RequestHandler: public IRequestHandler{
 public:
     //禁止拷贝构造函数和赋值重载
     RequestHandler(const RequestHandler&) = delete;
@@ -19,14 +18,11 @@ public:
     explicit RequestHandler(const std::string& doc_root);
 
     /// 处理请求带reply
-    void handleRequest(const Request& req, Reply& rep);
+    bool handleRequest(const Request& req, Reply& rep) override;
 
 private:
     /// 网站文件路径
     std::string _root;
-
-    /// 解析url到out，失败就false
-    static bool urlDecode(const std::string& in, std::string& out);//URL分析
 };
 
 

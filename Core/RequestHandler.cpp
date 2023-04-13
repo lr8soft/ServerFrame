@@ -8,24 +8,25 @@
 #include "RequestHandler.h"
 #include "Request.hpp"
 #include "Reply.h"
+#include "../Utils/UrlUtils.h"
 #include "../Utils/MimeUtils.h"
 
 RequestHandler::RequestHandler(const std::string &doc_root) : _root(doc_root){
 
 }
 
-void RequestHandler::handleRequest(const Request &req, Reply &rep) {
+bool RequestHandler::handleRequest(const Request &req, Reply &rep) {
     std::string reqPath;
     // 解析失败
-    if (!urlDecode(req.uri, reqPath)) {
+    if (!UrlUtils::urlDecode(req.uri, reqPath)) {
         rep = Reply::stockReply(Reply::bad_request);
-        return;
+        return false;
     }
 
     // 请求路径不含..
     if (reqPath.empty() || reqPath[0] != '/' || reqPath.find("..") != std::string::npos) {
         rep = Reply::stockReply(Reply::bad_request);
-        return;
+        return false;
     }
 
     // 如果请求url最后一个字符是/，那么加上一个index.html
@@ -53,7 +54,7 @@ void RequestHandler::handleRequest(const Request &req, Reply &rep) {
     // 404
     if (!is) {
         rep = Reply::stockReply(Reply::not_found);
-        return;
+        return false;
     }
 
     rep.status = Reply::ok;
@@ -71,34 +72,6 @@ void RequestHandler::handleRequest(const Request &req, Reply &rep) {
     rep.headers[1].value = MimeUtils::getMimeFromExt(extension);//扩展名->Content-Type
     rep.headers[2].name = "Server";
     rep.headers[2].value = "ServerFrame";
-}
 
-bool RequestHandler::urlDecode(const std::string &in, std::string &out) {
-    out.clear();
-    out.reserve(in.size());
-    for (std::size_t i = 0; i < in.size(); ++i) {
-        // 转义字符
-        if (in[i] == '%') {
-            if (i + 3 <= in.size()) {
-                int value = 0;
-                // 跳过%直接取%xy里的xy
-                std::istringstream is(in.substr(i + 1, 2));
-                // 再把xy从16进制转10进制（0-255）
-                if (is >> std::hex >> value) {
-                    out += static_cast<char>(value);
-                    i += 2;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        // +表示空格
-        } else if (in[i] == '+') {
-            out += ' ';
-        } else {
-            out += in[i];
-        }
-    }
     return true;
 }

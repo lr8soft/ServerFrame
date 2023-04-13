@@ -3,7 +3,7 @@ project(ServerFrame)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(ServerFrame main.cpp Utils/HttpConnect.cpp Utils/HttpConnect.h Server.cpp Server.h Utils/Timer.cpp Utils/Timer.h Utils/LogUtil.cpp Utils/LogUtil.h SimpleAsioDefine.h ConnManager.cpp ConnManager.h ConnManager.h Core/Connection.cpp Core/Connection.h Core/RequestParser.cpp Core/RequestParser.hpp Core/Request.hpp Core/Request.hpp Core/RequestHandler.cpp Core/RequestHandler.h Core/RequestHandler.h Core/Reply.cpp Core/Reply.h Core/Reply.h Core/Header.h Core/Header.h Utils/MimeUtils.cpp Utils/MimeUtils.h)
+add_executable(ServerFrame main.cpp Utils/HttpConnect.cpp Utils/HttpConnect.h Server.cpp Server.h Utils/Timer.cpp Utils/Timer.h Utils/LogUtil.cpp Utils/LogUtil.h SimpleAsioDefine.h ConnManager.cpp ConnManager.h ConnManager.h Core/Connection.cpp Core/Connection.h Core/RequestParser.cpp Core/RequestParser.hpp Core/Request.hpp Core/Request.hpp Core/RequestHandler.cpp Core/RequestHandler.h Core/RequestHandler.h Core/Reply.cpp Core/Reply.h Core/Reply.h Core/Header.h Core/Header.h Utils/MimeUtils.cpp Utils/MimeUtils.h Core/RequestDispatcher.cpp Core/RequestDispatcher.h Utils/UrlUtils.cpp Utils/UrlUtils.h Core/IRequestHandler.h)
 
 find_package(CURL CONFIG REQUIRED)
 target_link_libraries(ServerFrame PRIVATE CURL::libcurl)

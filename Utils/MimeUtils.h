@@ -10,7 +10,7 @@ namespace MimeUtils {
     /// 转换拓展名到mime类型
     std::string getMimeFromExt(const std::string& extension);
 
-} // namespace mime_types
+} // namespace mime_utils
 
 
 #endif //SERVERFRAME_MIMEUTILS_H
