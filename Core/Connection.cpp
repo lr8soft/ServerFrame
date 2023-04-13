@@ -17,7 +17,7 @@ void Connection::doRead() {
         [this](const std::error_code & code, std::size_t bytesCount){
         if(!code) {
             RequestParser::ResultEnum result;
-            // add _buffer to _bufferStream
+            // 记录请求所有buffer
             _bufferStream << std::string(_buffer.data(), bytesCount);
 
             // 解包解析结果
@@ -25,8 +25,12 @@ void Connection::doRead() {
                                                           _buffer.data() + bytesCount);  // +bytesCount计算iterend
             // 解析成功
             if (result == RequestParser::good) {
+                // 解析表单
+                _parser.parseForm(_request, _bufferStream);
                 RequestDispatcher::getInstance()->handleRequest(_request, _reply);
                 LogUtil::printInfo(_request.method + ":" + _request.uri);
+                // 清除缓存
+                _bufferStream.clear();
                 doWrite();
             } else if (result == RequestParser::bad) {
                 _reply = Reply::stockReply(Reply::bad_request);

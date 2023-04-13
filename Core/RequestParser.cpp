@@ -232,6 +232,27 @@ void RequestParser::reset() {
     _state = method_start;
 }
 
-RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::stringstream &str) {
-    return RequestParser::bad;
+void RequestParser::parseForm(Request &request, std::stringstream &str) {
+    // 把headers全读取到Map
+    for (auto &header : request.headers) {
+        request.headerMap[header.name] = header.value;
+    }
+    // 卸磨杀驴
+    request.headers.clear();
+
+    // 读取str里的内容，当检测到Content-Length: 开头的文字后，下面的数字是内容长度
+    // 根据内容长度再读取新内容后结束
+    std::string line;
+    while (std::getline(str, line)) {
+        if (line.find("Content-Length: ") == 0) {
+            int len = std::stoi(line.substr(16));
+            std::string content;
+            content.resize(len);
+            str.read(&content[0], len);
+
+            std::cout << "formdata: " << content << std::endl;
+            break;
+        }
+    }
+
 }

@@ -16,10 +16,6 @@ bool PostResolver::handleRequest(const Request &req, Reply &rep) {
         return false;
     }
 
-    // 打印req.headers里的内容
-    for (auto &header : req.headers) {
-        std::cout << header.name << ": " << header.value << std::endl;
-    }
 
     //req.
 
