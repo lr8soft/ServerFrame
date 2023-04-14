@@ -15,14 +15,18 @@ void Connection::start() {
 void Connection::doRead() {
     _socket.async_read_some(asio::buffer(_buffer),
         [this](const std::error_code & code, std::size_t bytesCount){
+
         if(!code) {
             RequestParser::ResultEnum result;
             // 记录请求所有buffer
             _bufferStream << std::string(_buffer.data(), bytesCount);
+            // get指针回到起始
+            _bufferStream.seekg(0, std::ios::beg);
+
+            std::cout << "buffer:\n" << _bufferStream.str() << std::endl;
 
             // 解包解析结果
-            std::tie(result, std::ignore) = _parser.parse(_request, _buffer.data(),
-                                                          _buffer.data() + bytesCount);  // +bytesCount计算iterend
+            result = _parser.parse(_request, _bufferStream);
             // 解析成功
             if (result == RequestParser::good) {
                 // 解析表单
@@ -31,16 +35,16 @@ void Connection::doRead() {
                 if(formResult != RequestParser::indeterminate) {
                     RequestDispatcher::getInstance()->handleRequest(_request, _reply);
                     LogUtil::printInfo(_request.method + ":" + _request.uri);
-                    // 清除缓存，指针归位
+                    // 清除缓存
                     _bufferStream.clear();
-                    _bufferStream.seekp(0, std::ios::beg);
-                    _bufferStream.seekg(0, std::ios::beg);
                     doWrite();
                 }else {
                     doRead();
                 }
             } else if (result == RequestParser::bad) {
+                std::cout << "bad request " << _bufferStream.str() << std::endl;
                 _reply = Reply::stockReply(Reply::bad_request);
+                _bufferStream.clear();
                 doWrite();
             } else {
                 doRead();

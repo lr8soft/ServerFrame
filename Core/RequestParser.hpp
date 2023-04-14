@@ -20,16 +20,7 @@ public:
     enum ResultEnum { good, bad, indeterminate };
 
     // 尝试解析
-    template <typename T>
-    std::tuple<ResultEnum, T> parse(Request& request, T begin, T end) {
-        while (begin != end) {
-            ResultEnum result = parseRequestItem(request, *begin++);
-            if (result == good || result == bad) {
-                return std::make_tuple(result, begin);
-            }
-        }
-        return std::make_tuple(indeterminate, begin);
-    }
+    ResultEnum parse(Request& request, std::stringstream & stream);
 
     // 尝试解析表单
     ResultEnum parseForm(Request& request, std::stringstream & stream);

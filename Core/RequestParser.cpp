@@ -293,10 +293,29 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
             }
 
         }else if(request.contentType.starts_with("multipart/form-data")) {
+            std::cout << "multipart/form-data" << std::endl;
             // multipart长度包含\r\n的
             if(!checkBodyComplete(request.contentLength, stream)) {
+                std::cout << "incompleted" << std::endl;
                 return indeterminate;
             }
+            // 读取boundary
+            std::string boundary;
+            auto pos = request.contentType.find("boundary=");
+            if(pos != std::string::npos) {
+                boundary = request.contentType.substr(pos + 9);
+            }
+            if(boundary.empty()) {
+                std::cout << "no boundary " << request.contentType << std::endl;
+                return bad;
+            }
+            // 读取body
+            std::string body;
+            body.resize(request.contentLength);
+            stream.read(&body[0], request.contentLength);
+
+            // 尝试解析
+            std::cout << "BODY Length: " << request.contentLength << "\n" <<body << std::endl;
         }
 
         // header进map
@@ -306,7 +325,6 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
         // 卸磨杀驴
         request.headers.clear();
     }
-    std::cout << "finish" << std::endl;
     return result;
 }
 
@@ -317,4 +335,18 @@ bool RequestParser::checkBodyComplete(int bodyLength, std::stringstream &stream)
         return false;
     }
     return true;
+}
+
+RequestParser::ResultEnum RequestParser::parse(Request &request, std::stringstream &stream) {
+    RequestParser::ResultEnum result = indeterminate;
+    char c;
+    while (stream.get(c)) {
+        result = parseRequestItem(request, c);
+        if (result == good || result == bad) {
+            break;
+        }
+    }
+    // get完指针在最后，需要重置到开头
+    stream.seekg(0, std::ios::beg);
+    return result;
 }
