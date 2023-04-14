@@ -37,6 +37,9 @@ public:
 private:
     ResultEnum parseRequestItem(Request& req, char input);
 
+    /// 检测请求body长度是否完整
+    bool checkBodyComplete(int bodyLength, std::stringstream & stream);
+
 
     /// Check if a byte is an HTTP character.
     static bool isChar(int c);

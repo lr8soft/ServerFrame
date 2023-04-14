@@ -26,17 +26,17 @@ void Connection::doRead() {
             // 解析成功
             if (result == RequestParser::good) {
                 // 解析表单
-                result = _parser.parseForm(_request, _bufferStream);
-                if(result == RequestParser::good) {
+                auto formResult = _parser.parseForm(_request, _bufferStream);
+                // 只要不是没读完都行
+                if(formResult != RequestParser::indeterminate) {
                     RequestDispatcher::getInstance()->handleRequest(_request, _reply);
                     LogUtil::printInfo(_request.method + ":" + _request.uri);
-                    // 清除缓存
+                    // 清除缓存，指针归位
                     _bufferStream.clear();
+                    _bufferStream.seekp(0, std::ios::beg);
+                    _bufferStream.seekg(0, std::ios::beg);
                     doWrite();
-                }else if (result == RequestParser::bad) {
-                    _reply = Reply::stockReply(Reply::bad_request);
-                    doWrite();
-                }else{
+                }else {
                     doRead();
                 }
             } else if (result == RequestParser::bad) {

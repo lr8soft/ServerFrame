@@ -234,9 +234,7 @@ void RequestParser::reset() {
 }
 
 RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::stringstream &stream) {
-    // 把headers全读取到Map
     RequestParser::ResultEnum result = bad;
-
     // 读取str里的内容，记录Content-Type: 后面的内容到request.contentType
     // 当检测到Content-Length: 开头的文字后，下面的数字是内容长度
     std::string line;
@@ -252,22 +250,14 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
         }
     }
 
-    // 有了content类型和长度就开始解析content
     if(result == good) {
-        // 读当前行content
-        std::cout << "contentLength: " << request.contentLength << std::endl;
-        std::cout << "streamTellG: " << stream.tellg() << std::endl;
-        std::cout << "streamLength: " << stream.str().length()<< std::endl;
-
-        // 如果当前流的长度小于contentLength+2（\r\n），说明还没读完
-        if(request.contentLength + stream.tellg() > stream.str().length()) {
-            std::cout << "need read more" << std::endl;
-            return indeterminate;
-        }
-
-        // 解析-xform，格式username=123456&password=aaaaa&email=asdf%40sdf.sadf
-        if(request.contentType.find("application/x-www-form-urlencoded") == 0){
-            // x-form开头\r\n并不会算进contentLength里，所以要先读两个
+        // x-www-form-urlencoded格式表单
+        if(request.contentType.find("application/x-www-form-urlencoded") == 0) {
+            // +2因为\r\n不算进x-www-form的长度
+            if(!checkBodyComplete(request.contentLength + 2, stream)) {
+                return indeterminate;
+            }
+            // 去掉\r\n
             stream.get();
             stream.get();
 
@@ -275,7 +265,7 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
             content.resize(request.contentLength);
             stream.read(&content[0], request.contentLength);
 
-            // 解析urlencoded
+            // 解析-xform，格式username=123456&password=aaaaa
             std::string key, value;
             bool isKey = true;
             for (auto &c : content) {
@@ -284,7 +274,7 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
                 } else if (c == '&') {
                     auto decodeKey = UrlUtils::urlDecode(key);
                     auto decodeValue = UrlUtils::urlDecode(value);
-                    request.contentMap[decodeKey] = decodeValue;
+                    request.bodyMap[decodeKey] = decodeValue;
                     key.clear();
                     value.clear();
                     isKey = true;
@@ -299,11 +289,14 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
             if (!key.empty()) {
                 auto decodeKey = UrlUtils::urlDecode(key);
                 auto decodeValue = UrlUtils::urlDecode(value);
-                request.contentMap[decodeKey] = decodeValue;
+                request.bodyMap[decodeKey] = decodeValue;
             }
 
-        }else if(request.contentType.starts_with("multipart/form-data")){
-
+        }else if(request.contentType.starts_with("multipart/form-data")) {
+            // multipart长度包含\r\n的
+            if(!checkBodyComplete(request.contentLength, stream)) {
+                return indeterminate;
+            }
         }
 
         // header进map
@@ -313,5 +306,15 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
         // 卸磨杀驴
         request.headers.clear();
     }
+    std::cout << "finish" << std::endl;
     return result;
+}
+
+bool RequestParser::checkBodyComplete(int bodyLength, std::stringstream &stream) {
+    // tellp是写入指针位置，即当前长度
+    // 检测当前读取位置+body长度是否大于当前流长度，就知道body是否完整
+    if(bodyLength + stream.tellg() > stream.tellp()) {
+        return false;
+    }
+    return true;
 }

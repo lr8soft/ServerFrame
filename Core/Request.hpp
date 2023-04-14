@@ -19,7 +19,7 @@ struct Request {
     int contentLength;
     std::vector<Header> headers;
     std::map<std::string, std::string> headerMap;
-    std::map<std::string, std::string> contentMap;
+    std::map<std::string, std::string> bodyMap;
 };
 
 #endif //SERVERFRAME_REQUEST_H

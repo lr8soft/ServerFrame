@@ -3,10 +3,12 @@
 //
 
 #include <iostream>
+#include <sstream>
 #include "PostResolver.h"
 #include "../Core/Request.hpp"
 #include "../Core/Reply.h"
 #include "../Utils/UrlUtils.h"
+#include "../Utils/MimeUtils.h"
 
 bool PostResolver::handleRequest(const Request &req, Reply &rep) {
     std::string reqPath;
@@ -16,11 +18,13 @@ bool PostResolver::handleRequest(const Request &req, Reply &rep) {
         return false;
     }
 
-    std::cout << "post content:" << std::endl;
+    std::stringstream stream;
+    stream << "POST Body Params:\n";
     // 遍历req.contentMap并输出
-    for (auto &item : req.contentMap) {
-        std::cout << item.first << ":" << item.second << " len: " << item.second.length() << std::endl;
+    for (auto &item : req.bodyMap) {
+        stream << item.first << ":" << item.second << " len: " << item.second.length() << std::endl;
     }
 
+    Reply::setReply(rep, stream.str(), "html");
     return true;
 }

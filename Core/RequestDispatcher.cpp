@@ -2,6 +2,7 @@
 // Created by lrsoft on 2023/4/13.
 //
 
+#include <iostream>
 #include "RequestDispatcher.h"
 #include "Request.hpp"
 #include "Reply.h"
@@ -18,6 +19,7 @@ void RequestDispatcher::handleRequest(const Request &req, Reply &rep) {
 
     // 依次调用
     for (auto iter = searchIter.first; iter != searchIter.second; ++iter) {
+        std::cout << "RequestDispatcher::handleRequest: " << iter->first << " " << iter->second << std::endl;
         // 如果有一个handler处理了，那么就不再继续
         if (iter->second->handleRequest(req, rep)) {
             return;

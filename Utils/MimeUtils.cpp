@@ -13,7 +13,10 @@ namespace MimeUtils{
             {"htm",  "text/html"},
             {"html", "text/html"},
             {"jpg",  "image/jpeg"},
-            {"png",  "image/png"}
+            {"png",  "image/png"},
+            {"css",  "text/css"},
+            {"js",   "application/javascript"},
+            {"json", "application/json"}
     };
 
     std::string getMimeFromExt(const std::string& extension) {
