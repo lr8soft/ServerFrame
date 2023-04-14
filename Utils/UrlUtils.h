@@ -10,6 +10,8 @@ namespace UrlUtils {
     // 把url中转义字符空格等转换回来
     bool urlDecode(const std::string& in, std::string& out);
 
+    std::string urlDecode(const std::string& in);
+
 } // namespace url-utils
 
 

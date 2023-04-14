@@ -36,4 +36,10 @@ namespace UrlUtils {
         }
         return true;
     }
+
+    std::string urlDecode(const std::string& in) {
+        std::string out;
+        urlDecode(in, out);
+        return out;
+    }
 }

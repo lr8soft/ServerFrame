@@ -26,12 +26,19 @@ void Connection::doRead() {
             // 解析成功
             if (result == RequestParser::good) {
                 // 解析表单
-                _parser.parseForm(_request, _bufferStream);
-                RequestDispatcher::getInstance()->handleRequest(_request, _reply);
-                LogUtil::printInfo(_request.method + ":" + _request.uri);
-                // 清除缓存
-                _bufferStream.clear();
-                doWrite();
+                result = _parser.parseForm(_request, _bufferStream);
+                if(result == RequestParser::good) {
+                    RequestDispatcher::getInstance()->handleRequest(_request, _reply);
+                    LogUtil::printInfo(_request.method + ":" + _request.uri);
+                    // 清除缓存
+                    _bufferStream.clear();
+                    doWrite();
+                }else if (result == RequestParser::bad) {
+                    _reply = Reply::stockReply(Reply::bad_request);
+                    doWrite();
+                }else{
+                    doRead();
+                }
             } else if (result == RequestParser::bad) {
                 _reply = Reply::stockReply(Reply::bad_request);
                 doWrite();

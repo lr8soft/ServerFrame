@@ -32,7 +32,7 @@ public:
     }
 
     // 尝试解析表单
-    void parseForm(Request& request, std::stringstream & stream);
+    ResultEnum parseForm(Request& request, std::stringstream & stream);
 
 private:
     ResultEnum parseRequestItem(Request& req, char input);

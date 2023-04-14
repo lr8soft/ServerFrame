@@ -233,61 +233,85 @@ void RequestParser::reset() {
     _state = method_start;
 }
 
-void RequestParser::parseForm(Request &request, std::stringstream &stream) {
+RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::stringstream &stream) {
     // 把headers全读取到Map
-    for (auto &header : request.headers) {
-        request.headerMap[header.name] = header.value;
-    }
-    // 卸磨杀驴
-    request.headers.clear();
+    RequestParser::ResultEnum result = bad;
 
     // 读取str里的内容，记录Content-Type: 后面的内容到request.contentType
     // 当检测到Content-Length: 开头的文字后，下面的数字是内容长度
     std::string line;
-    // 保留\r\n
+    // 读content类型与长度
     while (std::getline(stream, line)) {
         if (line.find("Content-Type: ") == 0) {
             request.contentType = line.substr(14);
         } else if (line.find("Content-Length: ") == 0) {
             // 读完后面就没必要循环了
-            int len = std::stoi(line.substr(16));
-            request.contentLength = len;
-
-            // 读当前行content
-            std::string contentBuff, content;
-            contentBuff.resize(request.contentLength);
-            stream.read(&contentBuff[0], request.contentLength);
-
-            UrlUtils::urlDecode(contentBuff, content);
-
-            // 解析-xform，格式username=123456&password=aaaaa&email=asdf%40sdf.sadf
-            if(request.contentType.find("application/x-www-form-urlencoded") == 0){
-                // 解析urlencoded
-                std::string key, value;
-                bool isKey = true;
-                for (auto &c : content) {
-                    if (c == '=') {
-                        isKey = false;
-                    } else if (c == '&') {
-                        request.contentMap[key] = value;
-                        key.clear();
-                        value.clear();
-                        isKey = true;
-                    } else {
-                        if (isKey) {
-                            key.push_back(c);
-                        } else {
-                            value.push_back(c);
-                        }
-                    }
-                }
-                if (!key.empty()) {
-                    request.contentMap[key] = value;
-                }
-
-            }else if(request.contentType.starts_with("multipart/form-data")){
-            }
+            request.contentLength = std::stoi(line.substr(16));
+            result = good;
             break;
         }
     }
+
+    // 有了content类型和长度就开始解析content
+    if(result == good) {
+        // 读当前行content
+        std::cout << "contentLength: " << request.contentLength << std::endl;
+        std::cout << "streamTellG: " << stream.tellg() << std::endl;
+        std::cout << "streamLength: " << stream.str().length()<< std::endl;
+
+        // 如果当前流的长度小于contentLength+2（\r\n），说明还没读完
+        if(request.contentLength + stream.tellg() > stream.str().length()) {
+            std::cout << "need read more" << std::endl;
+            return indeterminate;
+        }
+
+        // 解析-xform，格式username=123456&password=aaaaa&email=asdf%40sdf.sadf
+        if(request.contentType.find("application/x-www-form-urlencoded") == 0){
+            // x-form开头\r\n并不会算进contentLength里，所以要先读两个
+            stream.get();
+            stream.get();
+
+            std::string content;
+            content.resize(request.contentLength);
+            stream.read(&content[0], request.contentLength);
+
+            // 解析urlencoded
+            std::string key, value;
+            bool isKey = true;
+            for (auto &c : content) {
+                if (c == '=') {
+                    isKey = false;
+                } else if (c == '&') {
+                    auto decodeKey = UrlUtils::urlDecode(key);
+                    auto decodeValue = UrlUtils::urlDecode(value);
+                    request.contentMap[decodeKey] = decodeValue;
+                    key.clear();
+                    value.clear();
+                    isKey = true;
+                } else {
+                    if (isKey) {
+                        key.push_back(c);
+                    } else {
+                        value.push_back(c);
+                    }
+                }
+            }
+            if (!key.empty()) {
+                auto decodeKey = UrlUtils::urlDecode(key);
+                auto decodeValue = UrlUtils::urlDecode(value);
+                request.contentMap[decodeKey] = decodeValue;
+            }
+
+        }else if(request.contentType.starts_with("multipart/form-data")){
+
+        }
+
+        // header进map
+        for (auto &header : request.headers) {
+            request.headerMap[header.name] = header.value;
+        }
+        // 卸磨杀驴
+        request.headers.clear();
+    }
+    return result;
 }
