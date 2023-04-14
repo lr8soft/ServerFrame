@@ -58,3 +58,4 @@ size_t HttpConnect::writeData(void* buffer, size_t size, size_t nmemb, void* use
     *((std::stringstream*) userp) << data << std::endl;
     return  size * nmemb;
 }
+

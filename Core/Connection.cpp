@@ -23,8 +23,6 @@ void Connection::doRead() {
             // get指针回到起始
             _bufferStream.seekg(0, std::ios::beg);
 
-            std::cout << "buffer:\n" << _bufferStream.str() << std::endl;
-
             // 解包解析结果
             result = _parser.parse(_request, _bufferStream);
             // 解析成功
@@ -42,7 +40,7 @@ void Connection::doRead() {
                     doRead();
                 }
             } else if (result == RequestParser::bad) {
-                std::cout << "bad request " << _bufferStream.str() << std::endl;
+                //std::cout << "bad request " << _bufferStream.str() << std::endl;
                 _reply = Reply::stockReply(Reply::bad_request);
                 _bufferStream.clear();
                 doWrite();
