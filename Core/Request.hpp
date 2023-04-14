@@ -13,11 +13,13 @@
 struct Request {
     std::string method;
     std::string uri;
+    std::string contentType;
     int http_version_major;
     int http_version_minor;
+    int contentLength;
     std::vector<Header> headers;
     std::map<std::string, std::string> headerMap;
-    std::map<std::string, std::string> bodyMap;
+    std::map<std::string, std::string> contentMap;
 };
 
 #endif //SERVERFRAME_REQUEST_H

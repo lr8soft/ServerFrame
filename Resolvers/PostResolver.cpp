@@ -16,8 +16,11 @@ bool PostResolver::handleRequest(const Request &req, Reply &rep) {
         return false;
     }
 
+    std::cout << "post content:" << std::endl;
+    // 遍历req.contentMap并输出
+    for (auto &item : req.contentMap) {
+        std::cout << item.first << ":" << item.second << " len: " << item.second.length() << std::endl;
+    }
 
-    //req.
-
-    return false;
+    return true;
 }

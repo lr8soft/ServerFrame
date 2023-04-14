@@ -6,6 +6,7 @@
 #include <sstream>
 #include "RequestParser.hpp"
 #include "Request.hpp"
+#include "../Utils/UrlUtils.h"
 
 RequestParser::ResultEnum RequestParser::parseRequestItem(Request &req, char input) {
     // 开头第一行GET / HTTP/1.1
@@ -232,7 +233,7 @@ void RequestParser::reset() {
     _state = method_start;
 }
 
-void RequestParser::parseForm(Request &request, std::stringstream &str) {
+void RequestParser::parseForm(Request &request, std::stringstream &stream) {
     // 把headers全读取到Map
     for (auto &header : request.headers) {
         request.headerMap[header.name] = header.value;
@@ -240,19 +241,53 @@ void RequestParser::parseForm(Request &request, std::stringstream &str) {
     // 卸磨杀驴
     request.headers.clear();
 
-    // 读取str里的内容，当检测到Content-Length: 开头的文字后，下面的数字是内容长度
-    // 根据内容长度再读取新内容后结束
+    // 读取str里的内容，记录Content-Type: 后面的内容到request.contentType
+    // 当检测到Content-Length: 开头的文字后，下面的数字是内容长度
     std::string line;
-    while (std::getline(str, line)) {
-        if (line.find("Content-Length: ") == 0) {
+    // 保留\r\n
+    while (std::getline(stream, line)) {
+        if (line.find("Content-Type: ") == 0) {
+            request.contentType = line.substr(14);
+        } else if (line.find("Content-Length: ") == 0) {
+            // 读完后面就没必要循环了
             int len = std::stoi(line.substr(16));
-            std::string content;
-            content.resize(len);
-            str.read(&content[0], len);
+            request.contentLength = len;
 
-            std::cout << "formdata: " << content << std::endl;
+            // 读当前行content
+            std::string contentBuff, content;
+            contentBuff.resize(request.contentLength);
+            stream.read(&contentBuff[0], request.contentLength);
+
+            UrlUtils::urlDecode(contentBuff, content);
+
+            // 解析-xform，格式username=123456&password=aaaaa&email=asdf%40sdf.sadf
+            if(request.contentType.find("application/x-www-form-urlencoded") == 0){
+                // 解析urlencoded
+                std::string key, value;
+                bool isKey = true;
+                for (auto &c : content) {
+                    if (c == '=') {
+                        isKey = false;
+                    } else if (c == '&') {
+                        request.contentMap[key] = value;
+                        key.clear();
+                        value.clear();
+                        isKey = true;
+                    } else {
+                        if (isKey) {
+                            key.push_back(c);
+                        } else {
+                            value.push_back(c);
+                        }
+                    }
+                }
+                if (!key.empty()) {
+                    request.contentMap[key] = value;
+                }
+
+            }else if(request.contentType.starts_with("multipart/form-data")){
+            }
             break;
         }
     }
-
 }
