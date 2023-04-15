@@ -8,6 +8,9 @@
 #include "Request.hpp"
 #include "../Utils/UrlUtils.h"
 
+#include "MultiFormParser.h"
+#include "X3WFormParser.h"
+
 RequestParser::ResultEnum RequestParser::parseRequestItem(Request &req, char input) {
     // 开头第一行GET / HTTP/1.1
     switch (_state) {
@@ -227,7 +230,14 @@ bool RequestParser::isDigit(int c) {
     return c >= '0' && c <= '9';
 }
 
-RequestParser::RequestParser(): _state(method_start) {}
+RequestParser::RequestParser(): _state(method_start) {
+    contentParser.push_back(std::make_shared<MultiFormParser>());
+    contentParser.push_back(std::make_shared<X3WFormParser>());
+}
+
+RequestParser::~RequestParser() {
+    contentParser.clear();
+}
 
 void RequestParser::reset() {
     _state = method_start;
@@ -250,165 +260,14 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
         }
     }
 
+    // 尝试解析body
     if(result == good) {
-        // x-www-form-urlencoded格式表单
-        if(request.contentType.find("application/x-www-form-urlencoded") == 0) {
-            // +2因为\r\n不算进x-www-form的长度
-            if(!checkBodyComplete(request.contentLength + 2, stream)) {
+        for(auto parser : contentParser){
+            auto result = parser->parseBody(request, stream);
+            if(result == ContentParser::good) {
+                break;
+            }else if(result == ContentParser::indeterminate) {
                 return indeterminate;
-            }
-            // 去掉\r\n
-            stream.get();
-            stream.get();
-
-            std::string content;
-            content.resize(request.contentLength);
-            stream.read(&content[0], request.contentLength);
-
-            // 解析-xform，格式username=123456&password=aaaaa
-            std::string key, value;
-            bool isKey = true;
-            for (auto &c : content) {
-                if (c == '=') {
-                    isKey = false;
-                } else if (c == '&') {
-                    auto decodeKey = UrlUtils::urlDecode(key);
-                    auto decodeValue = UrlUtils::urlDecode(value);
-                    request.bodyMap[decodeKey] = decodeValue;
-                    key.clear();
-                    value.clear();
-                    isKey = true;
-                } else {
-                    if (isKey) {
-                        key.push_back(c);
-                    } else {
-                        value.push_back(c);
-                    }
-                }
-            }
-            if (!key.empty()) {
-                auto decodeKey = UrlUtils::urlDecode(key);
-                auto decodeValue = UrlUtils::urlDecode(value);
-                request.bodyMap[decodeKey] = decodeValue;
-            }
-
-        }else if(request.contentType.starts_with("multipart/form-data")) {
-            std::cout << "multipart/form-data" << std::endl;
-            // multipart长度包含\r\n的
-            if(!checkBodyComplete(request.contentLength, stream)) {
-                std::cout << "incompleted" << std::endl;
-                return indeterminate;
-            }
-            // 读取boundary
-            std::string boundary;
-            auto pos = request.contentType.find("boundary=");
-            if(pos != std::string::npos) {
-                boundary = "--" +  request.contentType.substr(pos + 9);
-                boundary.pop_back();
-            }
-            if(boundary.empty()) {
-                std::cout << "no boundary " << request.contentType << std::endl;
-                return bad;
-            }
-            // 读取body
-            std::string body;
-            body.resize(request.contentLength);
-            stream.read(&body[0], request.contentLength);
-
-            // 将body按行分割，boundary作为数据分割线，包围中间的数据
-            // 其中数据名称name在数据里的第一行，以name=""结束
-            // 第二行，以\r\n结束
-            // 第三行是数据值，再将name与value作为kv值记录到bodyMap
-            std::string key, value, fileName;
-            bool isKey = true, firstRun = true;
-            bool isValue = false, isFile = false;
-            std::string line;
-            std::stringstream bodyStream(body);
-            while (std::getline(bodyStream, line)) {
-                // 跳过第一行
-                if(firstRun) {
-                    firstRun = false;
-                    continue;
-                }
-                // 末尾除了最后一行，去掉getline后剩下的\r
-                line.pop_back();
-
-                if(line == boundary) {
-                    // 读到分割线，说明上一个数据读完了
-                    if(!key.empty()) {
-                        auto decodeKey = UrlUtils::urlDecode(key);
-                        auto decodeValue = UrlUtils::urlDecode(value);
-                        request.bodyMap[decodeKey] = decodeValue;
-                        if(isFile) {
-                            auto decodeFileName = UrlUtils::urlDecode(fileName);
-                            request.bodyMap[decodeKey + "_filename"] = decodeFileName;
-                        }
-
-                        std::cout << "key:" << decodeKey << " value:" << decodeValue << std::endl;
-                        key.clear();
-                        value.clear();
-                        fileName.clear();
-                        isKey = true;
-                        isValue = false;
-                        isFile = false;
-                    }
-                }else if(line == boundary + "-") {
-                    // 读到结束分割线，说明数据读完了
-                    // pop掉了末尾，所以是-不是--
-                    if(!key.empty()) {
-                        auto decodeKey = UrlUtils::urlDecode(key);
-                        auto decodeValue = UrlUtils::urlDecode(value);
-                        request.bodyMap[decodeKey] = decodeValue;
-                        if(isFile) {
-                            auto decodeFileName = UrlUtils::urlDecode(fileName);
-                            request.bodyMap[decodeKey + "_filename"] = decodeFileName;
-                        }
-                        std::cout << "key:" << decodeKey << " value:" << decodeValue << std::endl;
-                        key.clear();
-                        value.clear();
-                        fileName.clear();
-                        isKey = true;
-                        isValue = false;
-                        isFile = false;
-                    }
-                    break;
-                }else if(line.find("Content-Disposition: form-data; name=") == 0) {
-                    // 读到数据名称
-                    if(line.find("filename=") == std::string::npos) {
-                        auto pos = line.find("name=\"");
-                        if(pos != std::string::npos) {
-                            key = line.substr(pos + 6);
-                            // 弹掉引号
-                            key.pop_back();
-                        }
-                    }else{
-                        // 读到文件域，记录name
-                        auto pos = line.find("name=\"");
-                        if(pos != std::string::npos) {
-                            // name右引号定位
-                            auto endPos = line.find("\"", pos + 6);
-                            key = line.substr(pos + 6, endPos - pos + 1);
-                            std::cout << endPos << " " << pos << std::endl;
-                            // 记录fileName
-                            auto fileNamePos = line.find("filename=\"");
-                            if(fileNamePos != std::string::npos) {
-                                fileName = line.substr(fileNamePos + 10);
-                                // 弹掉引号
-                                fileName.pop_back();
-                            }
-                        }
-                        isFile = true;
-                    }
-
-                }else if(line.starts_with("Content-Type: ")){
-                    continue;
-                }else if(line.empty()) {
-                    // 读到空行，说明数据值开始了
-                    isValue = true;
-                }else if(isValue) {
-                    // 读到数据值
-                    value += line;
-                }
             }
         }
 
@@ -420,15 +279,6 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
         request.headers.clear();
     }
     return result;
-}
-
-bool RequestParser::checkBodyComplete(int bodyLength, std::stringstream &stream) {
-    // tellp是写入指针位置，即当前长度
-    // 检测当前读取位置+body长度是否大于当前流长度，就知道body是否完整
-    if(bodyLength + stream.tellg() > stream.tellp()) {
-        return false;
-    }
-    return true;
 }
 
 RequestParser::ResultEnum RequestParser::parse(Request &request, std::stringstream &stream) {
@@ -444,3 +294,4 @@ RequestParser::ResultEnum RequestParser::parse(Request &request, std::stringstre
     stream.seekg(0, std::ios::beg);
     return result;
 }
+

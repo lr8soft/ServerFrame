@@ -47,6 +47,9 @@ void Connection::doRead() {
             } else {
                 doRead();
             }
+
+            // 记得重置解析器
+            _parser.reset();
         }
         else if(code != asio::error::operation_aborted) {
             ConnManager::getInstance()->stopConn(shared_from_this());

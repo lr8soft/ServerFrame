@@ -8,12 +8,19 @@
 #include <tuple>
 #include <iostream>
 #include <sstream>
+#include <list>
+#include <memory>
+#include "ContentParser.hpp"
 //  from AsioLearn author NearXdu
 //  https://github.com/NearXdu/AsioLearn/blob/master/src/example_http/request_handler.hpp
 struct Request;
 class RequestParser {
+private:
+    std::list<std::shared_ptr<ContentParser>> contentParser;
+
 public:
     RequestParser();
+    ~RequestParser();
 
     void reset();
     // 解析结果
@@ -27,10 +34,6 @@ public:
 
 private:
     ResultEnum parseRequestItem(Request& req, char input);
-
-    /// 检测请求body长度是否完整
-    bool checkBodyComplete(int bodyLength, std::stringstream & stream);
-
 
     /// Check if a byte is an HTTP character.
     static bool isChar(int c);

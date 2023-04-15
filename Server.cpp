@@ -52,7 +52,7 @@ void Server::doAccept() {
             return;
         }
 
-        LogUtil::printInfo("Socket connected with " + _nextSocket.remote_endpoint().address().to_string() + "  " + code.message());
+        //LogUtil::printInfo("Socket connected with " + _nextSocket.remote_endpoint().address().to_string() + "  " + code.message());
         if(!code) {
             auto pConn = std::make_shared<Connection>(std::move(_nextSocket));
             ConnManager::getInstance()->startConn(pConn);
