@@ -12,16 +12,10 @@
 ContentParser::ResultEnum X3WFormParser::parseBody(Request &request, std::stringstream &stream) {
     ContentParser::ResultEnum result = bad;
     if(request.contentType.find("application/x-www-form-urlencoded") == 0) {
-        std::cout << "application/x-www-form-urlencoded" << std::endl;
-        // +2因为\r\n不算进x-www-form的长度
-        if(!checkBodyComplete(request.contentLength + 2, stream)) {
+        if(!checkBodyComplete(request.contentLength, stream)) {
             std::cout << "x3w-form incompleted" << std::endl;
             return indeterminate;
         }
-        result = good;
-        // 去掉\r\n
-        stream.get();
-        stream.get();
 
         std::string content;
         content.resize(request.contentLength);

@@ -23,8 +23,9 @@ void Connection::doRead() {
             // get指针回到起始
             _bufferStream.seekg(0, std::ios::beg);
 
+
             // 解包解析结果
-            result = _parser.parse(_request, _bufferStream);
+            result = _parser.parseHeader(_request, _bufferStream);
             // 解析成功
             if (result == RequestParser::good) {
                 // 解析表单

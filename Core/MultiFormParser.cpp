@@ -12,7 +12,7 @@ ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stri
     if(request.contentType.starts_with("multipart/form-data")) {
         std::cout << "multipart/form-data" << std::endl;
         // multipart长度包含\r\n的
-        if(!checkBodyComplete(request.contentLength, stream)) {
+        if(!checkBodyComplete(request.contentLength - 2, stream)) {
             //std::cout << "form-data incompleted" << std::endl;
             return indeterminate;
         }
@@ -21,7 +21,6 @@ ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stri
         auto pos = request.contentType.find("boundary=");
         if(pos != std::string::npos) {
             boundary = "--" +  request.contentType.substr(pos + 9);
-            boundary.pop_back();
         }
         if(boundary.empty()) {
             std::cout << "no boundary " << request.contentType << std::endl;
@@ -39,21 +38,16 @@ ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stri
         // 第二行，以\r\n结束
         // 第三行是数据值，再将name与value作为kv值记录到bodyMap
         std::string key, value;
-        bool firstRun = true;
         bool isValue = false;
         std::string line;
         std::stringstream bodyStream(body);
         while (std::getline(bodyStream, line)) {
             //std::cout << line << std::endl;
-            // 跳过第一行
-            if(firstRun) {
-                firstRun = false;
-                continue;
-            }
             // 末尾除了最后一行，去掉getline后剩下的\r
             line.pop_back();
-
+            //std::cout << "boundary [" + line +"]" <<"[" + boundary + "]" << std::endl;
             if(line == boundary) {
+
                 // 读到分割线，说明上一个数据读完了
                 if(!key.empty()) {
                     auto decodeKey = UrlUtils::urlDecode(key);
@@ -64,7 +58,7 @@ ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stri
                     value.clear();
                     isValue = false;
                 }
-            }else if(line == boundary + "-") {
+            }else if(line == boundary + "--") {
                 // 读到结束分割线，说明数据读完了
                 // pop掉了末尾，所以是-不是--
                 if(!key.empty()) {

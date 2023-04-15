@@ -14,10 +14,9 @@ struct Request {
     std::string method;
     std::string uri;
     std::string contentType;
-    int http_version_major;
-    int http_version_minor;
     int contentLength;
-    std::vector<Header> headers;
+    int httpVersionMajor;
+    int httpVersionMinor;
     std::map<std::string, std::string> headerMap;
     std::map<std::string, std::string> bodyMap;
 
@@ -25,7 +24,6 @@ struct Request {
         method.clear();
         uri.clear();
         contentType.clear();
-        headers.clear();
         headerMap.clear();
         bodyMap.clear();
     }
