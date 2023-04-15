@@ -37,6 +37,8 @@ void Connection::doRead() {
                     _bufferStream.clear();
                     doWrite();
                 }else {
+                    // 没读完记得清理解析了一半的request
+                    _request.reset();
                     doRead();
                 }
             } else if (result == RequestParser::bad) {

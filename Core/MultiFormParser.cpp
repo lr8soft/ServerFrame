@@ -13,7 +13,7 @@ ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stri
         std::cout << "multipart/form-data" << std::endl;
         // multipart长度包含\r\n的
         if(!checkBodyComplete(request.contentLength, stream)) {
-            std::cout << "form-data incompleted" << std::endl;
+            //std::cout << "form-data incompleted" << std::endl;
             return indeterminate;
         }
         // 读取boundary
@@ -59,7 +59,7 @@ ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stri
                     auto decodeKey = UrlUtils::urlDecode(key);
                     auto decodeValue = UrlUtils::urlDecode(value);
                     request.bodyMap[decodeKey] = decodeValue;
-                    std::cout << "key:" << decodeKey << " value:" << decodeValue << std::endl;
+                    //std::cout << "key:" << decodeKey << " value:" << decodeValue << std::endl;
                     key.clear();
                     value.clear();
                     isValue = false;
@@ -71,7 +71,7 @@ ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stri
                     auto decodeKey = UrlUtils::urlDecode(key);
                     auto decodeValue = UrlUtils::urlDecode(value);
                     request.bodyMap[decodeKey] = decodeValue;
-                    std::cout << "key:" << decodeKey << " value:" << decodeValue << std::endl;
+                    //std::cout << "key:" << decodeKey << " value:" << decodeValue << std::endl;
                     key.clear();
                     value.clear();
                     isValue = false;

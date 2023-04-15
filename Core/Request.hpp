@@ -20,6 +20,15 @@ struct Request {
     std::vector<Header> headers;
     std::map<std::string, std::string> headerMap;
     std::map<std::string, std::string> bodyMap;
+
+    void reset() {
+        method.clear();
+        uri.clear();
+        contentType.clear();
+        headers.clear();
+        headerMap.clear();
+        bodyMap.clear();
+    }
 };
 
 #endif //SERVERFRAME_REQUEST_H
