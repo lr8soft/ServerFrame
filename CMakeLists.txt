@@ -17,7 +17,7 @@ target_link_libraries(ServerFrame PRIVATE asio::asio)
 if(WIN32)
     target_link_libraries(ServerFrame PRIVATE wsock32 ws2_32)
 elseif(UNIX)
-    target_link_libraries(ServerFrame PRIVATE pthread boost_system)
+    target_link_libraries(ServerFrame PRIVATE pthread)
 endif()
 
 find_package(lua REQUIRED)
