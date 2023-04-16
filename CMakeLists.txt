@@ -8,8 +8,8 @@ add_executable(ServerFrame main.cpp Utils/HttpConnect.cpp Utils/HttpConnect.h Se
 find_package(CURL CONFIG REQUIRED)
 target_link_libraries(ServerFrame PRIVATE CURL::libcurl)
 
-find_package(jsoncpp CONFIG REQUIRED)
-target_link_libraries(ServerFrame PRIVATE JsonCpp::JsonCpp)
+find_package(RapidJSON CONFIG REQUIRED)
+target_link_libraries(ServerFrame PRIVATE rapidjson)
 
 find_package(asio CONFIG REQUIRED)
 target_link_libraries(ServerFrame PRIVATE asio::asio)
