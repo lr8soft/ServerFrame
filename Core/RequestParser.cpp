@@ -69,7 +69,7 @@ RequestParser::ResultEnum RequestParser::parseHeader(Request &request, std::stri
 
         // header里的最后一行
         if(line == "\r") {
-            std::cout << "header last line " << line << std::endl;
+            //std::cout << "header last line " << line << std::endl;
             break;
         }
         // 去掉结尾的\r
