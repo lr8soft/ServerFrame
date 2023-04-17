@@ -17,6 +17,9 @@ public:
     bool handleRequest(const Request& req, Reply& rep);
 
 private:
+    std::string parserAnyValue(lua_State* state, int index);
+
+private:
     std::map<std::string, int> urlMethodMap;
     lua_State* pState;
 };

@@ -2,10 +2,10 @@
 url = {
     login = function(request)
         print("LOGIN!")
-        return true
+        return { status = "operation_success", result = "login_success" }
     end,
     regist = function(request)
         print("REGIST!")
-        return true
+        return { status = "operation_success" }
     end
 }
