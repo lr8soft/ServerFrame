@@ -5,6 +5,7 @@
 #include <lua.hpp>
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
+#include <cmath>
 #include "LuaResolver.h"
 #include "../Core/Request.hpp"
 #include "../Core/Reply.h"
@@ -88,47 +89,49 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
         return false;
     }
 
-
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-    writer.StartObject();
-    // 回到栈顶
-    int returnTableIndex = lua_gettop(pState);
-    lua_pushnil(pState);
-    while (lua_next(pState, returnTableIndex) != 0) {
-        const char *key = lua_tostring(pState, -2);
-        std::string value = parserAnyValue(pState, -1);
-        writer.Key(key);
-        writer.String(value.c_str());
-        // 弹出key
-        lua_pop(pState, 1);
-    }
+    parseLuaTable(pState,  writer, lua_gettop(pState));
     // 弹出返回的table
     lua_pop(pState, 1);
 
-    writer.EndObject();
     // 设置json并返回
     Reply::setReply(rep, buffer.GetString(), "json");
     return true;
 }
 
-std::string LuaResolver::parserAnyValue(lua_State* state, int index) {
-    if (lua_isnumber(state, index)) {
-        double value = lua_tonumber(state, index);
-        return std::to_string(value);
-    } else if (lua_isstring(state, index)) {
-        const char* value = lua_tostring(state, index);
-        return value;
-    } else if (lua_isboolean(state, index)) {
-        bool value = lua_toboolean(state, index);
-        return std::to_string(value);
-    } else if (lua_istable(state, index)) {
-        // 处理嵌套的table
+void LuaResolver::parseLuaTable(lua_State *pState, rapidjson::Writer<rapidjson::StringBuffer> &writer, int index) {
+    lua_pushnil(pState); // 第一个键
+    writer.StartObject();
+    while (lua_next(pState, index) != 0) {
+        // 使用lua_tostring函数获取键和值
+        writer.Key(lua_tostring(pState, -2));
+        if (lua_istable(pState, -1)) {
+            // 如果值是一个表，递归调用自己
+            parseLuaTable(pState, writer, lua_gettop(pState));
+        } else {
+            switch (lua_type(pState, -1)) {
+                case LUA_TSTRING:
+                    writer.String(lua_tostring(pState, -1));
+                    break;
+                case LUA_TBOOLEAN:
+                    writer.Bool(lua_toboolean(pState, -1));
+                    break;
+                case LUA_TNUMBER: {
+                    double value = lua_tonumber(pState, -1);
+                    if(ceil(value) == floor(value))
+                        writer.Int((int)value);
+                    else
+                        writer.Double(lua_tonumber(pState, -1));
+                    break;
+                }
+                default:
+                    writer.Null();
+                    break;
+            }
+        }
+        // 弹出值，保留键用于下一次迭代
+        lua_pop(pState, 1);
     }
-
-    return "";
+    writer.EndObject();
 }
-
-
-
-

@@ -1,8 +1,15 @@
-
 url = {
     login = function(request)
         print("LOGIN!")
-        return { status = "operation_success", result = "login_success" }
+        result = { status = "operation_success",
+                   result = "login_success",
+                   data = {
+                       id = 233333,
+                       name = "lrsoft",
+                       value = 1234.456
+                   }
+        }
+        return result
     end,
     regist = function(request)
         print("REGIST!")

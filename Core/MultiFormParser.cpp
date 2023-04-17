@@ -10,7 +10,7 @@
 ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stringstream &stream) {
     ContentParser::ResultEnum result = bad;
     if(request.contentType.starts_with("multipart/form-data")) {
-        std::cout << "multipart/form-data" << std::endl;
+        //std::cout << "multipart/form-data" << std::endl;
         // multipart长度包含\r\n的
         if(!checkBodyComplete(request.contentLength - 2, stream)) {
             //std::cout << "form-data incompleted" << std::endl;

@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <lua.hpp>
+#include <rapidjson/writer.h>
 #include "IRequestSolver.h"
 
 class LuaResolver: public IRequestSolver{
@@ -17,11 +18,12 @@ public:
     bool handleRequest(const Request& req, Reply& rep);
 
 private:
-    std::string parserAnyValue(lua_State* state, int index);
-
+    /// 解析栈顶的lua表内容并写入至writer
+    void parseLuaTable(lua_State* pState, rapidjson::Writer<rapidjson::StringBuffer> &writer, int index);
 private:
     std::map<std::string, int> urlMethodMap;
     lua_State* pState;
+
 };
 
 
