@@ -23,6 +23,9 @@ endif()
 find_package(lua REQUIRED)
 target_link_libraries(ServerFrame PRIVATE lua)
 
+find_package(SqliteOrm CONFIG REQUIRED)
+target_link_libraries(ServerFrame PRIVATE sqlite_orm::sqlite_orm)
+
 # 添加debug宏
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     add_definitions(-D_DEBUG)
