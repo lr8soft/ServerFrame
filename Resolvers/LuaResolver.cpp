@@ -6,7 +6,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <cmath>
-#include <sstream>
+#include <string>
 #include "LuaResolver.h"
 #include "../Core/Request.hpp"
 #include "../Core/Reply.h"
@@ -33,7 +33,9 @@ LuaResolver::LuaResolver() {
 
     lua_getglobal(pState, "url");
 
-    loadLuaFunction(pState, "", lua_gettop(pState));
+    std::list<std::string> list;
+    loadLuaFunction(pState, "", lua_gettop(pState), list);
+
     isInitSuccess = true;
 }
 
@@ -43,7 +45,7 @@ LuaResolver::~LuaResolver() {
 }
 
 
-void LuaResolver::loadLuaFunction(lua_State *pState, const std::string &packageName, int index) {
+void LuaResolver::loadLuaFunction(lua_State *pState, const std::string &packageName, int index, std::list<std::string>& folderList) {
     if(!packageName.empty()) {
         lua_getglobal(pState, packageName.c_str());
     }
@@ -55,18 +57,21 @@ void LuaResolver::loadLuaFunction(lua_State *pState, const std::string &packageN
         const char *key = lua_tostring(pState, -2);
         std::stringstream ss;
         if(!packageName.empty())
-            ss << packageName << "." << key;
+            ss << packageName << "/" << key;
         else
             ss << key;
 
+        folderList.push_back(key);
+
         if (lua_isfunction(pState, -1)) {
-            urlMethodMap.insert(std::make_pair(ss.str(), key));
+            urlMethodMap.insert(std::make_pair(ss.str(), folderList));
             //std::cout << key << "is func:" << ss.str() << std::endl;
         }else if(lua_istable(pState, -1)) {
-            loadLuaFunction(pState, ss.str(), lua_gettop(pState));
+            loadLuaFunction(pState, ss.str(), lua_gettop(pState), folderList);
             //std::cout << key << "is table:" << ss.str() << std::endl;
         }
         lua_pop(pState, 1);
+        folderList.pop_back();
     }
     lua_pop(pState, 1);
 }
@@ -84,14 +89,11 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
         return false;
     }
 
-    // 去掉斜杠
+    // 去掉开头的斜杠
     if(reqPath.starts_with("/")) {
         reqPath = reqPath.substr(1);
     }
 
-    // 替换斜杠为点，以便在Lua中使用
-    std::replace(reqPath.begin(), reqPath.end(), '/', '.');
-    //reqPath = "url." + reqPath;
 
     // 从urlMethodMap中找到对应的方法
     auto it = urlMethodMap.find(reqPath);
@@ -100,9 +102,13 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
         return false;
     }
 
+
     lua_getglobal(pState, "url");
-    lua_pushstring(pState,  it->first.c_str());
-    lua_gettable(pState, -2);
+    auto folderList = it->second;
+    // 把url各个字段压入栈中
+    for (auto const &folder: folderList) {
+        lua_getfield(pState, -1, folder.c_str());
+    }
 
     if (!lua_isfunction(pState, -1)) {
         LogUtil::printError("Fail to get lua function " + it->first);

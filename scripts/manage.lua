@@ -1,6 +1,12 @@
-local user = require("user")
+local userModule = require("user")
 
 url = {
-    user = user,
-    login = user.login
+    user = userModule,
+    test = function(request)
+        result = {
+            text = "Hello ServerFrame",
+            request = request
+        }
+        return result
+    end
 }
