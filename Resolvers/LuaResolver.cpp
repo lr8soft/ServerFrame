@@ -6,6 +6,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <cmath>
+#include <sstream>
 #include "LuaResolver.h"
 #include "../Core/Request.hpp"
 #include "../Core/Reply.h"
@@ -15,24 +16,25 @@
 
 LuaResolver::LuaResolver() {
     pState = LuaUtil::getNewState();
+    luaL_openlibs(pState);
 #ifdef _DEBUG
+    const char* packageStr = "package.path = package.path .. ';../scripts/?.lua'";
     const char* path = "../scripts/manage.lua";
 #else
+    const char* packageStr = "package.path = package.path .. ';./scripts/?.lua'";
     const char* path = "scripts/manage.lua";
 #endif
+
+    luaL_dostring(pState, packageStr);
+
+
     luaL_openlibs(pState);
     luaL_dofile(pState, path);
+
     lua_getglobal(pState, "url");
-    lua_pushnil(pState);
-    // lua_next弹出url表里的名称与方法
-    while (lua_next(pState, -2) != 0) {
-        const char *key = lua_tostring(pState, -2);
-        if (lua_isfunction(pState, -1)) {
-            urlMethodMap.insert(std::make_pair(key, 0));
-            //std::cout << " key:" << key << std::endl;
-        }
-        lua_pop(pState, 1);
-    }
+
+    loadLuaFunction(pState, "", lua_gettop(pState));
+    isInitSuccess = true;
 }
 
 LuaResolver::~LuaResolver() {
@@ -40,7 +42,41 @@ LuaResolver::~LuaResolver() {
     pState = nullptr;
 }
 
+
+void LuaResolver::loadLuaFunction(lua_State *pState, const std::string &packageName, int index) {
+    if(!packageName.empty()) {
+        lua_getglobal(pState, packageName.c_str());
+    }
+
+    lua_pushnil(pState);
+
+    // lua_next弹出url表里的名称与方法
+    while (lua_next(pState, index) != 0) {
+        const char *key = lua_tostring(pState, -2);
+        std::stringstream ss;
+        if(!packageName.empty())
+            ss << packageName << "." << key;
+        else
+            ss << key;
+
+        if (lua_isfunction(pState, -1)) {
+            urlMethodMap.insert(std::make_pair(ss.str(), key));
+            //std::cout << key << "is func:" << ss.str() << std::endl;
+        }else if(lua_istable(pState, -1)) {
+            loadLuaFunction(pState, ss.str(), lua_gettop(pState));
+            //std::cout << key << "is table:" << ss.str() << std::endl;
+        }
+        lua_pop(pState, 1);
+    }
+    lua_pop(pState, 1);
+}
+
 bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
+    if(isInitSuccess == false) {
+        rep = Reply::stockReply(Reply::internal_server_error);
+        return false;
+    }
+
     std::string reqPath;
     // 解析失败
     if (!UrlUtils::urlDecode(req.uri, reqPath)) {
@@ -49,7 +85,14 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     }
 
     // 去掉斜杠
-    reqPath = reqPath.substr(1);
+    if(reqPath.starts_with("/")) {
+        reqPath = reqPath.substr(1);
+    }
+
+    // 替换斜杠为点，以便在Lua中使用
+    std::replace(reqPath.begin(), reqPath.end(), '/', '.');
+    //reqPath = "url." + reqPath;
+
     // 从urlMethodMap中找到对应的方法
     auto it = urlMethodMap.find(reqPath);
     if (it == urlMethodMap.end()) {
@@ -58,7 +101,7 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     }
 
     lua_getglobal(pState, "url");
-    lua_pushstring(pState, it->first.c_str());
+    lua_pushstring(pState,  it->first.c_str());
     lua_gettable(pState, -2);
 
     if (!lua_isfunction(pState, -1)) {
@@ -135,3 +178,4 @@ void LuaResolver::parseLuaTable(lua_State *pState, rapidjson::Writer<rapidjson::
     }
     writer.EndObject();
 }
+

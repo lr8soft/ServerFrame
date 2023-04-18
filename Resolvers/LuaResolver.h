@@ -18,11 +18,15 @@ public:
     bool handleRequest(const Request& req, Reply& rep);
 
 private:
+    void loadLuaFunction(lua_State* pState, const std::string& packageName, int index);
+
     /// 解析栈顶的lua表内容并写入至writer
     void parseLuaTable(lua_State* pState, rapidjson::Writer<rapidjson::StringBuffer> &writer, int index);
 private:
-    std::map<std::string, int> urlMethodMap;
+    std::map<std::string, std::string> urlMethodMap;
     lua_State* pState;
+
+    bool isInitSuccess = false;
 
 };
 
