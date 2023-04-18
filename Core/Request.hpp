@@ -7,14 +7,26 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "Header.h"
 
 struct Request {
     std::string method;
     std::string uri;
-    int http_version_major;
-    int http_version_minor;
-    std::vector<Header> headers;
+    std::string contentType;
+    int contentLength;
+    int httpVersionMajor;
+    int httpVersionMinor;
+    std::map<std::string, std::string> headerMap;
+    std::map<std::string, std::string> bodyMap;
+
+    void reset() {
+        method.clear();
+        uri.clear();
+        contentType.clear();
+        headerMap.clear();
+        bodyMap.clear();
+    }
 };
 
 #endif //SERVERFRAME_REQUEST_H

@@ -4,6 +4,7 @@
 
 #include <asio.hpp>
 #include "Reply.h"
+#include "../Utils/MimeUtils.h"
 
 namespace StatusString {
     const std::string ok =
@@ -227,15 +228,19 @@ std::vector<asio::const_buffer> Reply::toBuffers() {
 }
 
 Reply Reply::stockReply(Reply::StatusType status) {
-    Reply rep;
-    rep.status = status;
-    rep.content = stock_replies::toString(status);
-    rep.headers.resize(3);
-    rep.headers[0].name = "Content-Length";
-    rep.headers[0].value = std::to_string(rep.content.size());
-    rep.headers[1].name = "Content-Type";
-    rep.headers[1].value = "text/html";
-    rep.headers[2].name = "Server";
-    rep.headers[2].value = "ServerFrame";
-    return rep;
+    Reply reply;
+    setReply(reply, stock_replies::toString(status), "html", status);
+    return reply;
+}
+
+void Reply::setReply(Reply &reply, const std::string &content, const std::string &extName, Reply::StatusType status) {
+    reply.status = status;
+    reply.content = content;
+    reply.headers.resize(3);
+    reply.headers[0].name = "Content-Length";
+    reply.headers[0].value = std::to_string(content.size());
+    reply.headers[1].name = "Content-Type";
+    reply.headers[1].value = MimeUtils::getMimeFromExt(extName);
+    reply.headers[2].name = "Server";
+    reply.headers[2].value = "ServerFrame";
 }

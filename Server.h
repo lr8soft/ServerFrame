@@ -9,7 +9,6 @@
 #include <memory>
 #include <string>
 #include "SimpleAsioDefine.h"
-#include "Core/RequestHandler.h"
 #include "Utils/Timer.h"
 
 
@@ -18,6 +17,7 @@ private:
     typedef asio::ip::tcp::resolver AsioResolver;
 public:
     Server(AsioService& service, const std::string & addr = "0.0.0.0", const std::string & port = "6780");
+    void init();
     void start();
 
 private:
@@ -34,8 +34,6 @@ private:
     asio::signal_set _signals;
     // 下个连接的socket
     AsioSocket _nextSocket;
-    // 所有访问的请求的handle
-    RequestHandler _requestHandler;
 };
 
 

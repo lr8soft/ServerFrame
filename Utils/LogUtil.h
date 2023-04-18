@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include <string>
-#include <thread>
 #include <mutex>
 
 #ifndef _WIN64
@@ -27,5 +26,7 @@ public:
     static void printWarn(const std::string& str);
 
     static void printError(const std::string& str);
+
+    static std::string getCurrentTime();
 };
 #endif //SERVERFRAME_LOGUTIL_H
