@@ -10,22 +10,15 @@
 RequestDispatcher* RequestDispatcher::pInst = nullptr;
 
 void RequestDispatcher::handleRequest(const Request &req, Reply &rep) {
-    auto searchIter = handleGroup.equal_range(req.method);
-    // 该404了
-    if (searchIter.first == searchIter.second) {
-        rep = Reply::stockReply(Reply::not_found);
-        return;
-    }
-
     // 依次调用
-    for (auto iter = searchIter.first; iter != searchIter.second; ++iter) {
+    for (auto iter = handleList.begin(); iter != handleList.end(); ++iter) {
         // 如果有一个handler处理了，那么就不再继续
-        if (iter->second->handleRequest(req, rep)) {
+        if ((*iter)->handleRequest(req, rep)) {
             return;
         }
     }
 }
 
-void RequestDispatcher::addHandler(const std::string method, std::shared_ptr<IRequestSolver> handler) {
-    handleGroup.insert(std::make_pair(method, handler));
+void RequestDispatcher::addHandler( std::shared_ptr<IRequestSolver> handler) {
+    handleList.push_back(handler);
 }

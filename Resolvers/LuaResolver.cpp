@@ -116,14 +116,16 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
         return false;
     }
 
-    lua_newtable(pState);
+    /*lua_newtable(pState);
     int tableIndex = lua_gettop(pState);
     // 遍历req.contentMap并push到Lua表中
     for (auto const &[key, val]: req.bodyMap) {
         lua_pushstring(pState, key.c_str());
         lua_pushstring(pState, val.c_str());
         lua_settable(pState, tableIndex);
-    }
+    }*/
+
+    sendRequestToLua(pState, req);
 
     // 调用Lua方法
     if (lua_pcall(pState, 1, 1, 0) != LUA_OK) {
@@ -148,6 +150,43 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     Reply::setReply(rep, buffer.GetString(), "json");
     return true;
 }
+
+void LuaResolver::sendRequestToLua(lua_State *pState, const Request &req) {
+    // request table
+    lua_newtable(pState);
+
+    // request.POST
+    lua_pushstring(pState, "POST");
+    lua_newtable(pState);
+
+    // 遍历req.contentMap并push到POST表中
+    for (auto const &[key, val]: req.bodyMap) {
+        lua_pushstring(pState, key.c_str());
+        lua_pushstring(pState, val.c_str());
+        lua_settable(pState, -3);
+    }
+    // POST表压入request表
+    lua_settable(pState, -3);
+
+    // request.HEADER
+    lua_pushstring(pState, "HEADER");
+    lua_newtable(pState);
+    // 遍历req.headerMap并push到HEADER表中
+    for (auto const &[key, val]: req.headerMap) {
+        lua_pushstring(pState, key.c_str());
+        lua_pushstring(pState, val.c_str());
+        lua_settable(pState, -3);
+    }
+    // HEADER表压入request表
+    lua_settable(pState, -3);
+
+    // request.METHOD
+    lua_pushstring(pState, "METHOD");
+    lua_pushstring(pState, req.method.c_str());
+    lua_settable(pState, -3);
+}
+
+
 
 void LuaResolver::parseLuaTable(lua_State *pState, rapidjson::Writer<rapidjson::StringBuffer> &writer, int index) {
     lua_pushnil(pState); // 第一个键

@@ -23,6 +23,8 @@ private:
 
     /// 解析栈顶的lua表内容并写入至writer
     void parseLuaTable(lua_State* pState, rapidjson::Writer<rapidjson::StringBuffer> &writer, int index);
+
+    void sendRequestToLua(lua_State* pState, const Request& req);
 private:
     std::map<std::string, std::list<std::string>> urlMethodMap;
     lua_State* pState;

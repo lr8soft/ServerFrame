@@ -85,7 +85,7 @@ ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stri
                     // 是附件，从bodyStream读取指定长度二进制数据
                     auto binaryDataEndPos = bodyStream.tellg();
                     std::fpos<mbstate_t> binaryDataLength = binaryDataEndPos - attachmentDataStartPos - boundaryEnd.length() - 2;
-                    std::cout << "attachment Length:" << binaryDataLength << std::endl;
+                    //std::cout << "attachment Length:" << binaryDataLength << std::endl;
 
                     Attachment attachment;
                     attachment.contentType = fileType;
@@ -94,7 +94,6 @@ ContentParser::ResultEnum MultiFormParser::parseBody(Request &request, std::stri
                     std::string buffer;
                     bodyStream >> std::setw(binaryDataLength) >> buffer;
                     attachment.content << buffer;
-
 
                     request.fileMap[fileKeyName] = std::move(attachment);
                     //std::cout << "fileKeyName " << "[" + fileKeyName + "]" << " fileName " << "[" + fileName + "]" << " contentType" << "[" + fileType + "]" << std::endl;
