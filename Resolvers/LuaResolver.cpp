@@ -95,8 +95,17 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     }
 
 
+    std::string reqPurePath;
+    // 请求url可能有text?xxx=xxxx
+    auto pos = reqPath.find("?");
+    if(pos != std::string::npos) {
+        reqPurePath = reqPath.substr(0, pos);
+    }else {
+        reqPurePath = reqPath;
+    }
+
     // 从urlMethodMap中找到对应的方法
-    auto it = urlMethodMap.find(reqPath);
+    auto it = urlMethodMap.find(reqPurePath);
     if (it == urlMethodMap.end()) {
         rep = Reply::stockReply(Reply::not_found);
         return false;
@@ -109,22 +118,14 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     for (auto const &folder: folderList) {
         lua_getfield(pState, -1, folder.c_str());
     }
-
+    // 字段错误
     if (!lua_isfunction(pState, -1)) {
         LogUtil::printError("Fail to get lua function " + it->first);
         rep = Reply::stockReply(Reply::internal_server_error);
         return false;
     }
 
-    /*lua_newtable(pState);
-    int tableIndex = lua_gettop(pState);
-    // 遍历req.contentMap并push到Lua表中
-    for (auto const &[key, val]: req.bodyMap) {
-        lua_pushstring(pState, key.c_str());
-        lua_pushstring(pState, val.c_str());
-        lua_settable(pState, tableIndex);
-    }*/
-
+    // 把request解析成表发送到lua层
     sendRequestToLua(pState, req);
 
     // 调用Lua方法
@@ -166,6 +167,18 @@ void LuaResolver::sendRequestToLua(lua_State *pState, const Request &req) {
         lua_settable(pState, -3);
     }
     // POST表压入request表
+    lua_settable(pState, -3);
+
+    // request.GET
+    lua_pushstring(pState, "GET");
+    lua_newtable(pState);
+    // 遍历req.urlParamMap并push到GET表中
+    for (auto const &[key, val]: req.urlParamMap) {
+        lua_pushstring(pState, key.c_str());
+        lua_pushstring(pState, val.c_str());
+        lua_settable(pState, -3);
+    }
+    // GET表压入request表
     lua_settable(pState, -3);
 
     // request.HEADER
@@ -222,5 +235,24 @@ void LuaResolver::parseLuaTable(lua_State *pState, rapidjson::Writer<rapidjson::
         lua_pop(pState, 1);
     }
     writer.EndObject();
+}
+
+
+void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
+    // 返回的都是table
+    if (!lua_istable(pState, -1)) {
+        LogUtil::printError("Can not parse reply from lua.");
+        rep = Reply::stockReply(Reply::internal_server_error);
+        return;
+    }
+
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    parseLuaTable(pState,  writer, lua_gettop(pState));
+    // 弹出返回的table
+    lua_pop(pState, 1);
+
+    // 设置json并返回
+    Reply::setReply(rep, buffer.GetString(), "json");
 }
 

@@ -34,6 +34,8 @@ public:
 
 private:
     static ResultEnum parseFirstLine(Request& request, std::string& line);
+
+    static void parseUrlParams(Request& request, std::string& url);
 };
 
 

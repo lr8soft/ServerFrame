@@ -24,6 +24,7 @@ struct Request {
     int contentLength;
     int httpVersionMajor;
     int httpVersionMinor;
+    std::map<std::string, std::string> urlParamMap;
     std::map<std::string, std::string> headerMap;
     std::map<std::string, std::string> bodyMap;
     std::map<std::string, Attachment> fileMap;
@@ -32,6 +33,7 @@ struct Request {
         method.clear();
         uri.clear();
         contentType.clear();
+        urlParamMap.clear();
         headerMap.clear();
         bodyMap.clear();
         fileMap.clear();

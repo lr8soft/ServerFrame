@@ -19,12 +19,16 @@ public:
     bool handleRequest(const Request& req, Reply& rep);
 
 private:
+    /// 初始化时解析lua文件里的url表
     void loadLuaFunction(lua_State* pState, const std::string& packageName, int index, std::list<std::string>& folderList);
 
     /// 解析栈顶的lua表内容并写入至writer
     void parseLuaTable(lua_State* pState, rapidjson::Writer<rapidjson::StringBuffer> &writer, int index);
 
+    /// 解析request对象并发送给lua层
     void sendRequestToLua(lua_State* pState, const Request& req);
+
+    void parseLuaReply(lua_State* pState, Reply& rep);
 private:
     std::map<std::string, std::list<std::string>> urlMethodMap;
     lua_State* pState;
