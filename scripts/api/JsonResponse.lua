@@ -5,11 +5,10 @@ function JsonResponse:New()
     setmetatable(object, self)
     self.__index = self
 
-    self.status = 200
-    self.content = ""
-    self.headers = {
-        ["Content-Type"] = "application/json; charset=utf-8"
-    }
+    object.status = 200
+    object.content = ""
+    object.type = "application/json; charset=utf-8"
+
     return object
 end
 
@@ -17,8 +16,8 @@ function JsonResponse:setContent(content)
     self.content = content
 end
 
-function JsonResponse:setHeaderItem(key, value)
-    self.headers[key] = value
+function JsonResponse:setType(type)
+    self.type = type
 end
 
 function JsonResponse:setStatus(code)

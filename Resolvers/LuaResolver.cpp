@@ -133,21 +133,9 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
         rep = Reply::stockReply(Reply::internal_server_error);
         return false;
     }
-    // 返回的都是table
-    if (!lua_istable(pState, -1)) {
-        LogUtil::printError("Fail to get lua table " + it->first);
-        rep = Reply::stockReply(Reply::internal_server_error);
-        return false;
-    }
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-    parseLuaTable(pState,  writer, lua_gettop(pState));
-    // 弹出返回的table
-    lua_pop(pState, 1);
-
-    // 设置json并返回
-    Reply::setReply(rep, buffer.GetString(), "json");
+    // 解析lua层返回的response到reply
+    parseLuaReply(pState, rep);
     return true;
 }
 
@@ -238,9 +226,9 @@ void LuaResolver::parseLuaTable(lua_State *pState, rapidjson::Writer<rapidjson::
 
 
 void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
-
-    // 返回的都是table
-    if (!lua_istable(pState, -1)) {
+    // 返回的都是metatable
+    // 成功了metatable在栈顶
+    if (!lua_getmetatable(pState, -1)) {
         LogUtil::printError("Can not parse reply from lua.");
         rep = Reply::stockReply(Reply::internal_server_error);
         return;
@@ -248,7 +236,10 @@ void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
 
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-    parseLuaTable(pState,  writer, lua_gettop(pState));
+    writer.StartObject();
+    writer.Key("response");
+    parseLuaTable(pState,  writer, -3);
+    writer.EndObject();
     // 弹出返回的table
     lua_pop(pState, 1);
 
