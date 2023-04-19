@@ -8,7 +8,14 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <sstream>
 #include "Header.h"
+
+struct Attachment{
+    std::stringstream content;
+    std::string filename;
+    std::string contentType;
+};
 
 struct Request {
     std::string method;
@@ -19,6 +26,7 @@ struct Request {
     int httpVersionMinor;
     std::map<std::string, std::string> headerMap;
     std::map<std::string, std::string> bodyMap;
+    std::map<std::string, Attachment> fileMap;
 
     void reset() {
         method.clear();
@@ -26,6 +34,7 @@ struct Request {
         contentType.clear();
         headerMap.clear();
         bodyMap.clear();
+        fileMap.clear();
     }
 };
 
