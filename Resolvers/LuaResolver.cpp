@@ -26,17 +26,18 @@ LuaResolver::LuaResolver() {
 #endif
 
     luaL_dostring(pState, packageStr);
-
-
     luaL_openlibs(pState);
-    luaL_dofile(pState, path);
+    if(luaL_dofile(pState, path) == LUA_OK) {
+        lua_getglobal(pState, "url");
 
-    lua_getglobal(pState, "url");
+        std::list<std::string> list;
+        loadLuaFunction(pState, "", lua_gettop(pState), list);
+        isInitSuccess = true;
+    }else{
+        LuaUtil::printLuaError(pState);
+        isInitSuccess = false;
+    }
 
-    std::list<std::string> list;
-    loadLuaFunction(pState, "", lua_gettop(pState), list);
-
-    isInitSuccess = true;
 }
 
 LuaResolver::~LuaResolver() {
@@ -77,7 +78,7 @@ void LuaResolver::loadLuaFunction(lua_State *pState, const std::string &packageN
 }
 
 bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
-    if(isInitSuccess == false) {
+    if(!isInitSuccess) {
         rep = Reply::stockReply(Reply::internal_server_error);
         return false;
     }
@@ -107,10 +108,8 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     // 从urlMethodMap中找到对应的方法
     auto it = urlMethodMap.find(reqPurePath);
     if (it == urlMethodMap.end()) {
-        rep = Reply::stockReply(Reply::not_found);
         return false;
     }
-
 
     lua_getglobal(pState, "url");
     auto folderList = it->second;
@@ -130,7 +129,7 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
 
     // 调用Lua方法
     if (lua_pcall(pState, 1, 1, 0) != LUA_OK) {
-        LogUtil::printError("Fail to call lua function " + it->first);
+        LuaUtil::printLuaError(pState);
         rep = Reply::stockReply(Reply::internal_server_error);
         return false;
     }
@@ -239,6 +238,7 @@ void LuaResolver::parseLuaTable(lua_State *pState, rapidjson::Writer<rapidjson::
 
 
 void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
+
     // 返回的都是table
     if (!lua_istable(pState, -1)) {
         LogUtil::printError("Can not parse reply from lua.");

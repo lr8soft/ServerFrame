@@ -1,24 +1,16 @@
-local utils = require("test")
+local jresponse = require("api/JsonResponse")
 user = {}
 
 user.login = function(request)
     print("LOGIN!")
-    result = { status = "operation_success",
-               result = "login_success",
-               data = {
-                   id = 233333,
-                   name = "lrsoft",
-                   value = 1234.456
-               },
-               request = request
-    }
-    return result
+    response = jresponse:New()
+    response:setContent({ status = "operation_success", request = request })
+    return response
 end
 user.regist = function(request)
     print("REGIST!")
-    return { status = "operation_success", request = request }
+    response = jresponse:New()
+    response:setContent({ status = "operation_success", request = request })
 end
-
-user.util = utils
 
 return user

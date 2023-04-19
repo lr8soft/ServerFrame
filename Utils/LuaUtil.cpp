@@ -3,6 +3,7 @@
 //
 
 #include "LuaUtil.h"
+#include "LogUtil.h"
 
 lua_State *LuaUtil::getNewState() {
     lua_State *luaState = luaL_newstate();
@@ -24,4 +25,10 @@ lua_State *LuaUtil::getNewState() {
 
 void LuaUtil::luaEnvironmentRelease(lua_State *pState) {
     lua_close(pState);
+}
+
+void LuaUtil::printLuaError(lua_State *pState) {
+    if(lua_isstring(pState, -1)) {
+        LogUtil::printError(lua_tostring(pState, -1));
+    }
 }
