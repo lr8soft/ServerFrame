@@ -266,7 +266,7 @@ void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
     // 返回的都是metatable
     // 成功了metatable在栈顶
     if (!lua_getmetatable(pState, -1)) {
-        LogUtil::printError("Can not parse reply from lua.");
+        LogUtil::printError("lua reply type error.");
         rep = Reply::stockReply(Reply::internal_server_error);
         return;
     }
@@ -280,7 +280,42 @@ void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
     // 弹出返回的table
     lua_pop(pState, 1);
 
-    // 设置json并返回
-    Reply::setReply(rep, buffer.GetString(), "json");
+    rapidjson::Document doc;
+    //  将json字符串解析到doc中
+    doc.Parse(buffer.GetString());
+    if (doc.HasParseError()) {
+        LogUtil::printError("Can not parse reply from lua.");
+        rep = Reply::stockReply(Reply::internal_server_error);
+        return;
+    }
+
+    const rapidjson::Value& responseData = doc["response"];
+    // 检查返回的json是否完整
+    bool isReplyComplete = responseData.HasMember("status") && responseData["status"].IsNumber();
+    isReplyComplete = isReplyComplete && responseData.HasMember("content");
+    isReplyComplete = isReplyComplete && responseData.HasMember("type") && responseData["type"].IsString();
+
+    if (!isReplyComplete) {
+        LogUtil::printError("Reply from lua is not complete or type incorrect.");
+        rep = Reply::stockReply(Reply::internal_server_error);
+        return;
+    }
+
+    auto status = Reply::StatusType(responseData["status"].GetInt());
+    const rapidjson::Value& content = responseData["content"];
+    auto type = responseData["type"].GetString();
+
+    std::string contentStr;
+    // json就强转
+    if(!content.IsString()) {
+        rapidjson::StringBuffer valueBuf;
+        rapidjson::Writer<rapidjson::StringBuffer> valWriter(valueBuf);
+        content.Accept(valWriter);
+        contentStr = valueBuf.GetString();
+    }else{
+        contentStr = content.GetString();
+    }
+
+    Reply::setReply(rep, contentStr, type, status);
 }
 
