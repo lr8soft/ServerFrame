@@ -19,10 +19,9 @@ void Connection::doRead() {
         if(!code) {
             RequestParser::ResultEnum result;
             // 记录请求所有buffer
-            _bufferStream << std::string(_buffer.data(), bytesCount);
+            _bufferStream.write(_buffer.data(), bytesCount);
             // get指针回到起始
             _bufferStream.seekg(0, std::ios::beg);
-
 
             // 解包解析结果
             result = _parser.parseHeader(_request, _bufferStream);

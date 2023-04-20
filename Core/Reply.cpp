@@ -229,18 +229,18 @@ std::vector<asio::const_buffer> Reply::toBuffers() {
 
 Reply Reply::stockReply(Reply::StatusType status) {
     Reply reply;
-    setReply(reply, stock_replies::toString(status), "html", status);
+    setReply(reply, stock_replies::toString(status), MimeUtils::getMimeFromExt("html"), status);
     return reply;
 }
 
-void Reply::setReply(Reply &reply, const std::string &content, const std::string &extName, Reply::StatusType status) {
+void Reply::setReply(Reply &reply, const std::string &content, const std::string &contentType, Reply::StatusType status) {
     reply.status = status;
     reply.content = content;
     reply.headers.resize(3);
     reply.headers[0].name = "Content-Length";
     reply.headers[0].value = std::to_string(content.size());
     reply.headers[1].name = "Content-Type";
-    reply.headers[1].value = MimeUtils::getMimeFromExt(extName);
+    reply.headers[1].value = contentType;
     reply.headers[2].name = "Server";
     reply.headers[2].value = "ServerFrame";
 }

@@ -1,24 +1,31 @@
-local utils = require("test")
+local JsonResponse = require("api/JsonResponse")
+local HttpResponse = require("api/HttpResponse")
 user = {}
 
 user.login = function(request)
-    print("LOGIN!")
-    result = { status = "operation_success",
-               result = "login_success",
-               data = {
-                   id = 233333,
-                   name = "lrsoft",
-                   value = 1234.456
-               },
-               request = request
+    response = JsonResponse:New()
+    result = { 
+        status = "operation_success", 
+        array = {"aaa", "bbb"},
+        table = {
+            subArr = {111, 222},
+            name = "table1"
+        }
     }
-    return result
+    response:setContent(result)
+    return response
 end
 user.regist = function(request)
     print("REGIST!")
-    return { status = "operation_success", request = request }
+    response = JsonResponse:New()
+    response:setContent({ status = "operation_success", request = request })
+    return response
 end
 
-user.util = utils
+user.test = function(request)
+    rep = HttpResponse:New()
+    rep:setContent("Hello World!")
+    return rep
+end
 
 return user

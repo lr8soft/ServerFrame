@@ -8,7 +8,6 @@
 #include "ConnManager.h"
 #include "Utils/LogUtil.h"
 #include "Core/RequestDispatcher.h"
-#include "Resolvers/PostResolver.h"
 #include "Resolvers/LocalResolver.h"
 #include "Resolvers/LuaResolver.h"
 
@@ -37,9 +36,9 @@ Server::Server(AsioService &service, const std::string &addr, const std::string 
 void Server::init() {
     auto dispatcher = RequestDispatcher::getInstance();
     // POST请求
-    dispatcher->addHandler("POST", std::make_shared<LuaResolver>());
+    dispatcher->addHandler(std::make_shared<LuaResolver>());
     // 允许GET statics文件夹下的内容
-    dispatcher->addHandler("GET", std::make_shared<LocalResolver>("statics"));
+    dispatcher->addHandler(std::make_shared<LocalResolver>("statics"));
 }
 
 void Server::start() {

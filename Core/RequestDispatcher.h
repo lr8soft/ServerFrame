@@ -6,6 +6,7 @@
 #define SERVERFRAME_REQUESTDISPATCHER_H
 #include <map>
 #include <memory>
+#include <list>
 #include <string>
 #include "../Resolvers/IRequestSolver.h"
 
@@ -17,13 +18,13 @@ public:
         return pInst;
     }
 
-    void addHandler(const std::string method, std::shared_ptr<IRequestSolver> handler);
+    void addHandler(std::shared_ptr<IRequestSolver> handler);
     void handleRequest(const Request& req, Reply& rep);
 private:
     static RequestDispatcher* pInst;
 
-    // METHOD => Requesthandler
-    std::multimap<std::string, std::shared_ptr<IRequestSolver>> handleGroup;
+    // Requesthandler list
+    std::list<std::shared_ptr<IRequestSolver>> handleList;
 };
 
 

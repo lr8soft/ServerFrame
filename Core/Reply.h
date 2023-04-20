@@ -39,7 +39,7 @@ struct Reply {
     std::vector<asio::const_buffer> toBuffers();
 
     static Reply stockReply(StatusType status);
-    static void setReply(Reply& reply, const std::string& content, const std::string& extName, StatusType status = ok);
+    static void setReply(Reply& reply, const std::string& content, const std::string& contentType, StatusType status = ok);
 };
 
 

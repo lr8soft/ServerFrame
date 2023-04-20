@@ -12,6 +12,8 @@ public:
     static lua_State* getNewState();
     static void luaEnvironmentRelease(lua_State* pState);
 
+    static void printLuaError(lua_State* pState);
+
 };
 
 #endif //SERVERFRAME_LUAUTIL_H

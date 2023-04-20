@@ -38,6 +38,8 @@ RequestParser::ResultEnum RequestParser::parseFirstLine(Request& request, std::s
     // 读取方法与uri
     request.method = line.substr(0, splitLine1Pos);
     request.uri = line.substr(splitLine1Pos + 1, splitLine2Pos - splitLine1Pos - 1);
+    // 解析url里可能存在的参数
+    parseUrlParams(request, request.uri);
 
     // 解析协议版本
     std::string protocol = line.substr(splitLine2Pos + 1);
@@ -121,3 +123,33 @@ RequestParser::ResultEnum RequestParser::parseForm(Request &request, std::string
     return result;
 }
 
+void RequestParser::parseUrlParams(Request &request, std::string &url) {
+    // 查看url是否有?，有的话就是有参数
+    auto splitUrlPos = request.uri.find('?');
+    if(splitUrlPos != std::string::npos) {
+        std::string params = request.uri.substr(splitUrlPos + 1);
+        // 遍历params, aaa=bbb&ccc=ddd
+        auto splitParamPos = params.find('&');
+        while(true) {
+            std::string param;
+            // 最后一个参数
+            if(splitParamPos == std::string::npos) {
+                param = params;
+            } else {
+                param = params.substr(0, splitParamPos);
+            }
+
+            auto equalPos = param.find('=');
+            if(equalPos != std::string::npos) {
+                std::string key = param.substr(0, equalPos);
+                std::string value = param.substr(equalPos + 1);
+                request.urlParamMap.insert(std::make_pair(key, value));
+                //std::cout <<  key << "=" << value << std::endl;
+            }
+
+            if(splitParamPos == std::string::npos) break;
+            params = params.substr(splitParamPos + 1);
+            splitParamPos = params.find('&');
+        }
+    }
+}

@@ -14,5 +14,8 @@
   }, {
     "name" : "rapidjson",
     "version>=" : "2022-06-28#3"
+  }, {
+    "name" : "sqlite-orm",
+    "version>=" : "1.8.2"
   } ]
 }
