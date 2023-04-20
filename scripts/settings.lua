@@ -1,0 +1,6 @@
+
+settings = {
+    secret = ""
+}
+
+return settings

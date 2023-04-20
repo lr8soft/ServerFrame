@@ -1,5 +1,7 @@
-local JsonResponse = require("api/JsonResponse")
-local HttpResponse = require("api/HttpResponse")
+local JsonResponse = require("response/JsonResponse")
+local HttpResponse = require("response/HttpResponse")
+local strUtils = require("utils/StringUtils")
+local base64 = require("jwt/Base64")
 user = {}
 
 user.login = function(request)
@@ -12,6 +14,11 @@ user.login = function(request)
             name = "table1"
         }
     }
+
+    strResult = strUtils.TableToStr(result)
+    strEncode = base64.encode(strResult)
+    print("encode:", strEncode)
+    print("decode:", base64.decode(strEncode))
     response:setContent(result)
     return response
 end
