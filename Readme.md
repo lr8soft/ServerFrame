@@ -1,5 +1,5 @@
 # ServerFrame
-ServerFrame is a cross-platform service framework implemented in modern C++.
+ServerFrame is a cross-platform web application framework implemented in modern C++.
 
 ## Build
 1.Install vcpkg from https://github.com/microsoft/vcpkg
