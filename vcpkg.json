@@ -17,5 +17,8 @@
   }, {
     "name" : "sqlite-orm",
     "version>=" : "1.8.2"
+  }, {
+    "name" : "picosha2",
+    "version>=" : "2018-07-30#1"
   } ]
 }

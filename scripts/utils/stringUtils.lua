@@ -26,12 +26,12 @@ function stringUtils.TableToStr(t)
             retstr = retstr..signal..stringUtils.ToStringEx(value)
         else
             if type(key)=='number' or type(key) == 'string' then
-                retstr = retstr..signal..''..stringUtils.ToStringEx(key).."="..stringUtils.ToStringEx(value)
+                retstr = retstr..signal..''..stringUtils.ToStringEx(key)..":"..stringUtils.ToStringEx(value)
             else
                 if type(key)=='userdata' then
-                    retstr = retstr..signal.."*s"..stringUtils.TableToStr(getmetatable(key)).."*e".."="..stringUtils.ToStringEx(value)
+                    retstr = retstr..signal.."*s"..stringUtils.TableToStr(getmetatable(key)).."*e"..":"..stringUtils.ToStringEx(value)
                 else
-                    retstr = retstr..signal..key.."="..stringUtils.ToStringEx(value)
+                    retstr = retstr..signal..key..":"..stringUtils.ToStringEx(value)
                 end
             end
         end

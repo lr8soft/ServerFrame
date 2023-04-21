@@ -6,8 +6,8 @@ token = {}
 
 function token.GetHeaderToken()
     local header = {
-        typ = "JWT",
-        alg = "HS256"
+        alg = "HS256",
+        typ = "JWT"
     }
     local strHeader = strUtils.TableToStr(header)
     local strEncodeHeader = base64.encode(strHeader)

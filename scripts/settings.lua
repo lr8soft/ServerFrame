@@ -1,6 +1,6 @@
 
 settings = {
-    secret = ""
+    secret = "SERVERFRAME_DEMO_SECRET"
 }
 
 return settings
