@@ -1,20 +1,21 @@
-local JsonResponse = require("api/JsonResponse")
-local HttpResponse = require("api/HttpResponse")
+local JsonResponse = require("response/JsonResponse")
+local HttpResponse = require("response/HttpResponse")
+local token = require("jwt/token")
 user = {}
 
 user.login = function(request)
     response = JsonResponse:New()
     result = { 
-        status = "operation_success", 
-        array = {"aaa", "bbb"},
-        table = {
-            subArr = {111, 222},
-            name = "table1"
-        }
+        status = "operation_success",
+        info = "哎呀你干嘛哎呀你干嘛哎呀你干嘛哎呀你干嘛"
     }
+
+    strResult = token.GetToken(result)
+    print("jwt_token:", strResult)
     response:setContent(result)
     return response
 end
+
 user.regist = function(request)
     print("REGIST!")
     response = JsonResponse:New()

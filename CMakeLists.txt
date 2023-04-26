@@ -3,7 +3,7 @@ project(ServerFrame)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ServerFrame main.cpp Utils/HttpConnect.cpp Utils/HttpConnect.h Server.cpp Server.h Utils/Timer.cpp Utils/Timer.h Utils/LogUtil.cpp Utils/LogUtil.h SimpleAsioDefine.h ConnManager.cpp ConnManager.h ConnManager.h Core/Connection.cpp Core/Connection.h Core/RequestParser.cpp Core/RequestParser.hpp Core/Request.hpp Core/Request.hpp Resolvers/LocalResolver.cpp Resolvers/LocalResolver.h Resolvers/LocalResolver.h Core/Reply.cpp Core/Reply.h Core/Reply.h Core/Header.h Core/Header.h Utils/MimeUtils.cpp Utils/MimeUtils.h Core/RequestDispatcher.cpp Core/RequestDispatcher.h Utils/UrlUtils.cpp Utils/UrlUtils.h Resolvers/IRequestSolver.h Core/ContentParser.hpp Core/ContentParser.hpp Core/X3WFormParser.cpp Core/X3WFormParser.h Core/X3WFormParser.h Core/MultiFormParser.cpp Core/MultiFormParser.h Utils/LuaUtil.cpp Utils/LuaUtil.h Resolvers/LuaResolver.cpp Resolvers/LuaResolver.h Resolvers/LuaResolver.h)
+add_executable(ServerFrame main.cpp Utils/HttpConnect.cpp Utils/HttpConnect.h Server.cpp Server.h Utils/Timer.cpp Utils/Timer.h Utils/LogUtil.cpp Utils/LogUtil.h SimpleAsioDefine.h ConnManager.cpp ConnManager.h ConnManager.h Core/Connection.cpp Core/Connection.h Core/RequestParser.cpp Core/RequestParser.hpp Core/Request.hpp Core/Request.hpp Resolvers/LocalResolver.cpp Resolvers/LocalResolver.h Resolvers/LocalResolver.h Core/Reply.cpp Core/Reply.h Core/Reply.h Core/Header.h Core/Header.h Utils/MimeUtils.cpp Utils/MimeUtils.h Core/RequestDispatcher.cpp Core/RequestDispatcher.h Utils/UrlUtils.cpp Utils/UrlUtils.h Resolvers/IRequestSolver.h Core/ContentParser.hpp Core/ContentParser.hpp Core/X3WFormParser.cpp Core/X3WFormParser.h Core/X3WFormParser.h Core/MultiFormParser.cpp Core/MultiFormParser.h Utils/LuaUtil.cpp Utils/LuaUtil.h Resolvers/LuaResolver.cpp Resolvers/LuaResolver.h Resolvers/LuaResolver.h Utils/SHAProvider.cpp Utils/SHAProvider.h)
 
 find_package(CURL CONFIG REQUIRED)
 target_link_libraries(ServerFrame PRIVATE CURL::libcurl)
@@ -25,6 +25,9 @@ target_link_libraries(ServerFrame PRIVATE lua)
 
 find_package(SqliteOrm CONFIG REQUIRED)
 target_link_libraries(ServerFrame PRIVATE sqlite_orm::sqlite_orm)
+
+find_package(OpenSSL 3.1 REQUIRED)
+target_link_libraries(ServerFrame PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 
 # 添加debug宏
 if (CMAKE_BUILD_TYPE STREQUAL Debug)

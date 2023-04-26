@@ -62,7 +62,7 @@ RequestParser::ResultEnum RequestParser::parseHeader(Request &request, std::stri
     std::string line;
     // HTTP REQUEST中使用\r\n间隔，getline后会剩下\r
     while(std::getline(stream, line)) {
-        // 第一行格式POST /api/user/login HTTP/1.1
+        // 第一行格式POST /response/user/login HTTP/1.1
         if(isFirstLine) {
             if(parseFirstLine(request, line) != good) return bad;
             isFirstLine = false;
