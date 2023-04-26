@@ -12,8 +12,11 @@
 class SHAProvider {
 public:
     static std::string encryptBySHA256(std::string& info);
+    static std::string encryptByHMAC256(std::string& info, std::string& key);
 
     static int luaEncryptBySHA256(lua_State *pState);
+    static int luaEncryptByHMAC256(lua_State *pState);
+
     static int luaLibInit(lua_State *pState);
 };
 
