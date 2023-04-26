@@ -6,7 +6,8 @@ user = {}
 user.login = function(request)
     response = JsonResponse:New()
     result = { 
-        status = "operation_success"
+        status = "operation_success",
+        info = "哎呀你干嘛哎呀你干嘛哎呀你干嘛哎呀你干嘛"
     }
 
     strResult = token.GetToken(result)
@@ -14,6 +15,7 @@ user.login = function(request)
     response:setContent(result)
     return response
 end
+
 user.regist = function(request)
     print("REGIST!")
     response = JsonResponse:New()

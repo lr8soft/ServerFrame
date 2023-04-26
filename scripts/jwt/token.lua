@@ -29,7 +29,7 @@ end
 function token.GetToken(payLoadTable)
     local headerToken = token.GetHeaderToken()
     local payloadToken = token.GetPayLoadToken(payLoadTable)
-    local signatureToken = token.GetSignatureToken(headerToken, payloadToken)
+    local signatureToken = SHA.sha256(headerToken .. "." .. payloadToken)
     local token = headerToken .. "." .. payloadToken .. "." .. signatureToken
     return token
 end

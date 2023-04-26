@@ -4,6 +4,7 @@
 
 #include "LuaUtil.h"
 #include "LogUtil.h"
+#include "SHAProvider.h"
 
 lua_State *LuaUtil::getNewState() {
     lua_State *luaState = luaL_newstate();
@@ -11,7 +12,7 @@ lua_State *LuaUtil::getNewState() {
             {"base", luaopen_base},
             {"math", luaopen_math},
             {"io",   luaopen_io},
-            //{ "NewHorizon", GameObjectBinder::luaOpenGameObject},
+            { "SHA", SHAProvider::luaLibInit},
             {NULL, NULL}
     };
 
