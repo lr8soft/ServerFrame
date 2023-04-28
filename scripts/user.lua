@@ -12,6 +12,7 @@ user.login = function(request)
 
     strResult = token.GetToken(result)
     print("jwt_token:", strResult)
+    response:setHeader("jwt_token", strResult)
     response:setContent(result)
     return response
 end

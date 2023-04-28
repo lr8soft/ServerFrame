@@ -13,6 +13,7 @@
 #include "../Utils/LuaUtil.h"
 #include "../Utils/LogUtil.h"
 #include "../Utils/UrlUtils.h"
+#include "../Utils/LuaParseUtils.h"
 
 LuaResolver::LuaResolver() {
     pState = LuaUtil::getNewState();
@@ -186,82 +187,6 @@ void LuaResolver::sendRequestToLua(lua_State *pState, const Request &req) {
     lua_settable(pState, -3);
 }
 
-
-void LuaResolver::parseLuaTable(lua_State *pState, rapidjson::Writer<rapidjson::StringBuffer> &writer, int index) {
-    lua_pushnil(pState); // 第一个键
-    writer.StartObject();
-    while (lua_next(pState, index) != 0) {
-        // 使用lua_tostring函数获取键和值
-        writer.Key(lua_tostring(pState, -2));
-
-        int arrayLen = 1;
-        bool isTable = false, isArray = false;
-        // 判断值的类型
-        if (lua_istable(pState, -1)) {
-            // lua_rawlen > 0就是数组
-            arrayLen = lua_rawlen(pState, -1);
-            isArray = arrayLen > 0;
-            isTable = true;
-        }
-
-        // 纯表就纯解析
-        if (isTable && !isArray) {
-            // 如果值是一个表，递归调用自己
-            parseLuaTable(pState, writer, lua_gettop(pState));
-        } else {
-            if(isArray) {
-                // 是数组就让writer进入array状态
-                writer.StartArray();
-            }
-
-            for(int i = 1; i <= arrayLen; ++i) {
-                // 如果是数组就要先获取数组的值
-                // 不是的话直接解析
-                if(isArray) {
-                    lua_rawgeti(pState, -1, i);
-                }
-
-                switch (lua_type(pState, -1)) {
-                    case LUA_TSTRING:
-                        writer.String(lua_tostring(pState, -1));
-                        break;
-                    case LUA_TBOOLEAN:
-                        writer.Bool(lua_toboolean(pState, -1));
-                        break;
-                    case LUA_TNUMBER: {
-                        double value = lua_tonumber(pState, -1);
-                        if (ceil(value) == floor(value))
-                            writer.Int((int) value);
-                        else
-                            writer.Double(lua_tonumber(pState, -1));
-                        break;
-                    }
-                    case LUA_TTABLE:
-                        parseLuaTable(pState, writer, lua_gettop(pState));
-                        break;
-                    default:
-                        writer.Null();
-                        break;
-                }
-
-                // 如果是数组就要弹出刚刚lua_rawgeti的
-                if(isArray) {
-                    lua_pop(pState, 1);
-                }
-            }
-
-            // writer 退出数组模式
-            if(isArray) {
-                writer.EndArray();
-            }
-        }
-        // 弹出值，保留键用于下一次迭代
-        lua_pop(pState, 1);
-    }
-    writer.EndObject();
-}
-
-
 void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
     // 返回的都是metatable
     // 成功了metatable在栈顶
@@ -275,7 +200,7 @@ void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
     writer.StartObject();
     writer.Key("response");
-    parseLuaTable(pState,  writer, -3);
+    LuaParseUtils::parseLuaTable(pState,  writer, -3);
     writer.EndObject();
     // 弹出返回的table
     lua_pop(pState, 1);
@@ -293,7 +218,7 @@ void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
     // 检查返回的json是否完整
     bool isReplyComplete = responseData.HasMember("status") && responseData["status"].IsNumber();
     isReplyComplete = isReplyComplete && responseData.HasMember("content");
-    isReplyComplete = isReplyComplete && responseData.HasMember("type") && responseData["type"].IsString();
+    isReplyComplete = isReplyComplete && responseData.HasMember("headers");
 
     if (!isReplyComplete) {
         LogUtil::printError("Reply from lua is not complete or type incorrect.");
@@ -303,7 +228,7 @@ void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
 
     auto status = Reply::StatusType(responseData["status"].GetInt());
     const rapidjson::Value& content = responseData["content"];
-    auto type = responseData["type"].GetString();
+    const rapidjson::Value& header = responseData["headers"];
 
     std::string contentStr;
     // json就强转
@@ -316,6 +241,15 @@ void LuaResolver::parseLuaReply(lua_State *pState, Reply &rep) {
         contentStr = content.GetString();
     }
 
-    Reply::setReply(rep, contentStr, type, status);
+    rep.content = contentStr;
+    rep.status = status;
+    rep.headers.emplace_back("Content-Length", std::to_string(contentStr.size()));
+
+    // 遍历header写入到Reply
+    for (auto it = header.MemberBegin(); it != header.MemberEnd(); ++it) {
+        std::string key = it->name.GetString();
+        std::string value = it->value.GetString();
+        rep.headers.emplace_back(key, value);
+    }
 }
 
