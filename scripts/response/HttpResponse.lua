@@ -7,7 +7,9 @@ function HttpResponse:New()
 
     object.status = 200
     object.content = ""
-    object.type = "text/html; charset=utf-8"
+    object.headers = {
+        ["Content-Type"] = "text/html; charset=utf-8"
+    }
     return object
 end
 
@@ -17,6 +19,10 @@ end
 
 function HttpResponse:setStatus(code)
     self.status = code
+end
+
+function HttpResponse:setHeader(key, value)
+    self.headers[key] = value
 end
 
 return HttpResponse
