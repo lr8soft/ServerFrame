@@ -1,5 +1,6 @@
 local JsonResponse = require("response/JsonResponse")
 local HttpResponse = require("response/HttpResponse")
+local DB = require("model/db")
 local token = require("jwt/token")
 user = {}
 
@@ -18,9 +19,20 @@ user.login = function(request)
 end
 
 user.regist = function(request)
+    local obj = DB.User({
+        username = "lrsoft",
+        password = "test",
+        time_create = os.time()
+    })
+    obj:save()
     print("REGIST!")
+
     response = JsonResponse:New()
-    response:setContent({ status = "operation_success", request = request })
+    response:setContent({ status = "operation_success", request = request,
+                          user = {
+                              name = obj.username,
+                              id = obj.id
+                          } })
     return response
 end
 
