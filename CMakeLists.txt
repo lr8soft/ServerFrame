@@ -38,9 +38,14 @@ endif ()
 if(WIN32)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif ()
-add_library(luasql SHARED lib/luasql/src/luasql.c)
+add_library(luasql SHARED lib/luasql/src/luasql.c lib/luasql/src/ls_sqlite3.c)
 # luasql也要lua环境
 target_link_libraries(luasql PRIVATE lua)
+# luasql sqlite3环境
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
+target_link_libraries(luasql PRIVATE unofficial::sqlite3::sqlite3)
+# luasql动态链接库名字luasql.dll/.so前面不带Lib
 set_target_properties(luasql PROPERTIES PREFIX "")
 set_target_properties(luasql PROPERTIES OUTPUT_NAME "luasql")
+
 
