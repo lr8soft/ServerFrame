@@ -29,9 +29,6 @@ target_link_libraries(ServerFrame PRIVATE sqlite_orm::sqlite_orm)
 find_package(OpenSSL 3.1 REQUIRED)
 target_link_libraries(ServerFrame PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 
-# luasql依赖
-ADD_LIBRARY(luasql SHARED lib/luasql/src/luasql.c lib/luasql/src/ls_mysql.c lib/luasql/src/ls_sqlite3.c)
-
 # 添加debug宏
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     add_definitions(-D_DEBUG)
