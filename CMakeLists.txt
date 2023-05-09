@@ -33,3 +33,14 @@ target_link_libraries(ServerFrame PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     add_definitions(-D_DEBUG)
 endif ()
+
+# luasql.dll/.so依赖
+if(WIN32)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif ()
+add_library(luasql SHARED lib/luasql/src/luasql.c)
+# luasql也要lua环境
+target_link_libraries(luasql PRIVATE lua)
+set_target_properties(luasql PROPERTIES PREFIX "")
+set_target_properties(luasql PROPERTIES OUTPUT_NAME "luasql")
+
