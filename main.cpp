@@ -1,8 +1,7 @@
 #include "Server.h"
 
 int main() {
-    AsioService service;
-    Server server(service);
+    Server server(true);
     server.init();
     server.start();
     return 0;

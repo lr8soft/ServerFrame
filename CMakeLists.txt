@@ -3,7 +3,7 @@ project(ServerFrame)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ServerFrame main.cpp Utils/HttpConnect.cpp Utils/HttpConnect.h Server.cpp Server.h Utils/Timer.cpp Utils/Timer.h Utils/LogUtil.cpp Utils/LogUtil.h SimpleAsioDefine.h ConnManager.cpp ConnManager.h ConnManager.h Core/Connection.cpp Core/Connection.h Core/RequestParser.cpp Core/RequestParser.hpp Core/Request.hpp Core/Request.hpp Resolvers/LocalResolver.cpp Resolvers/LocalResolver.h Resolvers/LocalResolver.h Core/Reply.cpp Core/Reply.h Core/Reply.h Core/Header.h Core/Header.h Utils/MimeUtils.cpp Utils/MimeUtils.h Core/RequestDispatcher.cpp Core/RequestDispatcher.h Utils/UrlUtils.cpp Utils/UrlUtils.h Resolvers/IRequestSolver.h Core/ContentParser.hpp Core/ContentParser.hpp Core/X3WFormParser.cpp Core/X3WFormParser.h Core/X3WFormParser.h Core/MultiFormParser.cpp Core/MultiFormParser.h Utils/LuaUtil.cpp Utils/LuaUtil.h Resolvers/LuaResolver.cpp Resolvers/LuaResolver.h Resolvers/LuaResolver.h Utils/SHAProvider.cpp Utils/SHAProvider.h Utils/LuaParseUtils.cpp Utils/LuaParseUtils.h Utils/LuaParseUtils.h)
+add_executable(ServerFrame main.cpp Utils/HttpConnect.cpp Utils/HttpConnect.h Server.cpp Server.h Utils/Timer.cpp Utils/Timer.h Utils/LogUtil.cpp Utils/LogUtil.h SimpleAsioDefine.h ConnManager.cpp ConnManager.h ConnManager.h Core/Connection.cpp Core/Connection.h Core/RequestParser.cpp Core/RequestParser.hpp Core/Request.hpp Core/Request.hpp Resolvers/LocalResolver.cpp Resolvers/LocalResolver.h Resolvers/LocalResolver.h Core/Reply.cpp Core/Reply.h Core/Reply.h Core/Header.h Core/Header.h Utils/MimeUtils.cpp Utils/MimeUtils.h Core/RequestDispatcher.cpp Core/RequestDispatcher.h Utils/UrlUtils.cpp Utils/UrlUtils.h Resolvers/IRequestSolver.h Core/ContentParser.hpp Core/ContentParser.hpp Core/X3WFormParser.cpp Core/X3WFormParser.h Core/X3WFormParser.h Core/MultiFormParser.cpp Core/MultiFormParser.h Utils/LuaUtil.cpp Utils/LuaUtil.h Resolvers/LuaResolver.cpp Resolvers/LuaResolver.h Resolvers/LuaResolver.h Utils/SHAProvider.cpp Utils/SHAProvider.h Utils/LuaParseUtils.cpp Utils/LuaParseUtils.h Utils/LuaParseUtils.h Core/SSLConnection.h Core/SSLConnection.cpp Core/IConn.h)
 
 find_package(CURL CONFIG REQUIRED)
 target_link_libraries(ServerFrame PRIVATE CURL::libcurl)
@@ -38,9 +38,14 @@ endif ()
 if(WIN32)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif ()
-add_library(luasql SHARED lib/luasql/src/luasql.c)
+add_library(luasql SHARED lib/luasql/src/luasql.c lib/luasql/src/ls_sqlite3.c)
 # luasql也要lua环境
 target_link_libraries(luasql PRIVATE lua)
+# luasql sqlite3环境
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
+target_link_libraries(luasql PRIVATE unofficial::sqlite3::sqlite3)
+# luasql动态链接库名字luasql.dll/.so前面不带Lib
 set_target_properties(luasql PROPERTIES PREFIX "")
 set_target_properties(luasql PROPERTIES OUTPUT_NAME "luasql")
+
 
