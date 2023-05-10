@@ -33,13 +33,19 @@ user.login = function(request)
         response:setContent({ status = "operation_failed", info = "密码错误" })
         return response
     end
-    -- 生成token
-    result = { 
+
+    local result = { 
         status = "operation_success",
         info = "登录成功"
     }
 
-    strResult = token.GetToken(result)
+    
+    local payload = {
+        username = user.username,
+        isLogin = true
+    }
+    -- 生成token
+    local strResult = token.GetToken(payload)
     response:setHeader("jwt_token", strResult)
     response:setContent(result)
     return response
@@ -81,6 +87,32 @@ user.regist = function(request)
         }
     }
     response:setContent(result)
+    return response
+end
+
+user.checktoken = function(request)
+    response = JsonResponse:New()
+    -- 请求完整检测
+    local jwtToken = request.HEADER["jwt_token"]
+    if jwtToken == nil then
+        response:setContent({ status = "operation_failed", info = "token为空" })
+        return response
+    end
+
+    resultText = nil
+    if token.CheckValid(jwtToken) then
+        resultText = "token有效"
+    else
+        resultText = "token无效"
+    end
+
+    result = {
+        status = "operation_success",
+        info = resultText,
+        decode = token.decodePayload(jwtToken)
+    }
+    response:setContent(result)
+
     return response
 end
 
