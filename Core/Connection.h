@@ -15,7 +15,7 @@
 #include "RequestParser.hpp"
 #include "Reply.h"
 
-class Connection: public IConn, std::enable_shared_from_this<Connection> {
+class Connection: public IConn {
 private:
     std::array<char, 8192> _buffer;
     std::stringstream _bufferStream;

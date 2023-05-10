@@ -26,11 +26,11 @@ Server::Server(bool isHttps, const std::string &addr, const std::string &port)
     if(isHttps) {
         _pContext = std::make_shared<asio::ssl::context>(asio::ssl::context::sslv23);
 #ifdef _DEBUG
-        _pContext->use_certificate_chain_file("../cert/server.crt");
-        _pContext->use_private_key_file("../cert/server.key", asio::ssl::context::pem);
+        _pContext->use_certificate_chain_file("../cert/localhost.crt");
+        _pContext->use_private_key_file("../cert/localhost.key", asio::ssl::context::pem);
 #else
-        _pContext->use_certificate_chain_file("./cert/server.crt");
-        _pContext->use_private_key_file("./cert/server.key", asio::ssl::context::pem);
+        _pContext->use_certificate_chain_file("./cert/localhost.crt");
+        _pContext->use_private_key_file("./cert/localhost.key", asio::ssl::context::pem);
 #endif
     }
 
@@ -77,17 +77,17 @@ void Server::doAccept() {
         });
     }else{
         // 记录_pNextSSLSocket->lowest_layer
-        static asio::ssl::stream<AsioSocket> socket(_service, *_pContext);
-        _acceptor.async_accept(socket.lowest_layer(), [this](const std::error_code &code) {
+        auto pSocket = std::make_shared<asio::ssl::stream<AsioSocket>>(_service, *_pContext);
+        _acceptor.async_accept(pSocket->lowest_layer(), [&, pSocket](const std::error_code &code) {
             if (!_acceptor.is_open()) {
                 LogUtil::printError("Acceptor is closed!");
                 return;
             }
 
             if (!code) {
-                socket.async_handshake(asio::ssl::stream_base::server, [this](const std::error_code &code) {
+                pSocket->async_handshake(asio::ssl::stream_base::server, [pSocket](const std::error_code &code) {
                     if (!code) {
-                        auto pConn = std::make_shared<SSLConnection>(std::move(socket));
+                        auto pConn = std::make_shared<SSLConnection>(std::move(*pSocket));
                         ConnManager::getInstance()->startConn(pConn);
                     }
                 });

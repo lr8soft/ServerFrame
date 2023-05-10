@@ -12,10 +12,6 @@ void SSLConnection::start() {
     this->doRead();
 }
 
-void SSLConnection::stop() {
-
-}
-
 void SSLConnection::doRead() {
     _socket.async_read_some(asio::buffer(_buffer),
         [this](const std::error_code &code, std::size_t bytesCount) {
@@ -76,3 +72,7 @@ void SSLConnection::doWrite() {
         });
 }
 
+void SSLConnection::stop() {
+    std::error_code result;
+    _socket.shutdown(result);
+}

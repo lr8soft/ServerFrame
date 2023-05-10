@@ -16,7 +16,7 @@
 #include "RequestParser.hpp"
 #include "Reply.h"
 
-class SSLConnection: public IConn, std::enable_shared_from_this<SSLConnection> {
+class SSLConnection: public IConn {
 private:
     std::array<char, 8192> _buffer;
     std::stringstream _bufferStream;
