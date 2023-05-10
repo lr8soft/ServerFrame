@@ -8,6 +8,7 @@
 #include <atomic>
 #include <memory>
 #include <string>
+#include <asio/ssl.hpp>
 #include "SimpleAsioDefine.h"
 #include "Utils/Timer.h"
 
@@ -16,7 +17,7 @@ class Server {
 private:
     typedef asio::ip::tcp::resolver AsioResolver;
 public:
-    Server(AsioService& service, const std::string & addr = "0.0.0.0", const std::string & port = "6780");
+    Server(bool isHttps = false, const std::string & addr = "0.0.0.0", const std::string & port = "6780");
     void init();
     void start();
 
@@ -27,13 +28,14 @@ private:
     void doAwaitStop();
 
 private:
-    AsioService& _service;
+    bool _isHttps;
+    std::shared_ptr<asio::ssl::context> _pContext;
+
+    AsioService _service;
     AsioAcceptor _acceptor;
 
     // 终止信息
     asio::signal_set _signals;
-    // 下个连接的socket
-    AsioSocket _nextSocket;
 };
 
 

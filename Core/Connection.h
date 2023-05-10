@@ -6,6 +6,7 @@
 #define SERVERFRAME_CONNECTION_H
 
 #include "../SimpleAsioDefine.h"
+#include "IConn.h"
 #include <array>
 #include <memory>
 #include <sstream>
@@ -14,7 +15,7 @@
 #include "RequestParser.hpp"
 #include "Reply.h"
 
-class Connection: public std::enable_shared_from_this<Connection> {
+class Connection: public IConn, std::enable_shared_from_this<Connection> {
 private:
     std::array<char, 8192> _buffer;
     std::stringstream _bufferStream;
@@ -32,8 +33,8 @@ public:
     explicit Connection(AsioSocket socket)
             : _socket(std::move(socket)){};
 
-    void start();
-    void stop();
+    void start() override;
+    void stop() override;
 };
 
 

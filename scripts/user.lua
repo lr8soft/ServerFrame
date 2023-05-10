@@ -116,10 +116,4 @@ user.checktoken = function(request)
     return response
 end
 
-user.test = function(request)
-    rep = HttpResponse:New()
-    rep:setContent("Hello World!")
-    return rep
-end
-
 return user

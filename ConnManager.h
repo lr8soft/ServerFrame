@@ -8,7 +8,7 @@
 #include <set>
 #include <memory>
 #include "SimpleAsioDefine.h"
-#include "Core/Connection.h"
+#include "Core/IConn.h"
 
 class ConnManager {
 public:
@@ -18,14 +18,14 @@ public:
         return pInstance;
     }
 
-    void startConn(std::shared_ptr<Connection> pConn);
-    void stopConn(std::shared_ptr<Connection> pConn);
+    void startConn(std::shared_ptr<IConn> pConn);
+    void stopConn(std::shared_ptr<IConn> pConn);
     void stopAllConn();
 private:
     ConnManager(){}
 
 private:
-    std::set<std::shared_ptr<Connection>> connList;
+    std::set<std::shared_ptr<IConn>> connList;
 
     static ConnManager* pInstance;
 };

@@ -7,12 +7,12 @@
 
 ConnManager* ConnManager::pInstance = nullptr;
 
-void ConnManager::startConn(std::shared_ptr<Connection> pConn) {
+void ConnManager::startConn(std::shared_ptr<IConn> pConn) {
     connList.insert(pConn);
     pConn->start();
 }
 
-void ConnManager::stopConn(std::shared_ptr<Connection> pConn) {
+void ConnManager::stopConn(std::shared_ptr<IConn> pConn) {
     connList.erase(pConn);
     pConn->stop();
 }
