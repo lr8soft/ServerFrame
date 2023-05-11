@@ -121,11 +121,17 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     // 目标方法名称
     {
         std::stringstream nameStream;
-        nameStream << "url";
+        bool isFirstSubname = true;
         auto folderList = it->second;
         // 把url各个字段压入栈中
         for (auto const &folder: folderList) {
-            nameStream << "." << folder;
+            if(!isFirstSubname) {
+                nameStream << ".";
+            }else{
+                isFirstSubname = false;
+            }
+            nameStream << folder;
+
         }
         lua_pushstring(pState, nameStream.str().c_str());
     }
