@@ -61,15 +61,15 @@ void Server::start() {
 
 void Server::doAccept() {
     if(!_isHttps) {
-        static AsioSocket socket(_service);
-        _acceptor.async_accept(socket, [this](const std::error_code &code) {
+        auto pSocket = std::make_shared<AsioSocket>(_service);
+        _acceptor.async_accept(*pSocket, [this, pSocket](const std::error_code &code) {
             if (!_acceptor.is_open()) {
                 LogUtil::printError("Acceptor is closed!");
                 return;
             }
 
             if (!code) {
-                auto pConn = std::make_shared<Connection>(std::move(socket));
+                auto pConn = std::make_shared<Connection>(std::move(*pSocket));
                 ConnManager::getInstance()->startConn(pConn);
             }
 
@@ -78,7 +78,7 @@ void Server::doAccept() {
     }else{
         // 记录_pNextSSLSocket->lowest_layer
         auto pSocket = std::make_shared<asio::ssl::stream<AsioSocket>>(_service, *_pContext);
-        _acceptor.async_accept(pSocket->lowest_layer(), [&, pSocket](const std::error_code &code) {
+        _acceptor.async_accept(pSocket->lowest_layer(), [this, pSocket](const std::error_code &code) {
             if (!_acceptor.is_open()) {
                 LogUtil::printError("Acceptor is closed!");
                 return;
