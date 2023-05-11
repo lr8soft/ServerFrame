@@ -6,6 +6,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <cmath>
+#include <sstream>
 #include <string>
 #include "LuaResolver.h"
 #include "../Core/Request.hpp"
@@ -29,7 +30,8 @@ LuaResolver::LuaResolver() {
     luaL_dostring(pState, packageStr);
     luaL_openlibs(pState);
     if(luaL_dofile(pState, path) == LUA_OK) {
-        lua_getglobal(pState, "url");
+        lua_getglobal(pState, "manage");
+        lua_getfield(pState, -1, "url");
 
         std::list<std::string> list;
         loadLuaFunction(pState, "", lua_gettop(pState), list);
@@ -112,24 +114,26 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
         return false;
     }
 
-    lua_getglobal(pState, "url");
-    auto folderList = it->second;
-    // 把url各个字段压入栈中
-    for (auto const &folder: folderList) {
-        lua_getfield(pState, -1, folder.c_str());
-    }
-    // 字段错误
-    if (!lua_isfunction(pState, -1)) {
-        LogUtil::printError("Fail to get lua function " + it->first);
-        rep = Reply::stockReply(Reply::internal_server_error);
-        return false;
-    }
+    // 把要调用的代理方法放栈顶
+    lua_getglobal(pState, "manage");
+    lua_getfield(pState, -1, "callUrlMethod");
 
+    // 目标方法名称
+    {
+        std::stringstream nameStream;
+        nameStream << "url";
+        auto folderList = it->second;
+        // 把url各个字段压入栈中
+        for (auto const &folder: folderList) {
+            nameStream << "." << folder;
+        }
+        lua_pushstring(pState, nameStream.str().c_str());
+    }
     // 把request解析成表发送到lua层
     sendRequestToLua(pState, req);
 
     // 调用Lua方法
-    if (lua_pcall(pState, 1, 1, 0) != LUA_OK) {
+    if (lua_pcall(pState, 2, 1, 0) != LUA_OK) {
         LuaUtil::printLuaError(pState);
         rep = Reply::stockReply(Reply::internal_server_error);
         return false;
