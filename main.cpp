@@ -1,8 +1,8 @@
-#include "Server.h"
+#include "Listener.h"
 
 int main() {
-    Server server(false);
-    server.init();
-    server.start();
+    Listener listener(true);
+    listener.init();
+    listener.start();
     return 0;
 }
