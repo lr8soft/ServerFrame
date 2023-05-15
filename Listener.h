@@ -30,9 +30,12 @@ private:
 
 private:
     bool _isHttps = false;
-    std::string _appName;
+    int _port = -1;
+
+    std::string _address, _appName, _staticFolder;
+    std::string _certPath, _keyPath;
     std::shared_ptr<asio::ssl::context> _pContext;
-    std::shared_ptr<lua_State> _pState;
+    lua_State* _pState;
 
     AsioService _service;
     AsioAcceptor _acceptor;

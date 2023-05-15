@@ -7,8 +7,10 @@
 
 #include <list>
 #include <string>
+#include <map>
+#include <memory>
 #include <lua.hpp>
-
+class Listener;
 class ListenerManager {
 public:
     static ListenerManager* getInstance();
@@ -24,7 +26,8 @@ private:
 private:
     static ListenerManager* pInstance;
 
-    std::list<std::string> appList;
+    std::map<std::string, std::shared_ptr<Listener>> listenerMap;
+
     bool isInitSuccess = false;
     lua_State *pState;
 

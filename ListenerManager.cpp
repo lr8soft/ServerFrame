@@ -3,6 +3,7 @@
 //
 
 #include "ListenerManager.h"
+#include "Listener.h"
 #include "Utils/LuaUtil.h"
 #include "Utils/LogUtil.h"
 
@@ -47,7 +48,10 @@ void ListenerManager::loadListeners(lua_State *pState) {
         const char *key = lua_tostring(pState, -2);
         // 判断是否为table
         if(lua_istable(pState, -1)) {
-            appList.push_back(key);
+            // 创建监听器并初始化
+            auto pListener = std::make_shared<Listener>(key, lua_newthread(pState));
+            pListener->init();
+            listenerMap.insert(std::make_pair(key, pListener));
         }
     }
     lua_pop(pState, 1);
@@ -58,9 +62,9 @@ void ListenerManager::start() {
         LogUtil::printError("ListenerManager init failed!");
         return;
     }
-
-    for(auto& app : appList) {
-
+    // 启动监听器
+    for(auto& item : listenerMap) {
+        item.second->start();
     }
 }
 

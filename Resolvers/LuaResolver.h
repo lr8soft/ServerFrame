@@ -13,7 +13,7 @@
 
 class LuaResolver: public IRequestSolver{
 public:
-    LuaResolver();
+    LuaResolver(lua_State* state);
     ~LuaResolver();
 
     bool handleRequest(const Request& req, Reply& rep);

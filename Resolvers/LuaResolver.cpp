@@ -16,31 +16,12 @@
 #include "../Utils/UrlUtils.h"
 #include "../Utils/LuaParseUtils.h"
 
-LuaResolver::LuaResolver() {
-    pState = LuaUtil::getNewState();
-    luaL_openlibs(pState);
-#ifdef _DEBUG
-    const char* packageStr = "package.path = package.path .. ';../scripts/?.lua'";
-    const char* path = "../scripts/manage.lua";
-#else
-    const char* packageStr = "package.path = package.path .. ';./scripts/?.lua'";
-    const char* path = "scripts/manage.lua";
-#endif
+LuaResolver::LuaResolver(lua_State* state) : pState(state) {
+    lua_getfield(pState, -1, "url");
 
-    luaL_dostring(pState, packageStr);
-    luaL_openlibs(pState);
-    if(luaL_dofile(pState, path) == LUA_OK) {
-        lua_getglobal(pState, "manage");
-        lua_getfield(pState, -1, "url");
-
-        std::list<std::string> list;
-        loadLuaFunction(pState, "", lua_gettop(pState), list);
-        isInitSuccess = true;
-    }else{
-        LuaUtil::printLuaError(pState);
-        isInitSuccess = false;
-    }
-
+    std::list<std::string> list;
+    loadLuaFunction(pState, "", lua_gettop(pState), list);
+    isInitSuccess = true;
 }
 
 LuaResolver::~LuaResolver() {

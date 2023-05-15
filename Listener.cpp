@@ -48,9 +48,43 @@ Listener::Listener(const std::string & name, lua_State* state)
 }
 
 void Listener::init() {
+    // 读取appName名称的表
+    lua_getglobal(_pState, _appName.c_str());
+
+    // 遍历app的设置
+    lua_pushnil(_pState);
+    while (lua_next(_pState, lua_gettop(_pState)) != 0) {
+        const char *key = lua_tostring(_pState, -2);
+        if(strcmp(key, "port") == 0) {
+            _port = lua_tointeger(_pState, -1);
+        }else if(strcmp(key, "address") == 0) {
+            _address = lua_tostring(_pState, -1);
+        }else if(strcmp(key, "isHttps") == 0) {
+            _isHttps = lua_toboolean(_pState, -1);
+        }else if(strcmp(key, "static") == 0) {
+            _staticFolder = lua_tostring(_pState, -1);
+        }else if(strcmp(key, "cert") == 0) {
+            // 解析cert表
+            lua_pushnil(_pState);
+            while (lua_next(_pState, lua_gettop(_pState)) != 0) {
+                const char *certKey = lua_tostring(_pState, -2);
+                if(strcmp(certKey, "cert") == 0) {
+                    // 证书文件
+                    _certPath = lua_tostring(_pState, -1);
+                }else if(strcmp(certKey, "key") == 0) {
+                    // 密钥文件
+                    _keyPath = lua_tostring(_pState, -1);
+                }
+                lua_pop(_pState, 1);
+            }
+        }
+    }
+    lua_pop(_pState, 1);
+
+
     auto dispatcher = RequestDispatcher::getInstance();
     // POST请求
-    dispatcher->addHandler(std::make_shared<LuaResolver>());
+    dispatcher->addHandler(std::make_shared<LuaResolver>(_pState));
     // 允许GET statics文件夹下的内容
     dispatcher->addHandler(std::make_shared<LocalResolver>("statics"));
 }
