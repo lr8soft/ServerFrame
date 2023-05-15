@@ -2,6 +2,7 @@ local httpApp = require("app/httpServer")
 local httpsApp = require("app/httpsServer")
 
 manage = {
+    -- listener入口
     app = {
         httpServerDemo = httpApp,
         httpsServerDemo = httpsApp

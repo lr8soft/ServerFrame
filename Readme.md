@@ -8,10 +8,10 @@ This project is still in the early stage of development, and the API is not stab
 
 2.Clone the project and run the following commands in the project directory:
 ```
-git clone https://github.com/lr8soft/ServerFrame.git
+git clone --recurse-submodules https://github.com/lr8soft/ServerFrame.git
 cd ServerFrame
 
-cmake -B build -S . "-DCMAKE_TOOLCHAIN_FILE={the path where vcpkg is installed}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+cmake -B build -S . "-DCMAKE_TOOLCHAIN_FILE={vcpkg install path}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 cd build
 cmake ..
 make

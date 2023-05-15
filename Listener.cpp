@@ -14,8 +14,8 @@
 #include "Resolvers/LuaResolver.h"
 #include "Core/Connection.h"
 
-Listener::Listener(bool isHttps, const std::string &addr, const std::string &port)
-        : _isHttps(isHttps), _acceptor(_service), _signals(_service) {
+Listener::Listener(const std::string & name, lua_State* state)
+        : _appName(name), _pState(state), _acceptor(_service), _signals(_service) {
     _signals.add(SIGINT);
     _signals.add(SIGTERM);
 #if defined(SIGQUIT)
@@ -23,7 +23,7 @@ Listener::Listener(bool isHttps, const std::string &addr, const std::string &por
 #endif // defined(SIGQUIT)
     doAwaitStop();
 
-    if(isHttps) {
+    /*if(isHttps) {
         _pContext = std::make_shared<asio::ssl::context>(asio::ssl::context::sslv23);
 #ifdef _DEBUG
         _pContext->use_certificate_chain_file("../cert/localhost.crt");
@@ -44,7 +44,7 @@ Listener::Listener(bool isHttps, const std::string &addr, const std::string &por
     LogUtil::printInfo("ServerFrame started.");
     LogUtil::printInfo("Listen address: " + addr + ":" + port);
 
-    this->doAccept();
+    this->doAccept();*/
 }
 
 void Listener::init() {

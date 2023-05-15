@@ -2,9 +2,7 @@ local redirectResponse = require("app/RedirectResponse")
 httpServer = {
     port = 80,
     address = "0.0.0.0",
-    url = {
 
-    },
     -- 配置拦截器
     -- 直接转发https请求
     interceptor = function(req)

@@ -1,8 +1,8 @@
 #include "Listener.h"
-
+#include "ListenerManager.h"
 int main() {
-    Listener listener(true);
-    listener.init();
-    listener.start();
+    auto mgr = ListenerManager::getInstance();
+    mgr->init();
+    mgr->start();
     return 0;
 }

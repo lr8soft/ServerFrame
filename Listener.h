@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 #include <asio/ssl.hpp>
+#include <lua.hpp>
 #include "SimpleAsioDefine.h"
 #include "Utils/Timer.h"
 
@@ -17,7 +18,7 @@ class Listener {
 private:
     typedef asio::ip::tcp::resolver AsioResolver;
 public:
-    Listener(bool isHttps = false, const std::string & addr = "0.0.0.0", const std::string & port = "6780");
+    Listener(const std::string & name, lua_State* state);
     void init();
     void start();
 
@@ -28,8 +29,10 @@ private:
     void doAwaitStop();
 
 private:
-    bool _isHttps;
+    bool _isHttps = false;
+    std::string _appName;
     std::shared_ptr<asio::ssl::context> _pContext;
+    std::shared_ptr<lua_State> _pState;
 
     AsioService _service;
     AsioAcceptor _acceptor;
