@@ -1,4 +1,4 @@
-
+local redirectResponse = require("app/RedirectResponse")
 httpServer = {
     port = 80,
     address = "0.0.0.0",
@@ -6,15 +6,12 @@ httpServer = {
 
     },
     -- 配置拦截器
+    -- 直接转发https请求
     interceptor = function(req)
-        print("interceptor")
-        print("Method:", req.METHOD)
         print("Request Host:", req.HEADER.Host)
-        print("Request Path:", req.PATH)
-        print("Request Query:", req.QUERY)
-        print("Request Body:", req.BODY)
-        print("Request Header:", req.HEADER)
-        print("Request Cookie:", req.COOKIE)
+        local realPath = "https://" .. req.HEADER.Host .. req.HEADER.Uri
+        local response = redirectResponse:New(realPath)
+        return response
     end
 }
 
