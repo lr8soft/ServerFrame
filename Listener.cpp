@@ -8,6 +8,7 @@
 #include "Listener.h"
 #include "ConnManager.h"
 #include "Utils/LogUtil.h"
+#include "Utils/PathUtils.h"
 #include "Core/SSLConnection.h"
 #include "Core/RequestDispatcher.h"
 #include "Resolvers/LocalResolver.h"
@@ -22,32 +23,50 @@ Listener::Listener(const std::string & name, lua_State* state)
     _signals.add(SIGQUIT);
 #endif // defined(SIGQUIT)
     doAwaitStop();
-
-    /*if(isHttps) {
-        _pContext = std::make_shared<asio::ssl::context>(asio::ssl::context::sslv23);
-#ifdef _DEBUG
-        _pContext->use_certificate_chain_file("../cert/localhost.crt");
-        _pContext->use_private_key_file("../cert/localhost.key", asio::ssl::context::pem);
-#else
-        _pContext->use_certificate_chain_file("./cert/localhost.crt");
-        _pContext->use_private_key_file("./cert/localhost.key", asio::ssl::context::pem);
-#endif
-    }
-
-    AsioResolver resolver(_service);
-    AsioEndPoint endPoint = *resolver.resolve({addr, port});
-    _acceptor.open(endPoint.protocol());
-    _acceptor.set_option(asio::ip::tcp::acceptor::reuse_address(true));
-    _acceptor.bind(endPoint);
-    _acceptor.listen();
-
-    LogUtil::printInfo("ServerFrame started.");
-    LogUtil::printInfo("Listen address: " + addr + ":" + port);
-
-    this->doAccept();*/
 }
 
+
 void Listener::init() {
+    // 从lua加载设置
+    loadSettings();
+
+    if(_isHttps) {
+        _pContext = std::make_shared<asio::ssl::context>(asio::ssl::context::sslv23);
+        // 加载https证书
+        if(!_certPath.empty() && !_keyPath.empty()) {
+            _pContext->use_certificate_chain_file(PathUtils::getRealPath(_certPath));
+            _pContext->use_private_key_file(PathUtils::getRealPath(_keyPath), asio::ssl::context::pem);
+        }else{
+            LogUtil::printError("Cert path or key path not set in " + _appName + "!");
+        }
+    }
+
+    if(_port != -1 && !_address.empty()) {
+        AsioResolver resolver(_service);
+        AsioEndPoint endPoint = *resolver.resolve({_address.c_str(), std::to_string(_port).c_str()});
+        _acceptor.open(endPoint.protocol());
+        _acceptor.set_option(asio::ip::tcp::acceptor::reuse_address(true));
+        _acceptor.bind(endPoint);
+        _acceptor.listen();
+    }else{
+        LogUtil::printError("Port or address not set in " + _appName + "!");
+    }
+
+
+    auto dispatcher = RequestDispatcher::getInstance();
+    // POST请求
+    dispatcher->addHandler(std::make_shared<LuaResolver>(_pState));
+
+    if(!_staticFolder.empty()) {
+        // 允许GET statics文件夹下的内容
+        dispatcher->addHandler(std::make_shared<LocalResolver>(_staticFolder));
+    }
+
+    this->doAccept();
+
+}
+
+void Listener::loadSettings() {
     // 读取appName名称的表
     lua_getglobal(_pState, _appName.c_str());
 
@@ -80,14 +99,8 @@ void Listener::init() {
         }
     }
     lua_pop(_pState, 1);
-
-
-    auto dispatcher = RequestDispatcher::getInstance();
-    // POST请求
-    dispatcher->addHandler(std::make_shared<LuaResolver>(_pState));
-    // 允许GET statics文件夹下的内容
-    dispatcher->addHandler(std::make_shared<LocalResolver>("statics"));
 }
+
 
 void Listener::start() {
     _service.run();
@@ -140,4 +153,5 @@ void Listener::doAwaitStop() {
         LogUtil::printInfo("All connection stop now.");
     });
 }
+
 

@@ -23,6 +23,7 @@ public:
     void start();
 
 private:
+    void loadSettings();
     // 异步新连接
     void doAccept();
     // 异步等信号
