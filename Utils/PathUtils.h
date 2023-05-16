@@ -8,8 +8,7 @@
 #include <string>
 class PathUtils {
 public:
-    // debug与release读取路径不一致
-    // 只能转换file/a.text类型的路径，开头不带斜杠
+    // debug与release读取路径不一致，根据编译模式来获取路径
     static std::string getRealPath(const std::string & path);
 };
 

@@ -9,7 +9,9 @@
 
 ListenerManager *ListenerManager::pInstance = nullptr;
 ListenerManager *ListenerManager::getInstance() {
-    return nullptr;
+    if(pInstance == nullptr)
+        pInstance = new ListenerManager;
+    return pInstance;
 }
 
 void ListenerManager::init() {
@@ -24,12 +26,10 @@ void ListenerManager::init() {
 #endif
 
     luaL_dostring(pState, packageStr);
-    luaL_openlibs(pState);
     // 根据路径加载lua脚本
     if(luaL_dofile(pState, path) == LUA_OK) {
         lua_getglobal(pState, "manage");
         lua_getfield(pState, -1, "app");
-
         // 解析lua脚本中的app表
         loadListeners(pState);
 
@@ -43,16 +43,19 @@ void ListenerManager::init() {
 
 void ListenerManager::loadListeners(lua_State *pState) {
     lua_pushnil(pState);
+
     // lua_next弹出url表里的名称与方法
-    while (lua_next(pState, lua_gettop(pState)) != 0) {
-        const char *key = lua_tostring(pState, -2);
+    while (lua_next(pState, -2) != 0) {
+        std::string key = lua_tostring(pState, -2);
+        std::cout << "loadListeners key:" << key << std::endl;
         // 判断是否为table
-        if(lua_istable(pState, -1)) {
+        if(!key.empty() && lua_istable(pState, -1)) {
             // 创建监听器并初始化
-            auto pListener = std::make_shared<Listener>(key, lua_newthread(pState));
+            auto pListener = std::make_shared<Listener>(key, pState);
             pListener->init();
             listenerMap.insert(std::make_pair(key, pListener));
         }
+        lua_pop(pState, 1);
     }
     lua_pop(pState, 1);
 }

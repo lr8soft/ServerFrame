@@ -29,7 +29,7 @@ private:
     std::map<std::string, std::shared_ptr<Listener>> listenerMap;
 
     bool isInitSuccess = false;
-    lua_State *pState;
+    lua_State *pState = nullptr;
 
 };
 

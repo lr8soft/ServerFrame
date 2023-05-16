@@ -1,4 +1,4 @@
-local redirectResponse = require("app/RedirectResponse")
+local redirectResponse = require("response/RedirectResponse")
 httpServer = {
     port = 80,
     address = "0.0.0.0",
