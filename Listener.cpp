@@ -7,6 +7,7 @@
 
 #include "Listener.h"
 #include "ConnManager.h"
+#include "Utils/LuaUtil.h"
 #include "Utils/LogUtil.h"
 #include "Utils/PathUtils.h"
 #include "Core/SSLConnection.h"
@@ -54,8 +55,10 @@ void Listener::init() {
 
 
     auto dispatcher = RequestDispatcher::getInstance();
-    // POST请求
-    dispatcher->addHandler(std::make_shared<LuaResolver>(_pState));
+    if(_hasUrl) {
+        // Lua处理请求
+        dispatcher->addHandler(std::make_shared<LuaResolver>(_pState));
+    }
 
     if(!_staticFolder.empty()) {
         // 允许GET statics文件夹下的内容
@@ -98,13 +101,17 @@ void Listener::loadSettings() {
                 }
                 lua_pop(_pState, 1);
             }
-            // 不pop掉nil，保留在栈顶允许继续遍历
-            //lua_pop(_pState, 1);
+
+        }else if(strcmp(key, "url") == 0) {
+            // 检测url表是否为table类型
+            if(lua_istable(_pState, -1)) {
+                // 保留url表内容
+                _hasUrl = true;
+            }
         }
         lua_pop(_pState, 1);
     }
-    // 保留nil
-    //lua_pop(_pState, 1);
+
 }
 
 

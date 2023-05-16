@@ -30,16 +30,17 @@ private:
     void doAwaitStop();
 
 private:
-    bool _isHttps = false;
+    bool _isHttps = false, _hasUrl = false;
     int _port = -1;
 
     std::string _address, _appName, _staticFolder;
     std::string _certPath, _keyPath;
     std::shared_ptr<asio::ssl::context> _pContext;
-    lua_State* _pState;
 
     AsioService _service;
     AsioAcceptor _acceptor;
+
+    lua_State* _pState;
 
     // 终止信息
     asio::signal_set _signals;

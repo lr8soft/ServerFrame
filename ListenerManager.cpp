@@ -6,6 +6,7 @@
 #include "Listener.h"
 #include "Utils/LuaUtil.h"
 #include "Utils/LogUtil.h"
+#include "Utils/PathUtils.h"
 
 ListenerManager *ListenerManager::pInstance = nullptr;
 ListenerManager *ListenerManager::getInstance() {
@@ -15,19 +16,10 @@ ListenerManager *ListenerManager::getInstance() {
 }
 
 void ListenerManager::init() {
+    std::string path = PathUtils::getRealPath("scripts/manage.lua");
     pState = LuaUtil::getNewState();
-    luaL_openlibs(pState);
-#ifdef _DEBUG
-    const char* packageStr = "package.path = package.path .. ';../scripts/?.lua'";
-    const char* path = "../scripts/manage.lua";
-#else
-    const char* packageStr = "package.path = package.path .. ';./scripts/?.lua'";
-    const char* path = "scripts/manage.lua";
-#endif
-
-    luaL_dostring(pState, packageStr);
     // 根据路径加载lua脚本
-    if(luaL_dofile(pState, path) == LUA_OK) {
+    if(luaL_dofile(pState, path.c_str()) == LUA_OK) {
         lua_getglobal(pState, "manage");
         lua_getfield(pState, -1, "app");
         // 解析lua脚本中的app表
@@ -47,7 +39,7 @@ void ListenerManager::loadListeners(lua_State *pState) {
     // lua_next弹出url表里的名称与方法
     while (lua_next(pState, -2) != 0) {
         std::string key = lua_tostring(pState, -2);
-        std::cout << "loadListeners key:" << key << std::endl;
+        std::cout << "Load "<< key <<" Listener" << std::endl;
         // 判断是否为table
         if(!key.empty() && lua_istable(pState, -1)) {
             // 创建监听器并初始化

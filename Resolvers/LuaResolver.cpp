@@ -17,7 +17,11 @@
 #include "../Utils/LuaParseUtils.h"
 
 LuaResolver::LuaResolver(lua_State* state) : pState(state) {
-    lua_getfield(pState, -1, "url");
+    if(lua_getfield(pState, -1, "url") != 0) {
+        LogUtil::printError("url is not a table");
+        isInitSuccess = false;
+        return;
+    }
 
     std::list<std::string> list;
     loadLuaFunction(pState, "", lua_gettop(pState), list);

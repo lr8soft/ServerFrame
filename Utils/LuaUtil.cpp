@@ -21,6 +21,16 @@ lua_State *LuaUtil::getNewState() {
         luaL_requiref(luaState, lib->name, lib->func, 1);
         lua_pop(luaState, 1);
     }
+
+    luaL_openlibs(luaState);
+
+#ifdef _DEBUG
+    const char* packageStr = "package.path = package.path .. ';../scripts/?.lua'";
+#else
+    const char* packageStr = "package.path = package.path .. ';./scripts/?.lua'";
+#endif
+    luaL_dostring(luaState, packageStr);
+
     return luaState;
 }
 

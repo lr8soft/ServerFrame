@@ -2,6 +2,8 @@ local redirectResponse = require("response/RedirectResponse")
 httpServer = {
     port = 80,
     address = "0.0.0.0",
+    -- 要使用拦截功能得保留空的url
+    url = {},
 
     -- 配置拦截器
     -- 直接转发https请求
