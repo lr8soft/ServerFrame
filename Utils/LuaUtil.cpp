@@ -9,9 +9,11 @@
 lua_State *LuaUtil::getNewState() {
     lua_State *luaState = luaL_newstate();
     static const luaL_Reg lualibs[] = {
-            {"base", luaopen_base},
-            {"math", luaopen_math},
-            {"io",   luaopen_io},
+            {"base",  luaopen_base},
+            {"math",  luaopen_math},
+            {"debug", luaopen_debug},
+            {"io",    luaopen_io},
+            {"string",luaopen_string},
             { "SHA", SHAProvider::luaLibInit},
             {NULL, NULL}
     };
@@ -21,6 +23,16 @@ lua_State *LuaUtil::getNewState() {
         luaL_requiref(luaState, lib->name, lib->func, 1);
         lua_pop(luaState, 1);
     }
+
+    luaL_openlibs(luaState);
+
+#ifdef _DEBUG
+    const char* packageStr = "package.path = package.path .. ';../scripts/?.lua'";
+#else
+    const char* packageStr = "package.path = package.path .. ';./scripts/?.lua'";
+#endif
+    luaL_dostring(luaState, packageStr);
+
     return luaState;
 }
 

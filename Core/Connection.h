@@ -30,8 +30,8 @@ private:
     void doRead();
     void doWrite();
 public:
-    explicit Connection(AsioSocket socket)
-            : _socket(std::move(socket)){};
+    Connection(const std::string& appName, AsioSocket socket)
+            : IConn(appName), _socket(std::move(socket)){ }
 
     void start() override;
     void stop() override;

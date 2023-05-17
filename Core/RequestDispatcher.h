@@ -18,13 +18,13 @@ public:
         return pInst;
     }
 
-    void addHandler(std::shared_ptr<IRequestSolver> handler);
-    void handleRequest(const Request& req, Reply& rep);
+    void addHandler(const std::string& appName, std::shared_ptr<IRequestSolver> handler);
+    void handleRequest(const std::string& appName, const Request& req, Reply& rep);
 private:
     static RequestDispatcher* pInst;
 
     // Requesthandler list
-    std::list<std::shared_ptr<IRequestSolver>> handleList;
+    std::multimap<std::string, std::shared_ptr<IRequestSolver>> handleMap;
 };
 
 

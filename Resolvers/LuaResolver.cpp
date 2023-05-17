@@ -14,23 +14,22 @@
 #include "../Utils/LuaUtil.h"
 #include "../Utils/LogUtil.h"
 #include "../Utils/UrlUtils.h"
+#include "../Utils/PathUtils.h"
 #include "../Utils/LuaParseUtils.h"
 
-LuaResolver::LuaResolver() {
-    pState = LuaUtil::getNewState();
-    luaL_openlibs(pState);
-#ifdef _DEBUG
-    const char* packageStr = "package.path = package.path .. ';../scripts/?.lua'";
-    const char* path = "../scripts/manage.lua";
-#else
-    const char* packageStr = "package.path = package.path .. ';./scripts/?.lua'";
-    const char* path = "scripts/manage.lua";
-#endif
+LuaResolver::LuaResolver(const std::string & name) : appName(name) {
+    if(name.empty()) {
+        return;
+    }
 
-    luaL_dostring(pState, packageStr);
-    luaL_openlibs(pState);
-    if(luaL_dofile(pState, path) == LUA_OK) {
+    // lua响应部分是新环境
+    std::string path = PathUtils::getRealPath("scripts/manage.lua");
+    pState = LuaUtil::getNewState();
+    // 根据路径加载lua脚本
+    if(luaL_dofile(pState, path.c_str()) == LUA_OK) {
         lua_getglobal(pState, "manage");
+        lua_getfield(pState, -1, "app");
+        lua_getfield(pState, -1, appName.c_str());
         lua_getfield(pState, -1, "url");
 
         std::list<std::string> list;
@@ -38,9 +37,7 @@ LuaResolver::LuaResolver() {
         isInitSuccess = true;
     }else{
         LuaUtil::printLuaError(pState);
-        isInitSuccess = false;
     }
-
 }
 
 LuaResolver::~LuaResolver() {
@@ -118,7 +115,12 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     lua_getglobal(pState, "manage");
     lua_getfield(pState, -1, "callUrlMethod");
 
-    // 目标方法名称
+    // 发送app名称
+    {
+        lua_pushstring(pState, appName.c_str());
+    }
+
+    // 发送目标方法名称
     {
         std::stringstream nameStream;
         bool isFirstSubname = true;
@@ -131,7 +133,6 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
                 isFirstSubname = false;
             }
             nameStream << folder;
-
         }
         lua_pushstring(pState, nameStream.str().c_str());
     }
@@ -139,7 +140,7 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     sendRequestToLua(pState, req);
 
     // 调用Lua方法
-    if (lua_pcall(pState, 2, 1, 0) != LUA_OK) {
+    if (lua_pcall(pState, 3, 1, 0) != LUA_OK) {
         LuaUtil::printLuaError(pState);
         rep = Reply::stockReply(Reply::internal_server_error);
         return false;
