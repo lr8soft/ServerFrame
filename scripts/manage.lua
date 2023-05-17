@@ -4,7 +4,7 @@ local httpsApp = require("app/httpsServer")
 manage = {
     -- listener入口
     app = {
-        --httpServerDemo = httpApp,
+        httpServerDemo = httpApp,
         httpsServerDemo = httpsApp
     }
 }
@@ -12,6 +12,7 @@ manage = {
 -- 代理访问
 function manage.callUrlMethod(appStr, urlStr, req)
     local fullFunc = "manage.app." .. appStr .. ".url." .. urlStr
+    print("invoke" .. fullFunc)
     local func = _G
     for w in string.gmatch(fullFunc, "[%w_]+") do
         func = func[w]

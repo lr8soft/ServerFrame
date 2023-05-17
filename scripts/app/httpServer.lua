@@ -8,7 +8,7 @@ httpServer = {
     -- 配置拦截器
     -- 直接转发https请求
     interceptor = function(req)
-        print("Request Host:", req.HEADER.Host)
+        print("HTTP interceptor\nHost:", req.HEADER.Host)
         local realPath = "https://" .. req.HEADER.Host .. req.HEADER.Uri
         local response = redirectResponse:New(realPath)
         return response

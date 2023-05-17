@@ -15,7 +15,7 @@ httpsServer = {
     },
 
     interceptor = function(req)
-        print("interceptor work!\nhost:", req.HEADER.Host)
+        print("HTTPS interceptor\nhost:", req.HEADER.Host)
         print("uri:", req.HEADER.Uri)
         return nil
     end

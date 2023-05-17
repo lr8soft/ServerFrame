@@ -59,12 +59,12 @@ void Listener::init() {
     auto dispatcher = RequestDispatcher::getInstance();
     if(_hasUrl) {
         // Lua处理请求
-        dispatcher->addHandler(std::make_shared<LuaResolver>(_appName));
+        dispatcher->addHandler(_appName, std::make_shared<LuaResolver>(_appName));
     }
 
     if(!_staticFolder.empty()) {
         // 允许GET statics文件夹下的内容
-        dispatcher->addHandler(std::make_shared<LocalResolver>(_staticFolder));
+        dispatcher->addHandler(_appName, std::make_shared<LocalResolver>(_staticFolder));
     }
 
     this->doAccept();
@@ -130,7 +130,7 @@ void Listener::doAccept() {
             }
 
             if (!code) {
-                auto pConn = std::make_shared<Connection>(std::move(*pSocket));
+                auto pConn = std::make_shared<Connection>(_appName, std::move(*pSocket));
                 ConnManager::getInstance()->startConn(pConn);
             }
 
@@ -146,9 +146,9 @@ void Listener::doAccept() {
             }
 
             if (!code) {
-                pSocket->async_handshake(asio::ssl::stream_base::server, [pSocket](const std::error_code &code) {
+                pSocket->async_handshake(asio::ssl::stream_base::server, [this, pSocket](const std::error_code &code) {
                     if (!code) {
-                        auto pConn = std::make_shared<SSLConnection>(std::move(*pSocket));
+                        auto pConn = std::make_shared<SSLConnection>(_appName, std::move(*pSocket));
                         ConnManager::getInstance()->startConn(pConn);
                     }
                 });

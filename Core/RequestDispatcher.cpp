@@ -9,16 +9,17 @@
 
 RequestDispatcher* RequestDispatcher::pInst = nullptr;
 
-void RequestDispatcher::handleRequest(const Request &req, Reply &rep) {
-    // 依次调用
-    for (auto iter = handleList.begin(); iter != handleList.end(); ++iter) {
+void RequestDispatcher::handleRequest(const std::string& appName, const Request &req, Reply &rep) {
+    // 根据对应的appName依次调用
+    auto range = handleMap.equal_range(appName);
+    for (auto iter = range.first; iter != range.second; ++iter) {
         // 如果有一个handler处理了，那么就不再继续
-        if ((*iter)->handleRequest(req, rep)) {
+        if ((*iter).second->handleRequest(req, rep)) {
             return;
         }
     }
 }
 
-void RequestDispatcher::addHandler( std::shared_ptr<IRequestSolver> handler) {
-    handleList.push_back(handler);
+void RequestDispatcher::addHandler(const std::string& appName, std::shared_ptr<IRequestSolver> handler) {
+    handleMap.insert(std::make_pair(appName, handler));
 }
