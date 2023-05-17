@@ -1,5 +1,5 @@
 DB = {
-    DEBUG = true,
+    DEBUG = false,
     new = true,
     backtrace = true,
     name = "database.db",

@@ -32,8 +32,8 @@ private:
     void doRead();
     void doWrite();
 public:
-    explicit SSLConnection(asio::ssl::stream<AsioSocket> socket)
-    : _socket(std::move(socket)){};
+    SSLConnection(const std::string& appName, asio::ssl::stream<AsioSocket> socket)
+        : IConn(appName), _socket(std::move(socket)){}
 
     void start();
     void stop();

@@ -1,8 +1,8 @@
-#include "Server.h"
-
+#include "Listener.h"
+#include "ListenerManager.h"
 int main() {
-    Server server(true);
-    server.init();
-    server.start();
+    auto mgr = ListenerManager::getInstance();
+    mgr->init();
+    mgr->start();
     return 0;
 }

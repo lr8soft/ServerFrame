@@ -41,6 +41,8 @@ RequestParser::ResultEnum RequestParser::parseFirstLine(Request& request, std::s
     // 解析url里可能存在的参数
     parseUrlParams(request, request.uri);
 
+    request.headerMap.insert(std::make_pair("Uri", request.uri));
+
     // 解析协议版本
     std::string protocol = line.substr(splitLine2Pos + 1);
     auto slashPos = protocol.find('/');

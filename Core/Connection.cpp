@@ -31,7 +31,7 @@ void Connection::doRead() {
                 auto formResult = _parser.parseForm(_request, _bufferStream);
                 // 只要不是没读完都行
                 if(formResult != RequestParser::indeterminate) {
-                    RequestDispatcher::getInstance()->handleRequest(_request, _reply);
+                    RequestDispatcher::getInstance()->handleRequest(_appName, _request, _reply);
                     LogUtil::printInfo(_request.method + ":" + _request.uri);
                     // 清除缓存
                     _bufferStream.clear();
