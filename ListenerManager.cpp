@@ -57,10 +57,26 @@ void ListenerManager::start() {
         LogUtil::printError("ListenerManager init failed!");
         return;
     }
-    // 启动监听器
+    // 启动监听器线程
     for(auto& item : listenerMap) {
-        item.second->start();
+        // 新建线程并启动
+        auto pThread = std::make_shared<std::thread>(&Listener::start, item.second);
+        threadList.push_back(pThread);
+        pThread->detach();
     }
+
+    // 等待所有子线程joinable
+    while(true) {
+        bool isAllJoinable = true;
+        for(auto& item : threadList) {
+            if(!item->joinable())
+                isAllJoinable = false;
+        }
+        // 所有子线程结束
+        if(isAllJoinable)
+            break;
+    }
+
 }
 
 

@@ -7,6 +7,7 @@
 
 #include <set>
 #include <memory>
+#include <mutex>
 #include "SimpleAsioDefine.h"
 #include "Core/IConn.h"
 
@@ -26,6 +27,8 @@ private:
 
 private:
     std::set<std::shared_ptr<IConn>> connList;
+
+    std::mutex connMutex;
 
     static ConnManager* pInstance;
 };

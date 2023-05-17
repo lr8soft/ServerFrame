@@ -4,7 +4,7 @@ httpServer = {
     address = "0.0.0.0",
     -- 要使用拦截功能得保留空的url
     url = {},
-
+    static = "statics",
     -- 配置拦截器
     -- 直接转发https请求
     interceptor = function(req)

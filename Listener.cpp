@@ -106,8 +106,12 @@ void Listener::loadSettings() {
         }else if(strcmp(key, "url") == 0) {
             // 检测url表是否为table类型
             if(lua_istable(_pState, -1)) {
-                // 保留url表内容
                 _hasUrl = true;
+            }
+        }else if(strcmp(key, "interceptor") == 0) {
+            // 检测到拦截器
+            if(lua_isfunction(_pState, -1)) {
+                _hasInterceptor = true;
             }
         }
         lua_pop(_pState, 1);
@@ -117,6 +121,7 @@ void Listener::loadSettings() {
 
 
 void Listener::start() {
+    //LogUtil::printInfo("Start " + _appName );
     _service.run();
 }
 
@@ -164,7 +169,7 @@ void Listener::doAwaitStop() {
     _signals.async_wait([this](const std::error_code& code, int val){
         _acceptor.close();
         ConnManager::getInstance()->stopAllConn();
-        LogUtil::printInfo("All connection stop now.");
+        LogUtil::printInfo(_appName + " connection stop now.");
     });
 }
 
