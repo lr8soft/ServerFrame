@@ -39,7 +39,7 @@ void ListenerManager::loadListeners(lua_State *pState) {
     // lua_next弹出url表里的名称与方法
     while (lua_next(pState, -2) != 0) {
         std::string key = lua_tostring(pState, -2);
-        std::cout << "Load "<< key <<" Listener" << std::endl;
+        //std::cout << "Load "<< key <<" Listener" << std::endl;
         // 判断是否为table
         if(!key.empty() && lua_istable(pState, -1)) {
             // 创建监听器并初始化

@@ -49,6 +49,8 @@ void Listener::init() {
         _acceptor.set_option(asio::ip::tcp::acceptor::reuse_address(true));
         _acceptor.bind(endPoint);
         _acceptor.listen();
+
+        LogUtil::printInfo(_appName + " start listening on " + _address + ":" + std::to_string(_port) + " ..." );
     }else{
         LogUtil::printError("Port or address not set in " + _appName + "!");
     }
@@ -57,7 +59,7 @@ void Listener::init() {
     auto dispatcher = RequestDispatcher::getInstance();
     if(_hasUrl) {
         // Lua处理请求
-        dispatcher->addHandler(std::make_shared<LuaResolver>(_pState));
+        dispatcher->addHandler(std::make_shared<LuaResolver>(_appName));
     }
 
     if(!_staticFolder.empty()) {
@@ -73,8 +75,7 @@ void Listener::loadSettings() {
     // 遍历app的设置
     lua_pushnil(_pState);
 
-    int index = lua_gettop(_pState);
-    std::cout << _appName <<" loadSettings index:" << index << std::endl;
+    std::cout << "Load " << _appName <<" settings"<< std::endl;
 
     while (lua_next(_pState, -2) != 0) {
         const char *key = lua_tostring(_pState, -2);

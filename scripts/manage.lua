@@ -4,14 +4,14 @@ local httpsApp = require("app/httpsServer")
 manage = {
     -- listener入口
     app = {
-        httpServerDemo = httpApp,
+        --httpServerDemo = httpApp,
         httpsServerDemo = httpsApp
     }
 }
 
 -- 代理访问
 function manage.callUrlMethod(appStr, urlStr, req)
-    local fullFunc = appStr .. ".url." .. urlStr
+    local fullFunc = "manage.app." .. appStr .. ".url." .. urlStr
     local func = _G
     for w in string.gmatch(fullFunc, "[%w_]+") do
         func = func[w]
@@ -22,7 +22,7 @@ function manage.callUrlMethod(appStr, urlStr, req)
     end
 
     -- 调用拦截器
-    local interceptor = _G[appStr].interceptor
+    --[[local interceptor = _G[appStr].interceptor
     local interceptorResponse = nil
     if interceptor ~= nil then
         interceptorResponse = interceptor(req)
@@ -32,6 +32,7 @@ function manage.callUrlMethod(appStr, urlStr, req)
     if interceptorResponse ~= nil then
         return interceptorResponse
     end
+    ]]
 
     -- 没拦截的话就调用方法
     return func(req)

@@ -13,7 +13,7 @@
 
 class LuaResolver: public IRequestSolver{
 public:
-    LuaResolver(lua_State* state);
+    LuaResolver(const std::string & appName);
     ~LuaResolver();
 
     bool handleRequest(const Request& req, Reply& rep);
@@ -28,6 +28,8 @@ private:
     void parseLuaReply(lua_State* pState, Reply& rep);
 private:
     std::map<std::string, std::list<std::string>> urlMethodMap;
+
+    std::string appName;
     lua_State* pState;
 
     bool isInitSuccess = false;
