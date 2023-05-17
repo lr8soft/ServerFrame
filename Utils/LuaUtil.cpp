@@ -9,9 +9,11 @@
 lua_State *LuaUtil::getNewState() {
     lua_State *luaState = luaL_newstate();
     static const luaL_Reg lualibs[] = {
-            {"base", luaopen_base},
-            {"math", luaopen_math},
-            {"io",   luaopen_io},
+            {"base",  luaopen_base},
+            {"math",  luaopen_math},
+            {"debug", luaopen_debug},
+            {"io",    luaopen_io},
+            {"string",luaopen_string},
             { "SHA", SHAProvider::luaLibInit},
             {NULL, NULL}
     };

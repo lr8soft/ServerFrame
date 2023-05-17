@@ -120,7 +120,7 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
         lua_pushstring(pState, appName.c_str());
     }
 
-    // 目标方法名称
+    // 发送目标方法名称
     {
         std::stringstream nameStream;
         bool isFirstSubname = true;

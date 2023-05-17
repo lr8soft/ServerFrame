@@ -21,18 +21,18 @@ function manage.callUrlMethod(appStr, urlStr, req)
         error("Invalid function name: " .. fullFunc)
     end
 
+    
     -- 调用拦截器
-    --[[local interceptor = _G[appStr].interceptor
-    local interceptorResponse = nil
+    local interceptor = manage.app[appStr]["interceptor"]
     if interceptor ~= nil then
-        interceptorResponse = interceptor(req)
+        if type(interceptor) == "function" then
+            interceptorResponse = interceptor(req)
+            if interceptorResponse ~= nil then
+                return interceptorResponse
+            end
+        end
     end
 
-    -- 拦截器返回值不为空则直接返回
-    if interceptorResponse ~= nil then
-        return interceptorResponse
-    end
-    ]]
 
     -- 没拦截的话就调用方法
     return func(req)
