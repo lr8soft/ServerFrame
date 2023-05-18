@@ -60,23 +60,42 @@ void ListenerManager::start() {
     // 启动监听器线程
     for(auto& item : listenerMap) {
         // 新建线程并启动
-        auto pThread = std::make_shared<std::thread>(&Listener::start, item.second);
+        auto pThread = std::make_shared<std::thread>(&Listener::join, item.second);
         threadList.push_back(pThread);
         pThread->detach();
     }
 
-    // 等待所有子线程joinable
     while(true) {
-        bool isAllJoinable = true;
-        for(auto& item : threadList) {
-            if(!item->joinable())
-                isAllJoinable = false;
+        std::this_thread::yield();
+
+        bool isAllTerminated = true;
+
+        // 检查所有子线程是否结束
+        for(auto& item : listenerMap) {
+            if(!item.second->isTerminated()) {
+                isAllTerminated = false;
+                break;
+            }
         }
+
         // 所有子线程结束
-        if(isAllJoinable)
+        if(isAllTerminated)
             break;
     }
 
+    threadList.clear();
+    LogUtil::printWarn("All Listener Terminated.");
+}
+
+void ListenerManager::finalize() {
+    threadList.clear();
+    listenerMap.clear();
+
+    LuaUtil::luaEnvironmentRelease(pState);
+    pState = nullptr;
+    isInitSuccess = false;
+
+    LogUtil::printWarn("Server Terminated.");
 }
 
 

@@ -18,6 +18,7 @@ public:
 
     void init();
     void start();
+    void finalize();
 
 private:
     ListenerManager()= default;
