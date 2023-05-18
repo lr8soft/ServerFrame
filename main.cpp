@@ -4,5 +4,6 @@ int main() {
     auto mgr = ListenerManager::getInstance();
     mgr->init();
     mgr->start();
+    mgr->finalize();
     return 0;
 }

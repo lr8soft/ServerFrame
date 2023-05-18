@@ -50,7 +50,7 @@ void Listener::init() {
         _acceptor.bind(endPoint);
         _acceptor.listen();
 
-        LogUtil::printInfo(_appName + " start listening on " + _address + ":" + std::to_string(_port) + " ..." );
+        LogUtil::printInfo("App "+ _appName + " join listening on " + _address + ":" + std::to_string(_port));
     }else{
         LogUtil::printError("Port or address not set in " + _appName + "!");
     }
@@ -75,8 +75,7 @@ void Listener::loadSettings() {
     // 遍历app的设置
     lua_pushnil(_pState);
 
-    std::cout << "Load " << _appName <<" settings"<< std::endl;
-
+    LogUtil::printInfo("Load " + _appName + " settings");
     while (lua_next(_pState, -2) != 0) {
         const char *key = lua_tostring(_pState, -2);
         //std::cout << _appName << " loadSettings key:" << key << std::endl;
@@ -120,9 +119,10 @@ void Listener::loadSettings() {
 }
 
 
-void Listener::start() {
-    //LogUtil::printInfo("Start " + _appName );
+void Listener::join() {
+    LogUtil::printInfo("Listener " + _appName + " start");
     _service.run();
+    _isTerminated = true;
 }
 
 void Listener::doAccept() {
@@ -130,7 +130,7 @@ void Listener::doAccept() {
         auto pSocket = std::make_shared<AsioSocket>(_service);
         _acceptor.async_accept(*pSocket, [this, pSocket](const std::error_code &code) {
             if (!_acceptor.is_open()) {
-                LogUtil::printError("Acceptor is closed!");
+                LogUtil::printError(_appName + " acceptor is closed.");
                 return;
             }
 
@@ -146,7 +146,7 @@ void Listener::doAccept() {
 
         _acceptor.async_accept(pSocket->lowest_layer(), [this, pSocket](const std::error_code &code) {
             if (!_acceptor.is_open()) {
-                LogUtil::printError("Acceptor is closed!");
+                LogUtil::printError(_appName + " acceptor is closed.");
                 return;
             }
 
@@ -162,7 +162,6 @@ void Listener::doAccept() {
             doAccept();
         });
     }
-
 }
 
 void Listener::doAwaitStop() {

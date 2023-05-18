@@ -5,6 +5,7 @@
 #ifndef SERVERFRAME_LISTENER_H
 #define SERVERFRAME_LISTENER_H
 
+#include <atomic>
 #include <memory>
 #include <string>
 #include <asio/ssl.hpp>
@@ -19,7 +20,9 @@ private:
 public:
     Listener(const std::string & name, lua_State* state);
     void init();
-    void start();
+    void join();
+
+    bool isTerminated() const { return _isTerminated; }
 
 private:
     void loadSettings();
@@ -29,6 +32,7 @@ private:
     void doAwaitStop();
 
 private:
+    std::atomic<bool> _isTerminated = false;
     bool _isHttps = false, _hasUrl = false, _hasInterceptor = false;
     int _port = -1;
 
