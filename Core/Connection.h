@@ -7,7 +7,6 @@
 
 #include "../SimpleAsioDefine.h"
 #include "IConn.h"
-#include <array>
 #include <memory>
 #include <sstream>
 
@@ -26,9 +25,10 @@ private:
 
     Reply _reply;
 
-private:
-    void doRead();
-    void doWrite();
+protected:
+    void doRead() override;
+    void doWrite() override;
+
 public:
     Connection(const std::string& appName, AsioSocket socket)
             : IConn(appName), _socket(std::move(socket)){ }
