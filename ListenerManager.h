@@ -9,7 +9,6 @@
 #include <string>
 #include <map>
 #include <memory>
-#include <thread>
 #include <lua.hpp>
 class Listener;
 class ListenerManager {
@@ -29,7 +28,6 @@ private:
     static ListenerManager* pInstance;
 
     std::map<std::string, std::shared_ptr<Listener>> listenerMap;
-    std::list<std::shared_ptr<std::thread>> threadList;
 
     bool isInitSuccess = false;
     lua_State *pState = nullptr;

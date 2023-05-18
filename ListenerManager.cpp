@@ -2,6 +2,7 @@
 // Created by lrsoft on 2023/5/15.
 //
 
+#include <thread>
 #include "ListenerManager.h"
 #include "Listener.h"
 #include "Utils/LuaUtil.h"
@@ -60,9 +61,8 @@ void ListenerManager::start() {
     // 启动监听器线程
     for(auto& item : listenerMap) {
         // 新建线程并启动
-        auto pThread = std::make_shared<std::thread>(&Listener::join, item.second);
-        threadList.push_back(pThread);
-        pThread->detach();
+        auto thread = std::thread(&Listener::join, item.second);
+        thread.detach();
     }
 
     while(true) {
@@ -82,13 +82,10 @@ void ListenerManager::start() {
         if(isAllTerminated)
             break;
     }
-
-    threadList.clear();
     LogUtil::printWarn("All Listener Terminated.");
 }
 
 void ListenerManager::finalize() {
-    threadList.clear();
     listenerMap.clear();
 
     LuaUtil::luaEnvironmentRelease(pState);
