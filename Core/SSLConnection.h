@@ -27,10 +27,10 @@ private:
 
     Reply _reply;
 
+protected:
+    void doRead() override;
+    void doWrite() override;
 
-private:
-    void doRead();
-    void doWrite();
 public:
     SSLConnection(const std::string& appName, asio::ssl::stream<AsioSocket> socket)
         : IConn(appName), _socket(std::move(socket)){}
