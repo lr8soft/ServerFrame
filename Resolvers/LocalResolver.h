@@ -16,6 +16,9 @@ public:
     /// 处理请求带reply
     bool handleRequest(const Request& req, Reply& rep) override;
 
+    // 文件类型优先级最低
+    int getPriority() override { return 0; }
+
 private:
     /// 网站文件路径
     std::string _root;

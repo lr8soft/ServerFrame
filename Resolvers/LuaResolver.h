@@ -13,10 +13,12 @@
 
 class LuaResolver: public IRequestSolver{
 public:
-    LuaResolver(const std::string & appName);
+    LuaResolver(const std::string & appName, bool url, bool interceptor);
     ~LuaResolver();
 
-    bool handleRequest(const Request& req, Reply& rep);
+    bool handleRequest(const Request& req, Reply& rep) override;
+
+    int getPriority() override { return 1; }
 
 private:
     /// 初始化时解析lua文件里的url表
@@ -33,6 +35,7 @@ private:
     lua_State* pState;
 
     bool isInitSuccess = false;
+    bool hasUrl = false, hasInterceptor = false;
 
 };
 

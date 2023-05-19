@@ -30,7 +30,7 @@ Listener::Listener(const std::string & name, lua_State* state)
 void Listener::init() {
     // 从lua加载设置
     loadSettings();
-
+    // HTTPS监听器
     if(_isHttps) {
         _pContext = std::make_shared<asio::ssl::context>(asio::ssl::context::sslv23);
         // 加载https证书
@@ -42,6 +42,7 @@ void Listener::init() {
         }
     }
 
+    // 检测监听端口与地址是否设置
     if(_port != -1 && !_address.empty()) {
         AsioResolver resolver(_service);
         AsioEndPoint endPoint = *resolver.resolve({_address.c_str(), std::to_string(_port).c_str()});
@@ -57,9 +58,9 @@ void Listener::init() {
 
 
     auto dispatcher = RequestDispatcher::getInstance();
-    if(_hasUrl) {
+    if(_hasUrl || _hasInterceptor) {
         // Lua处理请求
-        dispatcher->addHandler(_appName, std::make_shared<LuaResolver>(_appName));
+        dispatcher->addHandler(_appName, std::make_shared<LuaResolver>(_appName, _hasUrl, _hasInterceptor));
     }
 
     if(!_staticFolder.empty()) {

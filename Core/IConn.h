@@ -29,9 +29,7 @@ protected:
     void onReadAction(const std::error_code & code, std::size_t bytesCount, std::array<char, 8192> & _buffer,
                       std::stringstream & _bufferStream, Request & _request, Reply & reply, RequestParser & _parser);
 
-
-
-
+    // doRead调用onReadAction
     virtual void doRead() = 0;
     virtual void doWrite() = 0;
 

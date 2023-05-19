@@ -24,7 +24,7 @@ private:
     static RequestDispatcher* pInst;
 
     // Requesthandler list
-    std::multimap<std::string, std::shared_ptr<IRequestSolver>> handleMap;
+    std::multimap<std::string, std::shared_ptr<IRequestSolver>, ISolverCompare> handleMap;
 };
 
 

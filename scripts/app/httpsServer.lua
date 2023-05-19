@@ -15,8 +15,8 @@ httpsServer = {
     },
 
     interceptor = function(req)
-        print("HTTPS interceptor\nhost:", req.HEADER.Host)
-        print("uri:", req.HEADER.Uri)
+        print("HTTPS Request Detected! Host:", req.HEADER.Host)
+        -- 返回nil即不拦截
         return nil
     end
 }

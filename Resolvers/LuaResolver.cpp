@@ -17,8 +17,14 @@
 #include "../Utils/PathUtils.h"
 #include "../Utils/LuaParseUtils.h"
 
-LuaResolver::LuaResolver(const std::string & name) : appName(name) {
+LuaResolver::LuaResolver(const std::string & name, bool url, bool interceptor)
+    : appName(name), hasUrl(url), hasInterceptor(interceptor) {
     if(name.empty()) {
+        return;
+    }
+
+    if(!hasUrl && !hasInterceptor) {
+        LogUtil::printError("LuaResolver: " + appName + " has no url and interceptor");
         return;
     }
 
@@ -30,10 +36,15 @@ LuaResolver::LuaResolver(const std::string & name) : appName(name) {
         lua_getglobal(pState, "manage");
         lua_getfield(pState, -1, "app");
         lua_getfield(pState, -1, appName.c_str());
-        lua_getfield(pState, -1, "url");
 
-        std::list<std::string> list;
-        loadLuaFunction(pState, "", lua_gettop(pState), list);
+        // 有url表的才解析lua方法
+        if(hasUrl) {
+            lua_getfield(pState, -1, "url");
+
+            std::list<std::string> list;
+            loadLuaFunction(pState, "", lua_gettop(pState), list);
+        }
+
         isInitSuccess = true;
     }else{
         LuaUtil::printLuaError(pState);
@@ -95,7 +106,6 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
         reqPath = reqPath.substr(1);
     }
 
-
     std::string reqPurePath;
     // 请求url可能有text?xxx=xxxx
     auto pos = reqPath.find("?");
@@ -105,26 +115,43 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
         reqPurePath = reqPath;
     }
 
-    // 从urlMethodMap中找到对应的方法
-    auto it = urlMethodMap.find(reqPurePath);
-    if (it == urlMethodMap.end()) {
-        return false;
+    // 如果没url表有拦截器，就是拦截器模式
+    bool isIntercetprMode = (!hasUrl && hasInterceptor);
+    if(isIntercetprMode) {
+        std::cout << appName << " interceptor mode" << std::endl;
+    }
+
+    auto urlIter = urlMethodMap.find(reqPurePath);
+    // URL模式，从urlMethodMap中找到对应的方法
+    if(!isIntercetprMode) {
+        if (urlIter == urlMethodMap.end()) {
+            // URL模式，没找到方法但也得走拦截器
+            if(hasInterceptor){
+                isIntercetprMode = true;
+            }else{
+                return false;
+            }
+        }
     }
 
     // 把要调用的代理方法放栈顶
     lua_getglobal(pState, "manage");
-    lua_getfield(pState, -1, "callUrlMethod");
+    if(!isIntercetprMode) {
+        lua_getfield(pState, -1, "callUrlMethod");
+    }else{
+        lua_getfield(pState, -1, "callInterceptor");
+    }
 
     // 发送app名称
     {
         lua_pushstring(pState, appName.c_str());
     }
 
-    // 发送目标方法名称
-    {
+    // URL模式，发送目标方法名称
+    if(!isIntercetprMode){
         std::stringstream nameStream;
         bool isFirstSubname = true;
-        auto folderList = it->second;
+        auto folderList = urlIter->second;
         // 把url各个字段压入栈中
         for (auto const &folder: folderList) {
             if(!isFirstSubname) {
@@ -140,10 +167,26 @@ bool LuaResolver::handleRequest(const Request &req, Reply &rep) {
     sendRequestToLua(pState, req);
 
     // 调用Lua方法
-    if (lua_pcall(pState, 3, 1, 0) != LUA_OK) {
-        LuaUtil::printLuaError(pState);
-        rep = Reply::stockReply(Reply::internal_server_error);
-        return false;
+    if(!isIntercetprMode) {
+        // URL模式的callUrlMethod(appStr, urlStr, req)
+        if (lua_pcall(pState, 3, 1, 0) != LUA_OK) {
+            LuaUtil::printLuaError(pState);
+            rep = Reply::stockReply(Reply::internal_server_error);
+            return false;
+        }
+    }else{
+        // 拦截器模式的callInterceptor(appStr, req)
+        if (lua_pcall(pState, 2, 1, 0) != LUA_OK) {
+            LuaUtil::printLuaError(pState);
+            rep = Reply::stockReply(Reply::internal_server_error);
+            return false;
+        }
+
+        // 检测栈顶返回值是否nil
+        // nil即拦截器放行
+        if(lua_isnil(pState, -1)) {
+            return false;
+        }
     }
 
     // 解析lua层返回的response到reply
